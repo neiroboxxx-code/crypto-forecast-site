@@ -1,16 +1,31 @@
 {
-    "updated_at": "2026-03-24T10:00:42.340420+00:00",
+    "updated_at": "2026-03-24T10:24:18.314010+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.615,
+        "risk_off_pressure": 0.6222,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 9
+        "oil_shock_count": 8
     },
     "items": [
+        {
+            "published_at": "2026-03-24T09:53:35+00:00",
+            "source": "fxstreet",
+            "title": "USD: Weaker as conflict risk eases – MUFG",
+            "url": "https://www.fxstreet.com/news/usd-weaker-as-conflict-risk-eases-mufg-202603240953",
+            "summary": "MUFG’s Senior Currency Analyst Lee Hardman notes the US Dollar remains under pressure after a sharp sell-off linked to de-escalation in the Middle East. The Dollar index again failed to clear 100.00 and retreated toward 98.88.",
+            "sentiment": -0.8,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-03-24T09:33:29+00:00",
             "source": "fxstreet",
@@ -175,27 +190,12 @@
             "btc_relevance_score": 0.75,
             "event_key": "macro_none_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-03-24T06:03:44+00:00",
-            "source": "fxstreet",
-            "title": "BoJ’s Ueda says to expect underlying inflation to accelerate moderately",
-            "url": "https://www.fxstreet.com/news/bojs-ueda-says-to-expect-underlying-inflation-to-accelerate-moderately-202603240603",
-            "summary": "Bank of Japan (BoJ) Governor Kazuo Ueda said on Tuesday that he expects underlying inflation to accelerate moderately. Ueda added that he will guide monetary policy appropriately to stably achieve our inflation target accompanied by wage gains.",
-            "sentiment": 0.0,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_none_inflation",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.07,
-        "avg_impact_score": 0.625,
+        "avg_sentiment": -0.1,
+        "avg_impact_score": 0.63,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
