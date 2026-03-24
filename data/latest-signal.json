@@ -1,0 +1,113 @@
+{
+    "updated_at": "2026-03-24T05:13:12.465621+00:00",
+    "symbol": "BTCUSDT",
+    "prediction_time": "2026-03-24T05:13:12.465621+00:00",
+    "target_time": "2026-03-25T05:13:12.465621+00:00",
+    "current_price": 70219.3,
+    "prediction_direction": "no_trade",
+    "probability_up": 0.0,
+    "probability_down": 1.0,
+    "confidence": 1.0,
+    "model_version": "baseline_v9_price_action",
+    "notes": "Baseline rule: 24h price change is positive | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | High ATR/volatility reduces confidence | Low relative volume reduces directional conviction | Deep pullback without recovery and weak volume weakens up signal | Moderate trend structure supports up signal | Deep pullback weakens long entry quality | Support test without breakdown weakens short scenario | Bearish continuation into support weakens short entry quality | Bearish two-candle continuation supports down signal | Late bullish context without confirmation weakens up signal | Too close to support: level filter blocks short signal | Strict filter activated: confidence/probability/confirmation/levels not strong enough | candle_timestamp=2026-03-24T05:00:00+00:00",
+    "market_recommendation": "Ждать",
+    "summary": "NO TRADE. Baseline rule: 24h price change is positive | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | High ATR/volatility reduces confidence | Low relative volume reduces directional conviction | Deep pullback without recovery and weak volume weakens up signal | Moderate trend structure supports up signal | Deep pullback weakens long entry quality | Support test without breakdown weakens short scenario | Bearish continuation into support weakens short entry quality | Bearish two-candle continuation supports down signal | Late bullish context without confirmation weakens up signal | Too close to support: level filter blocks short signal | Strict filter activated: confidence/probability/confirmation/levels not strong enough | candle_timestamp=2026-03-24T05:00:00+00:00",
+    "market": {
+        "latest_timestamp": "2026-03-22T20:00:00+00:00",
+        "price_change_1h": -0.0477,
+        "price_change_24h": -3.1015,
+        "avg_volume_24h": 254.2189,
+        "latest_volume": 239.10227,
+        "avg_volume_10": 218.508589,
+        "volume_ratio_10": 1.0942,
+        "high_volume_bar": false,
+        "bullish_volume_pressure": false,
+        "bearish_volume_pressure": false,
+        "bullish_engulfing": false,
+        "bearish_engulfing": false,
+        "doji": false,
+        "hammer": false,
+        "volatility_24h": 2436.6,
+        "rsi_14": 29.63,
+        "atr_14": 358.41,
+        "momentum_10": -0.008203
+    },
+    "levels": {
+        "nearest_resistance": 69043.3,
+        "nearest_support": 68554,
+        "resistance_distance_pct": 0.59,
+        "support_distance_pct": 0.13,
+        "resistance_levels_found": 6,
+        "support_levels_found": 8
+    },
+    "trend_structure": {
+        "trend_direction": "sideways",
+        "trend_strength": 0.0099,
+        "higher_highs": 7,
+        "higher_lows": 10,
+        "pullback_depth_pct": 19.6
+    },
+    "price_action": {
+        "breakout_up": false,
+        "breakout_down": false,
+        "breakout_up_strength": 0,
+        "breakout_down_strength": 0,
+        "near_resistance_test": false,
+        "near_support_test": true,
+        "rejection_back_inside": false,
+        "rejection_strength": 0,
+        "rejection_depth_pct": 0,
+        "pullback_recovery": false,
+        "bullish_two_candle_continuation": false,
+        "bearish_two_candle_continuation": false,
+        "bullish_continuation_into_resistance": false,
+        "bearish_continuation_into_support": false,
+        "bullish_hold_near_support": false,
+        "bearish_hold_near_resistance": false
+    },
+    "setup_confirmation": {
+        "candle_patterns": {
+            "bullish_engulfing": false,
+            "bearish_engulfing": false,
+            "doji": false,
+            "hammer": false
+        },
+        "multi_candle_patterns": {
+            "bullish_two_candle_continuation": false,
+            "bearish_two_candle_continuation": false
+        },
+        "price_action_signals": {
+            "near_support_test": true,
+            "near_resistance_test": false,
+            "pullback_recovery": false,
+            "rejection_back_inside": false,
+            "bullish_continuation_into_resistance": false,
+            "bearish_continuation_into_support": false,
+            "bullish_hold_near_support": false,
+            "bearish_hold_near_resistance": false
+        },
+        "interpretation": "Есть только тест поддержки без пробоя вниз. Явного свечного или многосвечного подтверждения нет. Объем слабый, поэтому сетап не подтвержден."
+    },
+    "news": {
+        "news_count": 30,
+        "avg_sentiment": -0.07,
+        "avg_impact_score": 0.6267,
+        "primary_count": 0,
+        "secondary_count": 0,
+        "requires_confirmation_count": 30
+    },
+    "performance": {
+        "total_predictions": 49,
+        "checked_results": 47,
+        "correct_predictions": 3,
+        "incorrect_predictions": 44,
+        "accuracy": 6
+    },
+    "position_status": {
+        "has_open_position": false,
+        "position_recommendation": "No open position",
+        "entry": null,
+        "stop": null,
+        "take": null
+    }
+}
