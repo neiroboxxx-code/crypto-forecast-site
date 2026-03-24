@@ -1,17 +1,17 @@
 {
-    "updated_at": "2026-03-24T05:13:12.465621+00:00",
+    "updated_at": "2026-03-24T09:21:40.911719+00:00",
     "symbol": "BTCUSDT",
-    "prediction_time": "2026-03-24T05:13:12.465621+00:00",
-    "target_time": "2026-03-25T05:13:12.465621+00:00",
-    "current_price": 70219.3,
+    "prediction_time": "2026-03-24T09:21:40.911719+00:00",
+    "target_time": "2026-03-25T09:21:40.911719+00:00",
+    "current_price": 70983.0,
     "prediction_direction": "no_trade",
     "probability_up": 0.0,
     "probability_down": 1.0,
     "confidence": 1.0,
     "model_version": "baseline_v9_price_action",
-    "notes": "Baseline rule: 24h price change is positive | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | High ATR/volatility reduces confidence | Low relative volume reduces directional conviction | Deep pullback without recovery and weak volume weakens up signal | Moderate trend structure supports up signal | Deep pullback weakens long entry quality | Support test without breakdown weakens short scenario | Bearish continuation into support weakens short entry quality | Bearish two-candle continuation supports down signal | Late bullish context without confirmation weakens up signal | Too close to support: level filter blocks short signal | Strict filter activated: confidence/probability/confirmation/levels not strong enough | candle_timestamp=2026-03-24T05:00:00+00:00",
+    "notes": "Baseline rule: 24h price change is positive | Doji reduces confidence | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | Low relative volume reduces directional conviction | Resistance test without breakout weakens long scenario | Short-term recovery supports up signal | Strict filter activated: confidence/probability/confirmation/levels not strong enough | candle_timestamp=2026-03-24T09:00:00+00:00",
     "market_recommendation": "Ждать",
-    "summary": "NO TRADE. Baseline rule: 24h price change is positive | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | High ATR/volatility reduces confidence | Low relative volume reduces directional conviction | Deep pullback without recovery and weak volume weakens up signal | Moderate trend structure supports up signal | Deep pullback weakens long entry quality | Support test without breakdown weakens short scenario | Bearish continuation into support weakens short entry quality | Bearish two-candle continuation supports down signal | Late bullish context without confirmation weakens up signal | Too close to support: level filter blocks short signal | Strict filter activated: confidence/probability/confirmation/levels not strong enough | candle_timestamp=2026-03-24T05:00:00+00:00",
+    "summary": "NO TRADE. Baseline rule: 24h price change is positive | Doji reduces confidence | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | Low relative volume reduces directional conviction | Resistance test without breakout weakens long scenario | Short-term recovery supports up signal | Strict filter activated: confidence/probability/confirmation/levels not strong enough | candle_timestamp=2026-03-24T09:00:00+00:00",
     "market": {
         "latest_timestamp": "2026-03-22T20:00:00+00:00",
         "price_change_1h": -0.0477,
@@ -90,17 +90,17 @@
     },
     "news": {
         "news_count": 30,
-        "avg_sentiment": -0.07,
-        "avg_impact_score": 0.6267,
+        "avg_sentiment": -0.04,
+        "avg_impact_score": 0.62,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
     },
     "performance": {
-        "total_predictions": 49,
-        "checked_results": 47,
+        "total_predictions": 50,
+        "checked_results": 48,
         "correct_predictions": 3,
-        "incorrect_predictions": 44,
+        "incorrect_predictions": 45,
         "accuracy": 6
     },
     "position_status": {

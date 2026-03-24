@@ -1,16 +1,76 @@
 {
-    "updated_at": "2026-03-24T06:56:12.881915+00:00",
+    "updated_at": "2026-03-24T09:21:40.904846+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
-        "summary": "Актуальных новостей: 30. Подтверждённых событий: 2."
+        "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
-        "confirmed_events_count": 2,
-        "risk_off_pressure": 0.6417,
-        "avg_confirmed_btc_relevance": 0.8,
-        "oil_shock_count": 10
+        "confirmed_events_count": 0,
+        "risk_off_pressure": 0.61,
+        "avg_confirmed_btc_relevance": 0,
+        "oil_shock_count": 9
     },
     "items": [
+        {
+            "published_at": "2026-03-24T08:53:09+00:00",
+            "source": "fxstreet",
+            "title": "Dow Jones futures gain on reports of Iran’s approval for negotiations",
+            "url": "https://www.fxstreet.com/news/dow-jones-futures-gain-on-reports-of-irans-approval-for-negotiations-202603240853",
+            "summary": "Dow Jones futures inch higher 0.9% to above 46,550 during European hours on Tuesday, ahead of the US cash market open. Meanwhile, S&P 500 and Nasdaq 100 futures gains 0.14% and 0.23% to near 6,650 and 24,460, respectively, at the time of writing.",
+            "sentiment": 0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "geopolitics_iran_none",
+            "market_regime_effect": "risk_on"
+        },
+        {
+            "published_at": "2026-03-24T08:35:28+00:00",
+            "source": "fxstreet",
+            "title": "BoJ: April hike expected after soft data – Danske Bank",
+            "url": "https://www.fxstreet.com/news/boj-april-hike-expected-after-soft-data-danske-bank-202603240835",
+            "summary": "Danske Research Team notes softer Japanese data, with composite PMI slipping and core CPI falling below target for the first time in four years, largely due to fuel subsidies. Despite this, PMIs show rising input prices and a weak Japanese Yen.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_inflation",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-03-24T08:24:57+00:00",
+            "source": "fxstreet",
+            "title": "DXY: Range top holds as headlines steer trade – ING",
+            "url": "https://www.fxstreet.com/news/dxy-range-top-holds-as-headlines-steer-trade-ing-202603240824",
+            "summary": "ING’s Chris Turner notes the Dollar has softened after comments on possible negotiations with Iran, but sees limited downside while the Strait of Hormuz remains shut and energy prices are elevated.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_iran_shipping",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-03-24T07:55:36+00:00",
+            "source": "fxstreet",
+            "title": "When is the UK Services PMI and how could it affect GBP/USD?",
+            "url": "https://www.fxstreet.com/news/when-is-the-uk-services-pmi-and-how-could-it-affect-gbp-usd-202603240755",
+            "summary": "The United Kingdom (UK) docket has the preliminary Purchasing Managers’ Index (PMI) data for March to be released by the S&P Global on Tuesday, later this session at 09:30 GMT.",
+            "sentiment": 0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-03-24T06:43:20+00:00",
             "source": "fxstreet",
@@ -130,72 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "geopolitics_iran_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-03-24T03:19:17+00:00",
-            "source": "fxstreet",
-            "title": "Australian Dollar underperforms as Iran pushes back hopes of peace talks",
-            "url": "https://www.fxstreet.com/news/australian-dollar-underperforms-as-iran-pushes-back-hopes-of-peace-talks-202603240319",
-            "summary": "The Australian Dollar (AUD) trades lower against its major currency peers, trading 0.6% down to near 0.6760 during the Asian trading session on Tuesday.",
-            "sentiment": 0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_iran_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-24T02:29:24+00:00",
-            "source": "fxstreet",
-            "title": "US Dollar Index (DXY) approaches mid-99.00s amid fading Iran de-escalation hopes",
-            "url": "https://www.fxstreet.com/news/us-dollar-index-dxy-approaches-mid-9900s-amid-fading-iran-de-escalation-hopes-202603240229",
-            "summary": "The US Dollar Index (DXY), which tracks the Greenback against a basket of currencies, regains positive traction following the previous day's downfall to a nearly two-week low and climbs to the 99.35 area during the Asian session on Tuesday.",
-            "sentiment": 0.0,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_iran_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-24T02:26:43+00:00",
-            "source": "fxstreet",
-            "title": "Canadian Dollar softens amid Middle East tension",
-            "url": "https://www.fxstreet.com/news/canadian-dollar-softens-amid-middle-east-tension-202603240226",
-            "summary": "The USD/CAD pair gathers strength to around 1.3750 during the Asian trading hours on Tuesday. Uncertainty and the ongoing US-Israel war on Iran continue to boost the US Dollar (USD) against the Canadian Dollar (CAD).",
-            "sentiment": 0.0,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_iran_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-24T02:03:53+00:00",
-            "source": "fxstreet",
-            "title": "NZD/USD moves below 0.5850 amid increased risk aversion",
-            "url": "https://www.fxstreet.com/news/nzd-usd-moves-below-05850-amid-increased-risk-aversion-202603240203",
-            "summary": "NZD/USD has pared its recent gains from the previous day, trading around 0.5830 during the Asian session on Tuesday. The pair depreciates as the US Dollar (USD) gains on increased risk aversion after the Israeli military said it had launched a fresh wave of strikes on Tehran.",
-            "sentiment": 0.6,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_israel_usd",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.07,
-        "avg_impact_score": 0.6267,
+        "avg_sentiment": -0.04,
+        "avg_impact_score": 0.62,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
