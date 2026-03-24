@@ -1,16 +1,31 @@
 {
-    "updated_at": "2026-03-24T10:24:18.314010+00:00",
+    "updated_at": "2026-03-24T10:54:18.118936+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6222,
+        "risk_off_pressure": 0.625,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 8
+        "oil_shock_count": 9
     },
     "items": [
+        {
+            "published_at": "2026-03-24T10:27:20+00:00",
+            "source": "fxstreet",
+            "title": "WTI Price Forecast: Holds key 20-day EMA amid Middle East conflicts",
+            "url": "https://www.fxstreet.com/news/wti-price-forecast-holds-key-20-day-ema-amid-middle-east-conflicts-202603241027",
+            "summary": "West Texas Intermediate (WTI), futures on NYMEX, is up 2% to near $90.00 during the European trading session on Tuesday. The oil price holds early gains, driven by Iran’s refusal to be involved in any direct talks with the United States (US) regarding the end of conflicts in the Middle East.",
+            "sentiment": 0.0,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_iran_oil",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-03-24T09:53:35+00:00",
             "source": "fxstreet",
@@ -175,27 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "macro_fed_rates",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-24T06:11:12+00:00",
-            "source": "fxstreet",
-            "title": "JPY: Disinflation tempers energy shock – Commerzbank",
-            "url": "https://www.fxstreet.com/news/jpy-disinflation-tempers-energy-shock-commerzbank-202603240611",
-            "summary": "Commerzbank analyst Volkmar Baur highlights that Japanese inflation fell more than expected in February, with weak services and food prices pointing to ongoing disinflation despite higher Oil.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_none_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.1,
-        "avg_impact_score": 0.63,
+        "avg_sentiment": -0.09,
+        "avg_impact_score": 0.6317,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
