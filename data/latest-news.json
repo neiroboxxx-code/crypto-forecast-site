@@ -1,16 +1,31 @@
 {
-    "updated_at": "2026-03-24T10:54:18.118936+00:00",
+    "updated_at": "2026-03-24T11:54:16.393919+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.625,
+        "risk_off_pressure": 0.6222,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 9
+        "oil_shock_count": 8
     },
     "items": [
+        {
+            "published_at": "2026-03-24T11:16:39+00:00",
+            "source": "fxstreet",
+            "title": "GBP: Inflation stalling complicates BoE path – TD Securities",
+            "url": "https://www.fxstreet.com/news/gbp-inflation-stalling-complicates-boe-path-td-securities-202603241116",
+            "summary": "TD Securities’ Global Strategy Team expects UK inflation to hold at 3.0% year-on-year in February, in line with the Bank of England (BoE) and market consensus. Core CPI is seen steady at 3.1%, with services easing but core goods ticking higher.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.55,
+            "event_key": "regulation_none_inflation",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-03-24T10:27:20+00:00",
             "source": "fxstreet",
@@ -175,27 +190,12 @@
             "btc_relevance_score": 0.75,
             "event_key": "macro_eu_usd",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-24T06:24:23+00:00",
-            "source": "fxstreet",
-            "title": "Fed: War fog clouds rate path – BNY",
-            "url": "https://www.fxstreet.com/news/fed-war-fog-clouds-rate-path-bny-202603240624",
-            "summary": "BNY strategist John Velis says the March FOMC broadly matched expectations, with no rate change and minimal forward guidance, while markets swiftly repriced toward a more hawkish path.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_fed_rates",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
         "avg_sentiment": -0.09,
-        "avg_impact_score": 0.6317,
+        "avg_impact_score": 0.63,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
