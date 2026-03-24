@@ -1,16 +1,46 @@
 {
-    "updated_at": "2026-03-24T09:21:40.904846+00:00",
+    "updated_at": "2026-03-24T10:00:42.340420+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.61,
+        "risk_off_pressure": 0.615,
         "avg_confirmed_btc_relevance": 0,
         "oil_shock_count": 9
     },
     "items": [
+        {
+            "published_at": "2026-03-24T09:33:29+00:00",
+            "source": "fxstreet",
+            "title": "HUF: War risk delays rate cuts – Commerzbank",
+            "url": "https://www.fxstreet.com/news/huf-war-risk-delays-rate-cuts-commerzbank-202603240933",
+            "summary": "Commerzbank analyst Michael Pfister notes that despite low Hungarian inflation and February’s initial 25 bp cut, the Iran war has shifted priorities, with markets and the bank expecting the central bank of Hungary, Magyar Nemzeti Bank (MNB) to hold rates today.",
+            "sentiment": -0.6,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_iran_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-03-24T09:18:06+00:00",
+            "source": "fxstreet",
+            "title": "Oil: Geopolitics keeps pressure on supply chains – Rabobank",
+            "url": "https://www.fxstreet.com/news/oil-geopolitics-keeps-pressure-on-supply-chains-rabobank-202603240918",
+            "summary": "Rabobank’s Senior Macro Strategist Bas van Geffen notes that Iran’s control over the Strait of Hormuz and ongoing regional tensions are keeping risks elevated for Oil and broader energy markets.",
+            "sentiment": -0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_iran_oil",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-03-24T08:53:09+00:00",
             "source": "fxstreet",
@@ -160,42 +190,12 @@
             "btc_relevance_score": 0.75,
             "event_key": "macro_none_inflation",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-24T05:07:41+00:00",
-            "source": "fxstreet",
-            "title": "NZD/USD extends rejection slide from 200-day SMA; declines to 0.5825 amid firmer USD",
-            "url": "https://www.fxstreet.com/news/nzd-usd-extends-rejection-slide-from-200-day-sma-declines-to-05825-amid-firmer-usd-202603240507",
-            "summary": "The NZD/USD pair continues with its struggle to make it through a technically significant 200-day Simple Moving Average (SMA) and attracts fresh sellers during the Asian session on Tuesday.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_none_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-24T04:59:14+00:00",
-            "source": "fxstreet",
-            "title": "WTI rises to near $91.00 as Gulf states edge toward direct involvement in Iran conflict",
-            "url": "https://www.fxstreet.com/news/wti-rises-to-near-9100-due-to-attacks-on-middle-east-energy-infrastructure-202603240459",
-            "summary": "West Texas Intermediate (WTI) oil price rebounds after registering over 9% losses in the previous day, trading around $91.00 per barrel during the Asian hours on Tuesday.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_iran_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.04,
-        "avg_impact_score": 0.62,
+        "avg_sentiment": -0.07,
+        "avg_impact_score": 0.625,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
