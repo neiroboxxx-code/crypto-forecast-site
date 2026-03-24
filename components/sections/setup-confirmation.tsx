@@ -62,7 +62,7 @@ function activeSignals() {
     return items;
 }
 
-function candlePatternRows() {
+function candlePatternRows(): [string, boolean][] {
     return [
         ["Бычье поглощение", signalData.setup_confirmation.candle_patterns.bullish_engulfing],
         ["Медвежье поглощение", signalData.setup_confirmation.candle_patterns.bearish_engulfing],
