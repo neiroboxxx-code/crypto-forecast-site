@@ -46,14 +46,13 @@ function formatRawPercent(value: number) {
 }
 
 function formatTime(value: string) {
-    const date = new Date(value);
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-
-    return `${day}.${month} ${hours}:${minutes}`;
+    return new Intl.DateTimeFormat("ru-RU", {
+        timeZone: "Europe/Moscow",
+        day: "2-digit",
+        month: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+    }).format(new Date(value));
 }
 
 function trendLabel(direction: string) {

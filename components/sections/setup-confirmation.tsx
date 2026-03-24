@@ -6,6 +6,7 @@ function yesNo(value: boolean) {
 
 function formatTime(value: string) {
     return new Intl.DateTimeFormat("ru-RU", {
+        timeZone: "Europe/Moscow",
         day: "2-digit",
         month: "2-digit",
         hour: "2-digit",
