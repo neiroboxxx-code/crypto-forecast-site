@@ -1,16 +1,61 @@
 {
-    "updated_at": "2026-03-25T21:10:08.298982+00:00",
+    "updated_at": "2026-03-26T01:10:04.601291+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6571,
+        "risk_off_pressure": 0.66,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 4
+        "oil_shock_count": 3
     },
     "items": [
+        {
+            "published_at": "2026-03-25T23:35:25+00:00",
+            "source": "fxstreet",
+            "title": "RBA’s Kent: Middle East conflict poses inflation and economic risks",
+            "url": "https://www.fxstreet.com/news/rbas-kent-middle-east-conflict-poses-inflation-and-economic-risks-202603252335",
+            "summary": "The Reserve Bank of Australia (RBA) Assistant Governor Christopher Kent warned that if the Middle East conflict prolongs, the economic damage would be greater and policymakers would need to cap inflation amid surging energy prices.",
+            "sentiment": -0.8,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_inflation",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-03-25T22:01:00+00:00",
+            "source": "fxstreet",
+            "title": "China: Growth seen improving in 1Q – DBS",
+            "url": "https://www.fxstreet.com/news/china-growth-seen-improving-in-1q-dbs-202603252201",
+            "summary": "DBS Group Research economists Byron Lam and Daisy Sharma present a China GDP Nowcast indicating real GDP growth likely improved to 4.7% in 1Q 2026 from 4.5% in Q4 2025.",
+            "sentiment": 0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "geopolitics_china_none",
+            "market_regime_effect": "neutral"
+        },
+        {
+            "published_at": "2026-03-25T21:30:42+00:00",
+            "source": "fxstreet",
+            "title": "NZD/USD hovers near 0.5800 as firm USD and geopolitical tensions cap upside",
+            "url": "https://www.fxstreet.com/news/nzd-usd-hovers-near-05800-as-firm-usd-and-geopolitical-tensions-cap-upside-202603252130",
+            "summary": "The NZD/USD pair fell to the 0.5800 region, remaining under pressure as the US Dollar (USD) stays firm amid geopolitical uncertainty and elevated yields.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-03-25T20:52:00+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.65,
             "event_key": "regulation_fed_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-03-25T14:55:47+00:00",
-            "source": "fxstreet",
-            "title": "USD: Upside risk persists in conflict-driven markets – BBH",
-            "url": "https://www.fxstreet.com/news/usd-upside-risk-persists-in-conflict-driven-markets-bbh-202603251455",
-            "summary": "Brown Brothers Harriman’s (BBH) Elias Haddad notes that global risk sentiment has improved as markets position for a potential conflict resolution involving Iran, with DXY consolidating below 100.00.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_iran_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-25T14:43:25+00:00",
-            "source": "fxstreet",
-            "title": "GBP: BoE hawkish shift supports Pound – UOB",
-            "url": "https://www.fxstreet.com/news/gbp-boe-hawkish-shift-supports-pound-uob-202603251443",
-            "summary": "UOB economist Lee Sue Ann highlights a hawkish pivot by the Bank of England (BoE), with the Bank Rate held at 3.75% and a unanimous 9–0 vote. The report removes prior expectations for three 2026 cuts, now forecasting the GBP Repo Rate steady at 3.75% through 4Q26 as inflation risks dominate.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_inflation",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-25T14:18:47+00:00",
-            "source": "fxstreet",
-            "title": "Oil: Supply shock deepens as Hormuz stays constrained – TD Securities",
-            "url": "https://www.fxstreet.com/news/oil-supply-shock-deepens-as-hormuz-stays-constrained-td-securities-202603251418",
-            "summary": "TD Securities’ Senior Commodity Strategist Ryan McKay warns that Oil markets face escalating tightness as flows through the Strait of Hormuz remain severely restricted and Gulf production cuts exceed 10m b/d.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.55,
-            "event_key": "regulation_none_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
         "avg_sentiment": -0.2,
-        "avg_impact_score": 0.6267,
+        "avg_impact_score": 0.625,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
