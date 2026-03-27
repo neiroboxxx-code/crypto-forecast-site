@@ -1,16 +1,46 @@
 {
-    "updated_at": "2026-03-27T05:10:07.724313+00:00",
+    "updated_at": "2026-03-27T09:10:03.921605+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.65,
+        "risk_off_pressure": 0.6667,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 8
+        "oil_shock_count": 7
     },
     "items": [
+        {
+            "published_at": "2026-03-27T08:37:20+00:00",
+            "source": "fxstreet",
+            "title": "Iran's Araghchi: US soldiers using local residents as shields",
+            "url": "https://www.fxstreet.com/news/irans-araghchi-us-soldiers-using-local-residents-as-shields-202603270837",
+            "summary": "Iran’s Foreign Minister Abbas Araghchi said in a post on X, formerly known as Twitter, that United States (US) soldiers are using local people to shield themselves.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "geopolitics_iran_none",
+            "market_regime_effect": "neutral"
+        },
+        {
+            "published_at": "2026-03-27T04:27:48+00:00",
+            "source": "fxstreet",
+            "title": "Japanese Yen edges higher on intervention fears; USD/JPY hangs near 159.50 on softer USD",
+            "url": "https://www.fxstreet.com/news/japanese-yen-edges-higher-on-intervention-fears-usd-jpy-hangs-near-15950-on-softer-usd-202603270427",
+            "summary": "The USD/JPY pair attracts some sellers during the Asian session on Friday, and for now, seems to have snapped a three-day winning streak back closer to its highest level since July 2024, touched earlier this month.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-03-27T03:37:33+00:00",
             "source": "fxstreet",
@@ -160,41 +190,11 @@
             "btc_relevance_score": 0.75,
             "event_key": "macro_none_inflation",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-26T21:53:00+00:00",
-            "source": "fxstreet",
-            "title": "APAC FX: Inflation channel and valuation gaps – BNY",
-            "url": "https://www.fxstreet.com/news/apac-fx-inflation-channel-and-valuation-gaps-bny-202603262153",
-            "summary": "Geoff Yu at BNY notes that North Asian economies face supply-related risks to their balance of payments despite ample energy reserves.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_none_inflation",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-26T21:25:48+00:00",
-            "source": "fxstreet",
-            "title": "NZD/USD slips as US Dollar strengthens and geopolitical tensions weigh",
-            "url": "https://www.fxstreet.com/news/nzd-usd-slips-as-us-dollar-strengthens-and-geopolitical-tensions-weigh-202603262125",
-            "summary": "The NZD/USD pair slipped to the 0.5760 region, remaining under pressure as the US Dollar (USD) stays firm amid elevated United States (US) yields and a cautious market mood.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_usd",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.19,
+        "avg_sentiment": -0.18,
         "avg_impact_score": 0.6217,
         "primary_count": 0,
         "secondary_count": 0,
