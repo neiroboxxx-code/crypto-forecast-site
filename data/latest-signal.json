@@ -91,7 +91,7 @@
     },
     "news": {
         "news_count": 30,
-        "avg_sentiment": -0.24,
+        "avg_sentiment": -0.19,
         "avg_impact_score": 0.6217,
         "primary_count": 0,
         "secondary_count": 0,
