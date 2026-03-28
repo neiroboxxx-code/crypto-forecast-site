@@ -1,16 +1,46 @@
 {
-    "updated_at": "2026-03-27T21:10:03.434426+00:00",
+    "updated_at": "2026-03-28T01:10:10.754073+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.625,
+        "risk_off_pressure": 0.6333,
         "avg_confirmed_btc_relevance": 0,
         "oil_shock_count": 6
     },
     "items": [
+        {
+            "published_at": "2026-03-27T21:36:00+00:00",
+            "source": "fxstreet",
+            "title": "Thai Baht: War-driven pressures challenge BOT stance – DBS",
+            "url": "https://www.fxstreet.com/news/thai-baht-war-driven-pressures-challenge-bot-stance-dbs-202603272136",
+            "summary": "DBS Group Research economist Chua Han Teng highlights that Thailand’s financial markets, particularly the Thai Baht (THB) and equities, are under pressure due to vulnerability to Middle East conflict-related commodity shocks.",
+            "sentiment": -0.6,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.55,
+            "event_key": "geopolitics_none_risk_sentiment",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-03-27T20:44:00+00:00",
+            "source": "fxstreet",
+            "title": "Philippines: Extended pause view after BSP off-cycle move – UOB",
+            "url": "https://www.fxstreet.com/news/philippines-extended-pause-view-after-bsp-off-cycle-move-uob-202603272044",
+            "summary": "UOB’s Global Economics & Markets Research, via Julia Goh and Loke Siew Ting, notes that the central bank of the Philippines, Bangko Sentral ng Pilipinas (BSP) kept the RRP (Reverse Repurchase Rate) rate at 4.25% in an off-cycle meeting as supply-driven inflation and Middle East risks intensify.",
+            "sentiment": -0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-03-27T20:03:00+00:00",
             "source": "fxstreet",
@@ -160,42 +190,12 @@
             "btc_relevance_score": 0.75,
             "event_key": "macro_none_usd",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-27T12:31:56+00:00",
-            "source": "fxstreet",
-            "title": "Banxico: Cautious after a close call for cut – Rabobank",
-            "url": "https://www.fxstreet.com/news/banxico-cautious-after-a-close-call-for-cut-rabobank-202603271231",
-            "summary": "Rabobank’s RaboResearch Global Economics & Markets team reviews Banxico’s March 26 decision to cut the overnight policy rate by 25bp to 6.75%. The move was a close call, with two governors preferring to keep rates at 7.00%.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_rates",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-27T12:07:06+00:00",
-            "source": "fxstreet",
-            "title": "Australian Dollar trades higher despite Mideast war-led cautious market mood",
-            "url": "https://www.fxstreet.com/news/australian-dollar-trades-higher-despite-mideast-war-led-cautious-market-mood-202603271207",
-            "summary": "The Australian Dollar (AUD) outperforms its major currency peers, trading marginally higher to near 0.6900 against the US Dollar (USD) during the late European trading session on Friday.",
-            "sentiment": 0.0,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_usd",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.21,
-        "avg_impact_score": 0.6167,
+        "avg_sentiment": -0.24,
+        "avg_impact_score": 0.625,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
