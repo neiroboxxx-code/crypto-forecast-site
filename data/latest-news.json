@@ -1,5 +1,5 @@
 {
-    "updated_at": "2026-03-31T21:10:06.107318+00:00",
+    "updated_at": "2026-03-31T23:45:21.054266+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
@@ -8,9 +8,54 @@
         "confirmed_events_count": 0,
         "risk_off_pressure": 0.66,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 13
+        "oil_shock_count": 12
     },
     "items": [
+        {
+            "published_at": "2026-03-31T22:26:00+00:00",
+            "source": "fxstreet",
+            "title": "MYR: Policy stance steady with data watch – UOB",
+            "url": "https://www.fxstreet.com/news/myr-policy-stance-steady-with-data-watch-uob-202603312226",
+            "summary": "UOB notes that the central bank of Malaysia, Bank Negara Malaysia (BNM) is expected to keep the Overnight Policy Rate at 2.75% through early 2027.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-03-31T21:57:00+00:00",
+            "source": "fxstreet",
+            "title": "KRW: Policy easing under consideration - BNY",
+            "url": "https://www.fxstreet.com/news/krw-policy-easing-under-consideration-bny-202603312157",
+            "summary": "BNY’s Head of Markets Macro Strategy Bob Savage notes that the Bank of Korea (BoK) may consider policy easing as Middle East geopolitical shocks threaten domestic growth.",
+            "sentiment": -0.4,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.55,
+            "event_key": "geopolitics_none_none",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-03-31T21:22:24+00:00",
+            "source": "fxstreet",
+            "title": "NZD/USD rebounds as USD weakens after Iran tensions escalate",
+            "url": "https://www.fxstreet.com/news/nzd-usd-rebounds-as-usd-weakens-after-iran-tensions-escalate-202603312122",
+            "summary": "NZD/USD surged and is now trading near the 0.5750 price region, starting the Asian session with a bullish bias on Wednesday.",
+            "sentiment": 0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_iran_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-03-31T20:49:00+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "macro_us_usd",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-31T16:20:48+00:00",
-            "source": "fxstreet",
-            "title": "Dow Jones Industrial Average surges over 500 points on hopes Iran war nears resolution",
-            "url": "https://www.fxstreet.com/news/dow-jones-industrial-average-surges-over-500-points-on-hopes-iran-war-nears-resolution-202603311620",
-            "summary": "The Dow Jones Industrial Average jumped around 500 points, or roughly 1.0%, on Tuesday as investors staged a recovery attempt on the final trading day of March. The S&P 500 gained 1.5% and the Nasdaq Composite advanced 2%.",
-            "sentiment": 0.6,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "geopolitics_iran_none",
-            "market_regime_effect": "risk_on"
-        },
-        {
-            "published_at": "2026-03-31T15:54:54+00:00",
-            "source": "fxstreet",
-            "title": "NZD/USD edges lower as resilient US Dollar, geopolitical risks weigh on sentiment",
-            "url": "https://www.fxstreet.com/news/nzd-usd-edges-lower-as-resilient-us-dollar-geopolitical-risks-weigh-on-sentiment-202603311554",
-            "summary": "NZD/USD trades around 0.5710 on Tuesday at the time of writing, down 0.15% on the day as the US Dollar (USD) stabilizes and market caution persists.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-03-31T14:56:50+00:00",
-            "source": "fxstreet",
-            "title": "Iran IRGC: Will target US companies in region as of April 1",
-            "url": "https://www.fxstreet.com/news/iran-irgc-will-target-us-companies-in-region-as-of-april-1-202603311456",
-            "summary": "Iran's state media reported on Tuesday that Iran's Islamic Revolutionary Guard Corps (IRGC) announced that they will target United States (US) companies, including Google, Apple, Intel, Boeing, IBM and Tesla, in the region as of April 1 in retaliation for attacks on Iran.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "geopolitics_iran_risk_sentiment",
-            "market_regime_effect": "neutral"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.21,
-        "avg_impact_score": 0.6517,
+        "avg_sentiment": -0.2,
+        "avg_impact_score": 0.65,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
