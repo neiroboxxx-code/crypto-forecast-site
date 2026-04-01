@@ -2,21 +2,21 @@ import signalData from "@/data/latest-signal.json";
 
 type SignalData = typeof signalData;
 
-function formatDirection(direction: SignalData["prediction_direction"]) {
-    if (direction === "up") return "LONG";
-    if (direction === "down") return "SHORT";
+function formatDirection(action: string) {
+    if (action === "enter_long") return "LONG";
+    if (action === "avoid_long") return "AVOID LONG";
     return "WAIT";
 }
 
-function directionClass(direction: SignalData["prediction_direction"]) {
-    if (direction === "up") return "text-emerald-300";
-    if (direction === "down") return "text-red-300";
+function directionClass(action: string) {
+    if (action === "enter_long") return "text-emerald-300";
+    if (action === "avoid_long") return "text-amber-300";
     return "text-cyan-200";
 }
 
-function formatRecommendation(direction: SignalData["prediction_direction"]) {
-    if (direction === "up") return "Смотреть лонг";
-    if (direction === "down") return "Смотреть шорт";
+function formatRecommendation(action: string) {
+    if (action === "enter_long") return "Смотреть лонг";
+    if (action === "avoid_long") return "Избегать лонга";
     return "Ждать";
 }
 
@@ -75,17 +75,27 @@ function rsiLabel(value: number) {
     return "нейтральная зона";
 }
 
-function marketToneLabel(direction: SignalData["prediction_direction"]) {
-    if (direction === "up") return "Лонговый приоритет";
-    if (direction === "down") return "Шортовый приоритет";
+function marketToneLabel(direction: string) {
+    if (direction === "bullish" || direction === "up") return "Лонговый приоритет";
+    if (direction === "bearish" || direction === "down") return "Шортовый приоритет";
+    if (direction === "sideways") return "Нейтральный приоритет";
     return "Активный сценарий";
 }
 
 export function SignalOverview() {
-    const direction = formatDirection(signalData.prediction_direction);
+    const typedSignal = signalData as SignalData & {
+        trade_action?: string;
+        market_direction?: string;
+    };
+
+    const actionValue = typedSignal.trade_action ?? "no_trade";
+    const marketDirectionValue =
+        typedSignal.market_direction ?? signalData.prediction_direction;
+
+    const direction = formatDirection(actionValue);
     const recommendation =
         signalData.market_recommendation ||
-        formatRecommendation(signalData.prediction_direction);
+        formatRecommendation(actionValue);
 
     return (
         <section className="w-full rounded-[28px] border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm md:p-6">
@@ -98,14 +108,14 @@ export function SignalOverview() {
                     <div className="mt-4 flex flex-col items-center">
                         <div
                             className={`text-[54px] font-semibold leading-none tracking-[-0.06em] ${directionClass(
-                                signalData.prediction_direction
+                                actionValue
                             )}`}
                         >
                             {direction}
                         </div>
 
                         <div className="mt-4 text-center text-[15px] leading-8 text-cyan-200">
-                            {marketToneLabel(signalData.prediction_direction)} на 24 часа
+                            {marketToneLabel(marketDirectionValue)} на 24 часа
                         </div>
 
                         <div className="mt-4 text-sm uppercase tracking-[0.22em] text-white/34">
