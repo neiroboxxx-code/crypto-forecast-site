@@ -1,16 +1,61 @@
 {
-    "updated_at": "2026-04-02T16:53:10.147453+00:00",
+    "updated_at": "2026-04-02T20:53:13.530454+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6208,
+        "risk_off_pressure": 0.625,
         "avg_confirmed_btc_relevance": 0,
         "oil_shock_count": 8
     },
     "items": [
+        {
+            "published_at": "2026-04-02T19:28:00+00:00",
+            "source": "fxstreet",
+            "title": "Global PMIs: Manufacturers look through inflation – Standard Chartered",
+            "url": "https://www.fxstreet.com/news/global-pmis-manufacturers-look-through-inflation-standard-chartered-202604021928",
+            "summary": "Standard Chartered’s Ethan Lester notes that global manufacturing PMIs stayed in expansionary territory in March for an eighth straight month, even as the pace of growth eased from February’s 44‑month high.",
+            "sentiment": 0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_inflation",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-02T18:57:14+00:00",
+            "source": "fxstreet",
+            "title": "Forex Today: US Dollar rebounds on Iran escalation, Oil surges, Gold sinks",
+            "url": "https://www.fxstreet.com/news/forex-today-us-dollar-rebounds-on-iran-escalation-oil-surges-gold-sinks-202604021857",
+            "summary": "The US Dollar Index (DXY) bounced back toward the 100.00 area after United States (US) President Donald Trump said the US would intensify strikes on Iran over the next two to three weeks, crushing hopes for a near-term de-escalation and reviving safe-haven demand for the Greenback.",
+            "sentiment": -0.4,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_iran_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-02T18:42:00+00:00",
+            "source": "fxstreet",
+            "title": "CNY: Gradual gains versus Dollar – Commerzbank",
+            "url": "https://www.fxstreet.com/news/cny-gradual-gains-versus-dollar-commerzbank-202604021842",
+            "summary": "Commerzbank’s Volkmar Baur expects the Chinese Yuan (CNY) to edge higher against the US Dollar (USD) while staying undervalued versus most other currencies. The bank projects USD/CNY at 6.90 by June 2026 and 6.70 by late 2027, with EUR/CNY broadly stable.",
+            "sentiment": 0.0,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-02T16:22:08+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.65,
             "event_key": "regulation_iran_usd",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-02T11:31:11+00:00",
-            "source": "fxstreet",
-            "title": "OPEC+ to raise oil output quota in meeting on April 5 – Reuters",
-            "url": "https://www.fxstreet.com/news/opec-to-raise-oil-output-quota-in-meeting-on-april-5-reuters-202604021131",
-            "summary": "OPEC+ is likely to weigh a further oil output quota hike at the meeting on April 5, Sunday, to prepare for any easing of Strait of Hormuz export constraints, according to a report from Reuters.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_opec_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-02T11:22:16+00:00",
-            "source": "fxstreet",
-            "title": "MENA FX: Funding gaps and current account stress – BNY",
-            "url": "https://www.fxstreet.com/news/mena-fx-funding-gaps-and-current-account-stress-bny-202604021122",
-            "summary": "BNY Mellon’s Geoff Yu highlights significant portfolio outflows from Middle East/North Africa (MENA) markets and warns that external funding gaps are likely to widen.",
-            "sentiment": -0.4,
-            "impact_score": 0.45,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.35,
-            "event_key": "institutional_none_none",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-02T11:17:55+00:00",
-            "source": "fxstreet",
-            "title": "Iran targeted US-linked steel and aluminum industries in Gulf -Iranian state media",
-            "url": "https://www.fxstreet.com/news/iran-targeted-us-linked-steel-and-aluminum-industries-in-gulf-iranian-state-media-202604021117",
-            "summary": "According to the Iranian state media, Iran’s Revolutionary Guards (IRG) have reported that they targeted United States (US)-linked steel and aluminum facilities in Gulf states.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "geopolitics_iran_none",
-            "market_regime_effect": "neutral"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
         "avg_sentiment": -0.17,
-        "avg_impact_score": 0.6217,
+        "avg_impact_score": 0.6267,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
