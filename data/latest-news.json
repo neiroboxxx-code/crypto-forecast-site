@@ -1,5 +1,5 @@
 {
-    "updated_at": "2026-04-01T21:10:04.870038+00:00",
+    "updated_at": "2026-04-02T00:50:54.279517+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
@@ -11,6 +11,51 @@
         "oil_shock_count": 5
     },
     "items": [
+        {
+            "published_at": "2026-04-01T23:45:39+00:00",
+            "source": "fxstreet",
+            "title": "US President Donald Trump is set to speak to nation on the war with Iran",
+            "url": "https://www.fxstreet.com/news/us-president-donald-trump-is-set-to-speak-to-nation-on-the-war-with-iran-202604012345",
+            "summary": "US President Donald Trump will address the nation at 01:00 GMT on Thursday to give an “update” on the war with Iran, CNN reported. The speech will be the first major national address the president has delivered on the conflict since the first joint US-Israeli strikes on Iran in late February.",
+            "sentiment": -0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "geopolitics_iran_risk_sentiment",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-01T22:36:00+00:00",
+            "source": "fxstreet",
+            "title": "SGD: MAS tightening path supports currency – Standard Chartered",
+            "url": "https://www.fxstreet.com/news/sgd-mas-tightening-path-supports-currency-standard-chartered-202604012236",
+            "summary": "Standard Chartered’s Edward Lee and Jonathan Koh expect the Monetary Authority of Singapore to steepen the SGD NEER slope by 50bps in April, partially reversing pre-emptive easing from H1-2025 while keeping the band unchanged.",
+            "sentiment": -0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.55,
+            "event_key": "geopolitics_none_none",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-01T22:30:00+00:00",
+            "source": "fxstreet",
+            "title": "When is the Australian Trade Data and how could it affect AUD/USD?",
+            "url": "https://www.fxstreet.com/news/when-is-the-australian-trade-data-and-how-could-it-affect-aud-usd-202604012230",
+            "summary": "The Australian Bureau of Statistics will publish its data for February on Thursday at 00.30 GMT. Australia’s Trade Surplus is expected to narrow to 2,500M MoM in February, compared to 2,631M in January.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-01T20:39:00+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.75,
             "event_key": "macro_eu_inflation",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-01T15:04:18+00:00",
-            "source": "fxstreet",
-            "title": "Norges Bank: Market repricing and inflation risks – Rabobank",
-            "url": "https://www.fxstreet.com/news/norges-bank-market-repricing-and-inflation-risks-rabobank-202604011504",
-            "summary": "Rabobank’s Senior FX Strategist Jane Foley notes that Norges Bank has shifted to a more hawkish stance as Norwegian inflation proves sticky. January and February CPI data surprised on the upside, prompting markets to move from expecting rate cuts to pricing in further tightening.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_none_rates",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-01T14:42:02+00:00",
-            "source": "fxstreet",
-            "title": "USD: NFP normalization and Fed hold expectations – TD Securities",
-            "url": "https://www.fxstreet.com/news/usd-nfp-normalization-and-fed-hold-expectations-td-securities-202604011442",
-            "summary": "TD Securities analysts expect the March US labor report to show a normalization in Nonfarm Payrolls (NFP), with headline gains of 30k, private NFP at 40k and a -10k drag from government jobs.",
-            "sentiment": 0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "regulation_fed_rates",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-01T14:30:22+00:00",
-            "source": "fxstreet",
-            "title": "Oil: Price shock impact on US growth – Commerzbank",
-            "url": "https://www.fxstreet.com/news/oil-price-shock-impact-on-us-growth-commerzbank-202604011430",
-            "summary": "Commerzbank economists Bernd Weidensteiner and Christoph Balz assess how the recent surge in Brent and WTI prices affects the US economy. They stress that the United States is structurally less vulnerable than in the 1970s thanks to lower oil intensity and higher domestic production.",
-            "sentiment": 0.0,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_us_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.13,
-        "avg_impact_score": 0.62,
+        "avg_sentiment": -0.15,
+        "avg_impact_score": 0.6183,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
