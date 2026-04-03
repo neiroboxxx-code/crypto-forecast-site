@@ -1,16 +1,31 @@
 {
-    "updated_at": "2026-04-02T23:54:59.559305+00:00",
+    "updated_at": "2026-04-03T01:10:03.128289+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6154,
+        "risk_off_pressure": 0.6143,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 8
+        "oil_shock_count": 9
     },
     "items": [
+        {
+            "published_at": "2026-04-02T23:57:19+00:00",
+            "source": "fxstreet",
+            "title": "Fed’s Goolsbee: Oil price rise is quite serious, everything depends on how long it lasts",
+            "url": "https://www.fxstreet.com/news/feds-goolsbee-oil-price-rise-is-quite-serious-everything-depends-on-how-long-it-lasts-202604022357",
+            "summary": "Federal Reserve Bank of Chicago President Austan Goolsbee said on Thursday that he is concerned about the timing of rising oil prices, stating that they could hinder efforts to reduce inflation.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_fed_oil",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-04-02T23:49:28+00:00",
             "source": "fxstreet",
@@ -175,21 +190,6 @@
             "btc_relevance_score": 0.55,
             "event_key": "regulation_none_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-02T15:21:38+00:00",
-            "source": "fxstreet",
-            "title": "Fed’s Logan: Payroll gains have been pretty weak",
-            "url": "https://www.fxstreet.com/news/feds-logan-payroll-gains-have-been-pretty-weak-202604021521",
-            "summary": "Lorie Logan, President of the Federal Reserve (Fed) Bank of Dallas, said that the Fed should not let balance sheets distract them from their main mission. Logan also claimed that central bank balance sheet growth isn’t bad if it meets the public's need during a speech at her bank on Thursday.",
-            "sentiment": 0.4,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_fed_rates",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
