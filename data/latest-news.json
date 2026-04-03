@@ -1,16 +1,46 @@
 {
-    "updated_at": "2026-04-03T09:10:02.960901+00:00",
+    "updated_at": "2026-04-03T13:10:01.541025+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6182,
+        "risk_off_pressure": 0.6444,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 8
+        "oil_shock_count": 7
     },
     "items": [
+        {
+            "published_at": "2026-04-03T11:33:41+00:00",
+            "source": "fxstreet",
+            "title": "Euro is looking for direction with all eyes on US Nonfarm Payrolls data",
+            "url": "https://www.fxstreet.com/news/eur-usd-steadies-below-11550-awaiting-us-payrolls-data-202604030904",
+            "summary": "The Euro (EUR) is trading sideways between 1.1530 and 1.1550 against the US Dollar (USD) in a holiday-thinned session, with most markets closed on Good Friday. The pair is on track for a 0.3% weekly appreciation, yet with price action trapped halfway through March’s trading range.",
+            "sentiment": 0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_eu_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-03T10:30:10+00:00",
+            "source": "fxstreet",
+            "title": "NZD/USD hovers above mid-term lows at 0.5700 with US NFP on tap",
+            "url": "https://www.fxstreet.com/news/nzd-usd-hovers-above-mid-term-lows-at-05700-with-us-nfp-on-tap-202604031030",
+            "summary": "The New Zealand Dollar (NZD) is showing the weakest performance among major currencies in an otherwise calm Good Friday session, with most markets closed on bank holidays.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-03T07:26:01+00:00",
             "source": "fxstreet",
@@ -160,42 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "macro_fed_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-02T23:49:28+00:00",
-            "source": "fxstreet",
-            "title": "US President Donald Trump urges Iran to make deal after bridge strike",
-            "url": "https://www.fxstreet.com/news/us-president-donald-trump-urges-iran-to-make-deal-after-bridge-strike-202604022349",
-            "summary": "US President Donald Trump touted the destruction of a bridge in Tehran, Iran. He warned that there was “much more to follow” and urged Tehran to “make a deal before it is too late.\"",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "geopolitics_iran_risk_sentiment",
-            "market_regime_effect": "neutral"
-        },
-        {
-            "published_at": "2026-04-02T23:27:41+00:00",
-            "source": "fxstreet",
-            "title": "US President Donald Trump will impose 100% tariff on some patented drugs — Bloomberg",
-            "url": "https://www.fxstreet.com/news/us-president-donald-trump-will-impose-100-tariff-on-some-patented-drugs-bloomberg-202604022327",
-            "summary": "US President Donald Trump signed an executive order that could slap up to 100% on certain imported medicines from companies that don't reach deals with his administration in the coming months, Bloomberg reported on Thursday.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_us_tariffs",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.08,
-        "avg_impact_score": 0.6217,
+        "avg_sentiment": -0.07,
+        "avg_impact_score": 0.6283,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
