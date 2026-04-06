@@ -1,16 +1,61 @@
 {
-    "updated_at": "2026-04-06T09:10:04.912592+00:00",
+    "updated_at": "2026-04-06T13:10:07.211114+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6091,
+        "risk_off_pressure": 0.6042,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 8
+        "oil_shock_count": 9
     },
     "items": [
+        {
+            "published_at": "2026-04-06T11:29:58+00:00",
+            "source": "fxstreet",
+            "title": "When is the US ISM Services PMI data for March and how could it affect EUR/USD?",
+            "url": "https://www.fxstreet.com/news/when-is-the-us-ism-services-pmi-data-for-march-and-how-could-it-affect-eur-usd-202604061129",
+            "summary": "The United States (US) Institute of Supply Management (ISM) Services Purchasing Managers’ Index (PMI) data for March is scheduled to be published today at 14:00 GMT.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_eu_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-06T10:10:31+00:00",
+            "source": "fxstreet",
+            "title": "WTI Oil drifts below $102.00 amid hopes of a peace deal in Iran",
+            "url": "https://www.fxstreet.com/news/wti-oil-drifts-to-10200-level-amid-hopes-of-a-peace-deal-in-iran-202604061010",
+            "summary": "US benchmark West Texas Intermediate Oil (WTI) depreciated about $5 from session highs on Monday, hitting lows near $101.00 per barrel, from $106.44 highs, weighed by news that the US and Iran might be bringing positions closer to a peace deal through international intermediaries.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_iran_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-06T09:32:15+00:00",
+            "source": "fxstreet",
+            "title": "USD: Oil-driven support reshapes path – OCBC",
+            "url": "https://www.fxstreet.com/news/usd-oil-driven-support-reshapes-path-ocbc-202604060932",
+            "summary": "OCBC strategists Sim Moh Siong and Christopher Wong highlight that higher Oil prices and safe-haven flows have re-anchored the Dollar, reversing expectations for a steady USD decline.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_oil",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-04-06T09:04:06+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "geopolitics_opec_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-05T22:30:48+00:00",
-            "source": "fxstreet",
-            "title": "WTI rises to near $105.00 as Trump threatens to hit Iran infrastructure",
-            "url": "https://www.fxstreet.com/news/wti-rises-to-near-10500-as-trump-threatens-to-hit-iran-infrastructure-202604052230",
-            "summary": "West Texas Intermediate (WTI), the US crude oil benchmark, is trading around $105.00 during the Asian trading hours on Monday. The WTI price climbs to its highest levels in nearly four years amid escalating conflict in the Middle East.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_iran_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-05T20:56:44+00:00",
-            "source": "fxstreet",
-            "title": "US President Donald Trump: Open the Strait of you’ll be living in hell",
-            "url": "https://www.fxstreet.com/news/us-president-donald-trump-open-the-strait-of-youll-be-living-in-hell-202604052056",
-            "summary": "United States President Donald Trump has threatened to destroy Iran if they do not reopen the Strait of Hormuz before the deadline, in a post shared on Truth Social.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_us_shipping",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-03T14:23:36+00:00",
-            "source": "fxstreet",
-            "title": "US S&P Global Services PMI posts first contraction since 2023",
-            "url": "https://www.fxstreet.com/news/us-sp-global-services-pmi-posts-first-contraction-since-2023-202604031423",
-            "summary": "The US S&P Global Services PMI in March reported that business activity in the sector is slowing sharply, falling to contractionary territory for the first time since January 2023, amid higher inflation and the war in the Middle East.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "regulation_us_inflation",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.06,
-        "avg_impact_score": 0.6167,
+        "avg_sentiment": -0.05,
+        "avg_impact_score": 0.6083,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
