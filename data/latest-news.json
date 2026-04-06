@@ -1,16 +1,61 @@
 {
-    "updated_at": "2026-04-06T13:10:07.211114+00:00",
+    "updated_at": "2026-04-06T17:10:06.502659+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6042,
+        "risk_off_pressure": 0.6125,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 9
+        "oil_shock_count": 10
     },
     "items": [
+        {
+            "published_at": "2026-04-06T14:53:04+00:00",
+            "source": "fxstreet",
+            "title": "APAC FX: Intervention and vulnerability to USD – BNY",
+            "url": "https://www.fxstreet.com/news/apac-fx-intervention-and-vulnerability-to-usd-bny-202604061453",
+            "summary": "BNY’s Bob Savage focuses on rising FX intervention and fragile sentiment in Asia-Pacific (APAC) as higher Oil and geopolitical risks pressure regional currencies.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-06T14:08:26+00:00",
+            "source": "fxstreet",
+            "title": "CAD: Jobs data and geopolitics steer rates – TD Securities",
+            "url": "https://www.fxstreet.com/news/cad-jobs-data-and-geopolitics-steer-rates-td-securities-202604061408",
+            "summary": "TD Securities strategists Robert Both and Emma Lawrence highlight that Canadian rates are opening weaker, with yields tracking US moves and geopolitical tensions. They expect CAD employment to show only a modest rebound and see imported volatility dominating.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "regulation_us_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-06T13:47:31+00:00",
+            "source": "fxstreet",
+            "title": "Brent: Conflict keeps risk premium elevated – OCBC",
+            "url": "https://www.fxstreet.com/news/brent-conflict-keeps-risk-premium-elevated-ocbc-202604061347",
+            "summary": "OCBC strategists Sim Moh Siong and Christopher Wong argue that market hopes for de-escalation in the US–Iran conflict look premature for Brent.",
+            "sentiment": -0.6,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_iran_oil",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-04-06T11:29:58+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "geopolitics_us_shipping",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-05T23:42:24+00:00",
-            "source": "fxstreet",
-            "title": "Australian Dollar softens on strong US jobs data, Middle East tensions",
-            "url": "https://www.fxstreet.com/news/australian-dollar-softens-on-strong-us-jobs-data-middle-east-tensions-202604052342",
-            "summary": "The AUD/USD pair extends the decline to near 0.6885 during the early Asian session on Monday. The US Dollar (USD) strengthens against the Australian Dollar (AUD) amid stronger-than-expected US employment data and ongoing geopolitical tensions in the Middle East.",
-            "sentiment": 0.0,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-05T23:07:44+00:00",
-            "source": "fxstreet",
-            "title": "Japanese Yen holds steady amid US-Iran tensions",
-            "url": "https://www.fxstreet.com/news/japanese-yen-holds-steady-amid-us-iran-tensions-202604052307",
-            "summary": "The USD/JPY pair trades on a flat note near 159.65 during the early Asian session on Monday. The pair steadies as traders continue to assess the developments surrounding the US-Iran conflict.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_iran_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-05T22:38:13+00:00",
-            "source": "fxstreet",
-            "title": "OPEC+ agrees to boost oil output in May amid global energy crisis",
-            "url": "https://www.fxstreet.com/news/opec-agrees-to-boost-oil-output-in-may-amid-global-energy-crisis-202604052238",
-            "summary": "The Organization of the Petroleum Exporting Countries and its allies (OPEC+) agreed on Sunday to raise their oil output quotas by 206,000 barrels per day (bps) for May, Reuters reported.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_opec_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.05,
-        "avg_impact_score": 0.6083,
+        "avg_sentiment": -0.06,
+        "avg_impact_score": 0.61,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
