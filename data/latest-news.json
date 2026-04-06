@@ -1,16 +1,46 @@
 {
-    "updated_at": "2026-04-06T01:10:01.009736+00:00",
+    "updated_at": "2026-04-06T05:10:00.978285+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6125,
+        "risk_off_pressure": 0.6136,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 10
+        "oil_shock_count": 8
     },
     "items": [
+        {
+            "published_at": "2026-04-06T04:02:22+00:00",
+            "source": "fxstreet",
+            "title": "US, Iran discuss 45-day ceasefire as mediators push for deal ahead of deadline",
+            "url": "https://www.fxstreet.com/news/us-iran-discuss-45-day-ceasefire-as-mediators-push-for-deal-ahead-of-deadline-202604060402",
+            "summary": "The United States (US), Iran and regional mediators are discussing terms for a possible 45-day ceasefire that could lead to an end of fighting, Bloomberg reported on Monday, citing Axios. The people, who were not named, said chances of reaching a deal over the next 48 hours are low.",
+            "sentiment": 0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "geopolitics_iran_none",
+            "market_regime_effect": "neutral"
+        },
+        {
+            "published_at": "2026-04-06T03:44:02+00:00",
+            "source": "fxstreet",
+            "title": "Asian stocks trade mixed amid Trump's fresh deadline to reopen the Strait of Hormuz",
+            "url": "https://www.fxstreet.com/news/asian-stocks-trade-mixed-amid-trumps-fresh-deadline-to-reopen-the-strait-of-hormuz-202604060344",
+            "summary": "Asian equity markets opened mixed at the start of a new week as traders remain on edge amid the risk of a further escalation of tensions in the Middle East.",
+            "sentiment": -0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_us_shipping",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-04-05T23:42:24+00:00",
             "source": "fxstreet",
@@ -160,41 +190,11 @@
             "btc_relevance_score": 0.85,
             "event_key": "geopolitics_us_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-03T07:00:00+00:00",
-            "source": "fxstreet",
-            "title": "US Nonfarm Payrolls expected to show 60K job gains in March as markets assess Fed rate path",
-            "url": "https://www.fxstreet.com/news/us-nonfarm-payrolls-expected-to-rise-by-60k-in-march-202604030400",
-            "summary": "The United States (US) Bureau of Labor Statistics (BLS) will release the Nonfarm Payrolls (NFP) data for March on Friday at 12:30 GMT.",
-            "sentiment": 0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_fed_rates",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-03T06:58:22+00:00",
-            "source": "fxstreet",
-            "title": "Japanese Yen struggles due to BoJ’s rate hike uncertainty",
-            "url": "https://www.fxstreet.com/news/japanese-yen-struggles-due-to-bojs-rate-hike-uncertainty-202604030658",
-            "summary": "USD/JPY remains in the positive territory for the third successive day after registering over 0.5% gains on Thursday, currently trading around 159.60 during the Asian hours on Friday. However, the pair moves little due to thin trading activity amid the Good Friday holiday.",
-            "sentiment": 0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_none_rates",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.04,
+        "avg_sentiment": -0.05,
         "avg_impact_score": 0.62,
         "primary_count": 0,
         "secondary_count": 0,
