@@ -1,16 +1,61 @@
 {
-    "updated_at": "2026-04-06T21:10:02.069462+00:00",
+    "updated_at": "2026-04-07T01:10:01.154010+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6115,
+        "risk_off_pressure": 0.6133,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 11
+        "oil_shock_count": 12
     },
     "items": [
+        {
+            "published_at": "2026-04-06T23:59:16+00:00",
+            "source": "fxstreet",
+            "title": "Japan’s Katayama: Fluctuating oil prices cause high volatility in financial and FX markets",
+            "url": "https://www.fxstreet.com/news/japans-katayama-fluctuating-oil-prices-cause-high-volatility-in-financial-and-fx-markets-202604062359",
+            "summary": "Japan’s Finance Minister Satsuki Katayama said on Tuesday that G7 finance ministers and central bankers agreed that fluctuating oil prices cause high volatility in financial and foreign exchange markets.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-06T23:28:15+00:00",
+            "source": "fxstreet",
+            "title": "US President Donald Trump: Iran ceasefire proposal ‘significant’ but ‘not good enough’",
+            "url": "https://www.fxstreet.com/news/us-president-donald-trump-iran-ceasefire-proposal-significant-but-not-good-enough-202604062328",
+            "summary": "US President Donald Trump said that the latest proposal for a US ceasefire with Iran is “not good enough,” ahead of his deadline for Iran to either reopen the Strait of Hormuz or face major attacks on its civilian infrastructure, CNBC reported on Monday.",
+            "sentiment": 0.0,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_iran_shipping",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-06T21:24:42+00:00",
+            "source": "fxstreet",
+            "title": "NZD/USD rises as ceasefire hopes weigh on US Dollar ahead of RBNZ decision",
+            "url": "https://www.fxstreet.com/news/nzd-usd-rises-as-ceasefire-hopes-weigh-on-us-dollar-ahead-of-rbnz-decision-202604062124",
+            "summary": "The NZD/USD pair trades with a bullish tone near the 0.5710 region on Tuesday, as the US Dollar (USD) softens amid improving risk sentiment driven by ceasefire hopes in the Middle East.",
+            "sentiment": 0.4,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-06T19:09:08+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.75,
             "event_key": "macro_eu_usd",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-06T10:10:31+00:00",
-            "source": "fxstreet",
-            "title": "WTI Oil drifts below $102.00 amid hopes of a peace deal in Iran",
-            "url": "https://www.fxstreet.com/news/wti-oil-drifts-to-10200-level-amid-hopes-of-a-peace-deal-in-iran-202604061010",
-            "summary": "US benchmark West Texas Intermediate Oil (WTI) depreciated about $5 from session highs on Monday, hitting lows near $101.00 per barrel, from $106.44 highs, weighed by news that the US and Iran might be bringing positions closer to a peace deal through international intermediaries.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_iran_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-06T09:32:15+00:00",
-            "source": "fxstreet",
-            "title": "USD: Oil-driven support reshapes path – OCBC",
-            "url": "https://www.fxstreet.com/news/usd-oil-driven-support-reshapes-path-ocbc-202604060932",
-            "summary": "OCBC strategists Sim Moh Siong and Christopher Wong highlight that higher Oil prices and safe-haven flows have re-anchored the Dollar, reversing expectations for a steady USD decline.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_none_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-06T09:04:06+00:00",
-            "source": "fxstreet",
-            "title": "Canadian Dollar strengthens as US-Iran ceasefire talks weigh on US Dollar",
-            "url": "https://www.fxstreet.com/news/canadian-dollar-strengthens-as-us-iran-ceasefire-talks-weigh-on-us-dollar-202604060904",
-            "summary": "USD/CAD depreciates as the US Dollar (USD) eases amid improved market sentiment following the reports, suggesting prospects for a ceasefire in the Middle East. The pair trades around 1.3920 during the European hours on Monday.",
-            "sentiment": 0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_iran_usd",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.01,
-        "avg_impact_score": 0.615,
+        "avg_sentiment": -0.02,
+        "avg_impact_score": 0.6167,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
