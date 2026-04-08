@@ -1,26 +1,26 @@
 {
-    "updated_at": "2026-04-07T09:00:00+00:00",
+    "updated_at": "2026-04-08T01:00:00+00:00",
     "symbol": "BTCUSDT",
-    "prediction_time": "2026-04-07T09:10:01.732264+00:00",
-    "target_time": "2026-04-08T09:10:01.732264+00:00",
-    "current_price": 69207.8,
+    "prediction_time": "2026-04-08T01:10:07.151685+00:00",
+    "target_time": "2026-04-09T01:10:07.151685+00:00",
+    "current_price": 71741.6,
     "prediction_direction": "up",
-    "probability_up": 0.5929,
-    "probability_down": 0.4071,
-    "confidence": 18.58,
+    "probability_up": 0.7249,
+    "probability_down": 0.2751,
+    "confidence": 44.98,
     "model_version": "baseline_v11_direction_action_split",
-    "notes": "Baseline rule: 24h price change is zero or negative | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | Low relative volume reduces directional conviction | Bullish continuation into resistance weakens long entry quality | Bullish hold near support supports rebound scenario | Bullish two-candle continuation supports up signal | Rejection back inside level reduces conviction | Too close to resistance: level filter blocks long entry | Strict filter activated: confidence/probability/confirmation/levels not strong enough | candle_timestamp=2026-04-07T09:00:00+00:00",
-    "market_recommendation": "Лонг-сценарий есть, но вход сейчас неидеален",
-    "summary": "UP BIAS / NO ENTRY. Baseline rule: 24h price change is zero or negative | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | Low relative volume reduces directional conviction | Bullish continuation into resistance weakens long entry quality | Bullish hold near support supports rebound scenario | Bullish two-candle continuation supports up signal | Rejection back inside level reduces conviction | Too close to resistance: level filter blocks long entry | Strict filter activated: confidence/probability/confirmation/levels not strong enough | candle_timestamp=2026-04-07T09:00:00+00:00",
+    "notes": "Baseline rule: 24h price change is positive | Hammer strengthens up signal | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | Positive momentum supports up signal | High ATR/volatility reduces confidence | Low relative volume reduces directional conviction | Strong trend structure supports up signal | Shallow pullback supports bullish continuation | Recovery after pullback supports trend continuation | candle_timestamp=2026-04-08T01:00:00+00:00",
+    "market_recommendation": "Смотреть лонг",
+    "summary": "LONG. Baseline rule: 24h price change is positive | Hammer strengthens up signal | Negative news flow supports down signal | Secondary/unconfirmed news reduces confidence | Positive momentum supports up signal | High ATR/volatility reduces confidence | Low relative volume reduces directional conviction | Strong trend structure supports up signal | Shallow pullback supports bullish continuation | Recovery after pullback supports trend continuation | candle_timestamp=2026-04-08T01:00:00+00:00",
     "market": {
-        "latest_timestamp": "2026-04-07T09:00:00+00:00",
-        "latest_close": 69207.8,
-        "price_change_1h": 0.395,
-        "price_change_24h": -0.8022,
-        "avg_volume_24h": 334.8384,
-        "latest_volume": 78.929916,
-        "avg_volume_10": 212.57011,
-        "volume_ratio_10": 0.3713,
+        "latest_timestamp": "2026-04-08T01:00:00+00:00",
+        "latest_close": 71741.6,
+        "price_change_1h": 0.0485,
+        "price_change_24h": 4.4756,
+        "avg_volume_24h": 614.3018,
+        "latest_volume": 95.77743,
+        "avg_volume_10": 891.013153,
+        "volume_ratio_10": 0.1075,
         "high_volume_bar": false,
         "bullish_volume_pressure": false,
         "bearish_volume_pressure": false,
@@ -28,10 +28,10 @@
         "bearish_engulfing": false,
         "doji": false,
         "hammer": false,
-        "volatility_24h": 2086.7,
-        "rsi_14": 39.65,
-        "atr_14": 359.36,
-        "momentum_10": 0.005252
+        "volatility_24h": 5062.1,
+        "rsi_14": 81.27,
+        "atr_14": 705.06,
+        "momentum_10": 0.052454
     },
     "levels": {
         "nearest_resistance": 69043.3,
@@ -91,18 +91,18 @@
     },
     "news": {
         "news_count": 30,
-        "avg_sentiment": -0.17,
-        "avg_impact_score": 0.6217,
+        "avg_sentiment": -0.16,
+        "avg_impact_score": 0.6283,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
     },
     "performance": {
-        "total_predictions": 153,
-        "checked_results": 148,
+        "total_predictions": 154,
+        "checked_results": 150,
         "correct_predictions": 81,
-        "incorrect_predictions": 67,
-        "accuracy": 55
+        "incorrect_predictions": 69,
+        "accuracy": 54
     },
     "position_status": {
         "has_open_position": false,
@@ -112,5 +112,5 @@
         "take": null
     },
     "market_direction": "up",
-    "trade_action": "no_trade"
+    "trade_action": "enter_long"
 }
