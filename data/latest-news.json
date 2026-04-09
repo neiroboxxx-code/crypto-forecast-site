@@ -1,5 +1,5 @@
 {
-    "updated_at": "2026-04-09T01:10:02.365240+00:00",
+    "updated_at": "2026-04-09T05:10:03.410890+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
@@ -11,6 +11,51 @@
         "oil_shock_count": 6
     },
     "items": [
+        {
+            "published_at": "2026-04-09T04:57:22+00:00",
+            "source": "fxstreet",
+            "title": "BoJ’s Ueda says Japan's financial conditions remain accommodative",
+            "url": "https://www.fxstreet.com/news/bojs-ueda-says-japans-financial-conditions-remain-accommodative-202604090457",
+            "summary": "Bank of Japan (BoJ) Governor Kazuo Ueda said that real interest rates are clearly negative and keeping the country's financial conditions accommodative, Reuters reported on Thursday.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_eu_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-09T04:05:04+00:00",
+            "source": "fxstreet",
+            "title": "US President Donald Trump warns of stronger military response if Iran deal fails",
+            "url": "https://www.fxstreet.com/news/us-president-donald-trump-warns-of-stronger-military-response-if-iran-deal-fails-202604090405",
+            "summary": "US President Donald Trump said on Thursday that US forces will remain deployed around Iran until a final agreement is fully implemented. He emphasized that the Strait of Hormuz must remain open and safe.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_iran_shipping",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-09T03:28:03+00:00",
+            "source": "fxstreet",
+            "title": "US Dollar Index moves little due to renewed safe-haven demand",
+            "url": "https://www.fxstreet.com/news/us-dollar-index-moves-little-due-to-renewed-safe-haven-demand-202604090328",
+            "summary": "The US Dollar Index (DXY), which measures the value of the US Dollar (USD) against six major currencies, is remaining flat after three days of losses and hovering around 99.00 during the Asian hours on Wednesday.",
+            "sentiment": 0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-08T23:30:30+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "macro_us_inflation",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-08T16:31:02+00:00",
-            "source": "fxstreet",
-            "title": "WTI slides sharply after US-Iran ceasefire removes war premium",
-            "url": "https://www.fxstreet.com/news/wti-slides-sharply-after-us-iran-ceasefire-removes-war-premium-202604081631",
-            "summary": "West Texas Intermediate (WTI) Crude Oil trades sharply lower on Wednesday, falling more than 10% after a temporary ceasefire agreement between the United States and Iran reduced the geopolitical risk premium embedded in prices.",
-            "sentiment": -0.4,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_iran_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-08T16:15:00+00:00",
-            "source": "fxstreet",
-            "title": "Fed Minutes to offer insights into March hold decision amid hawkish outlook",
-            "url": "https://www.fxstreet.com/news/fed-minutes-to-offer-insights-into-march-hold-decision-amid-hawkish-outlook-202604081315",
-            "summary": "The Federal Reserve (Fed) will publish its Minutes from the March 18 meeting on Wednesday. The release should be less about the decision itself and more about the officials’ “no rush to cut” narrative.",
-            "sentiment": 0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_fed_rates",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-08T15:00:45+00:00",
-            "source": "fxstreet",
-            "title": "Brent: Elevated prices after ceasefire relief – Commerzbank",
-            "url": "https://www.fxstreet.com/news/brent-elevated-prices-after-ceasefire-relief-commerzbank-202604081500",
-            "summary": "Commerzbank’s Thu Lan Nguyen notes that Brent prices dropped by USD 15 on news of a two‑week U.S.–Iran ceasefire and reopening of the Strait of Hormuz, but still trade near USD 95, well above pre‑war levels.",
-            "sentiment": -0.6,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_iran_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.07,
-        "avg_impact_score": 0.635,
+        "avg_sentiment": -0.1,
+        "avg_impact_score": 0.6317,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
