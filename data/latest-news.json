@@ -1,5 +1,5 @@
 {
-    "updated_at": "2026-04-08T21:10:07.246917+00:00",
+    "updated_at": "2026-04-09T01:10:02.365240+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
@@ -11,6 +11,51 @@
         "oil_shock_count": 6
     },
     "items": [
+        {
+            "published_at": "2026-04-08T23:30:30+00:00",
+            "source": "fxstreet",
+            "title": "Iran says peace talks would be 'unreasonable' as Israel expands Lebanon strikes — Reuters",
+            "url": "https://www.fxstreet.com/news/iran-says-peace-talks-would-be-unreasonable-as-israel-expands-lebanon-strikes-reuters-202604082330",
+            "summary": "Sporadic fighting continued in the Middle East, including in Lebanon, killing hundreds of people and drawing a threat of retaliation from Iran, Reuters reported on Thursday.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "geopolitics_iran_risk_sentiment",
+            "market_regime_effect": "neutral"
+        },
+        {
+            "published_at": "2026-04-08T21:56:29+00:00",
+            "source": "fxstreet",
+            "title": "NZD/USD holds fragile footing as USD demand returns amid geopolitical noise",
+            "url": "https://www.fxstreet.com/news/nzd-usd-holds-fragile-footing-as-usd-demand-returns-amid-geopolitical-noise-202604082156",
+            "summary": "The NZD/USD pair is trading with a cautious tone around the 0.5830 region on Thursday, as the New Zealand Dollar (NZD) regains some traction following shifting geopolitical headlines.",
+            "sentiment": 0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-08T21:42:42+00:00",
+            "source": "fxstreet",
+            "title": "AUD/JPY Price Forecast: Forms shooting-star, drops below 112.00 as bears lurk",
+            "url": "https://www.fxstreet.com/news/aud-jpy-price-forecast-forms-shooting-star-drops-below-11200-as-bears-lurk-202604082142",
+            "summary": "The Australian Dollar extended its gains versus the Japanese Yen, driven by an improvement in risk appetite amid the two-week pause in the Middle East conflict between the US and Iran.",
+            "sentiment": -0.6,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_iran_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-08T19:52:57+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "macro_iran_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-08T14:58:32+00:00",
-            "source": "fxstreet",
-            "title": "Oil tankers passing through Hormuz stopped after Israel's ceasefire breach – Fars News Agency",
-            "url": "https://www.fxstreet.com/news/oil-tankers-passing-through-hormuz-stopped-after-israels-ceasefire-breach-fars-news-agency-202604081458",
-            "summary": "Iran's Fars News Agency reported on Wednesday that oil tankers passing through the Strait of Hormuz have been stopped after Israel breached the ceasefire, per Reuters.",
-            "sentiment": 0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "geopolitics_israel_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-08T14:49:38+00:00",
-            "source": "fxstreet",
-            "title": "Eurozone: Weak demand offsets supply constraints – BNP Paribas",
-            "url": "https://www.fxstreet.com/news/eurozone-weak-demand-offsets-supply-constraints-bnp-paribas-202604081449",
-            "summary": "BNP Paribas analysts argue that weaker demand in the Eurozone compared to 2022 is helping to contain inflation, even as supply constraints remain above historical averages.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_eu_inflation",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-08T12:06:50+00:00",
-            "source": "fxstreet",
-            "title": "Oil: Prices slump below $100 on ceasefire – ING",
-            "url": "https://www.fxstreet.com/news/oil-prices-slump-below-100-on-ceasefire-ing-202604081206",
-            "summary": "ING’s commodities team of Ewa Manthey and Warren Patterson report that Oil prices have dropped sharply, with Brent and WTI falling well below $100 as a US–Iran two‑week ceasefire eases supply disruption fears.",
-            "sentiment": -0.6,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_iran_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.04,
-        "avg_impact_score": 0.6383,
+        "avg_sentiment": -0.07,
+        "avg_impact_score": 0.635,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
