@@ -1,16 +1,46 @@
 {
-    "updated_at": "2026-04-10T13:10:06.984789+00:00",
+    "updated_at": "2026-04-10T17:10:06.951822+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6531,
+        "risk_off_pressure": 0.6529,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 8
+        "oil_shock_count": 9
     },
     "items": [
+        {
+            "published_at": "2026-04-10T15:13:20+00:00",
+            "source": "fxstreet",
+            "title": "Iran demands a ceasefire in Lebanon before peace talks",
+            "url": "https://www.fxstreet.com/news/iran-demands-a-ceasefire-in-lebanon-before-talks-202604101513",
+            "summary": "Iran's ‌parliament speaker, Mohammad Baqer Qalibaf, said in a post on X on Friday that two previously agreed measures, a ceasefire in Lebanon and the release of Iran's blocked assets, must be implemented before negotiations begin.",
+            "sentiment": 0.0,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "geopolitics_iran_none",
+            "market_regime_effect": "neutral"
+        },
+        {
+            "published_at": "2026-04-10T14:38:00+00:00",
+            "source": "fxstreet",
+            "title": "Oil: Fragile ceasefire keeps supply risks elevated – Wells Fargo",
+            "url": "https://www.fxstreet.com/news/oil-fragile-ceasefire-keeps-supply-risks-elevated-wells-fargo-202604101438",
+            "summary": "Wells Fargo’s international economics team notes that a fragile ceasefire in the Middle East leaves Oil market risks elevated and conviction on the outlook low.",
+            "sentiment": 0.0,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "geopolitics_none_oil",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-04-10T12:35:05+00:00",
             "source": "fxstreet",
@@ -160,42 +190,12 @@
             "btc_relevance_score": 0.65,
             "event_key": "geopolitics_us_none",
             "market_regime_effect": "neutral"
-        },
-        {
-            "published_at": "2026-04-10T04:00:00+00:00",
-            "source": "fxstreet",
-            "title": "US CPI inflation set to jump sharply in March, driven by higher energy prices",
-            "url": "https://www.fxstreet.com/news/us-cpi-inflation-set-to-jump-sharply-in-march-driven-by-higher-energy-prices-202604100400",
-            "summary": "The US Bureau of Labor Statistics (BLS) will publish the March Consumer Price Index (CPI) data on Friday. The report is expected to show a jump in inflation, driven by the upsurge seen in crude Oil prices after the United States (US) and Israel launched a joint attack on Iran.",
-            "sentiment": 0.4,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-10T03:29:32+00:00",
-            "source": "fxstreet",
-            "title": "Canadian Dollar declines as oil prices ease, US Dollar gains",
-            "url": "https://www.fxstreet.com/news/canadian-dollar-declines-as-oil-prices-ease-us-dollar-gains-202604100329",
-            "summary": "USD/CAD gains ground after four days of losses, trading around 1.3820 during the Asian hours on Friday. The pair appreciates as the commodity-linked Canadian Dollar (CAD) struggles amid lower oil prices, given Canada’s status as the largest crude exporter to the United States (US).",
-            "sentiment": 0.4,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
         "avg_sentiment": -0.07,
-        "avg_impact_score": 0.63,
+        "avg_impact_score": 0.6333,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
