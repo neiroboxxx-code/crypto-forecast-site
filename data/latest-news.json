@@ -1,16 +1,61 @@
 {
-    "updated_at": "2026-04-10T01:10:05.534208+00:00",
+    "updated_at": "2026-04-10T05:10:07.182118+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6591,
+        "risk_off_pressure": 0.6643,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 4
+        "oil_shock_count": 6
     },
     "items": [
+        {
+            "published_at": "2026-04-10T04:00:00+00:00",
+            "source": "fxstreet",
+            "title": "US CPI inflation set to jump sharply in March, driven by higher energy prices",
+            "url": "https://www.fxstreet.com/news/us-cpi-inflation-set-to-jump-sharply-in-march-driven-by-higher-energy-prices-202604100400",
+            "summary": "The US Bureau of Labor Statistics (BLS) will publish the March Consumer Price Index (CPI) data on Friday. The report is expected to show a jump in inflation, driven by the upsurge seen in crude Oil prices after the United States (US) and Israel launched a joint attack on Iran.",
+            "sentiment": 0.4,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-10T03:29:32+00:00",
+            "source": "fxstreet",
+            "title": "Canadian Dollar declines as oil prices ease, US Dollar gains",
+            "url": "https://www.fxstreet.com/news/canadian-dollar-declines-as-oil-prices-ease-us-dollar-gains-202604100329",
+            "summary": "USD/CAD gains ground after four days of losses, trading around 1.3820 during the Asian hours on Friday. The pair appreciates as the commodity-linked Canadian Dollar (CAD) struggles amid lower oil prices, given Canada’s status as the largest crude exporter to the United States (US).",
+            "sentiment": 0.4,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-10T02:34:46+00:00",
+            "source": "fxstreet",
+            "title": "Japanese Yen softens on fragile US‑Iran ceasefire, eyes on US CPI release",
+            "url": "https://www.fxstreet.com/news/japanese-yen-softens-on-fragile-us-iran-ceasefire-eyes-on-us-cpi-release-202604100234",
+            "summary": "The USD/JPY pair gathers strength to around 159.15 during the Asian trading hours on Friday. Ongoing concerns regarding the Strait of Hormuz and the Middle East continue to lift the US Dollar (USD) against the Japanese Yen (JPY).",
+            "sentiment": 0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_iran_shipping",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-04-10T00:29:22+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "geopolitics_iran_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-09T18:23:00+00:00",
-            "source": "fxstreet",
-            "title": "Asia FX: Geopolitics and cautious positioning – MUFG",
-            "url": "https://www.fxstreet.com/news/asia-fx-geopolitics-and-cautious-positioning-mufg-202604091823",
-            "summary": "MUFG’s Senior Currency Analyst Michael Wan highlights that Asian currencies have held up alongside a weaker Dollar despite renewed tensions around the fragile two-week ceasefire in the Middle East.",
-            "sentiment": 0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-09T17:40:14+00:00",
-            "source": "fxstreet",
-            "title": "Global manufacturing: PMI drop highlights bottlenecks – ABN AMRO",
-            "url": "https://www.fxstreet.com/news/global-manufacturing-pmi-drop-highlights-bottlenecks-abn-amro-202604091740",
-            "summary": "ABN AMRO's Senior Economist Arjen van Dijkhuizen highlights that global manufacturing PMI slipped from 51.8 in February to 51.3 in March, largely linked to the Iran conflict.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "geopolitics_iran_risk_sentiment",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-09T17:02:00+00:00",
-            "source": "fxstreet",
-            "title": "Dow Jones Industrial Average extends ceasefire rally as Netanyahu opens Lebanon talks",
-            "url": "https://www.fxstreet.com/news/dow-jones-industrial-average-extends-ceasefire-rally-as-netanyahu-opens-lebanon-talks-202604091702",
-            "summary": "The Dow Jones Industrial Average (DJIA) climbed around 300 points on Thursday, or roughly 0.7%, extending a two-day rally that has seen the index recover sharply from its war-era lows.",
-            "sentiment": -0.4,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.55,
-            "event_key": "geopolitics_none_none",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.12,
-        "avg_impact_score": 0.6267,
+        "avg_sentiment": -0.09,
+        "avg_impact_score": 0.635,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
