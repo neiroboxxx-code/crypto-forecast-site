@@ -1,16 +1,61 @@
 {
-    "updated_at": "2026-04-13T01:10:05.804664+00:00",
+    "updated_at": "2026-04-13T05:10:04.957731+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6438,
+        "risk_off_pressure": 0.6125,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 9
+        "oil_shock_count": 10
     },
     "items": [
+        {
+            "published_at": "2026-04-13T04:46:13+00:00",
+            "source": "fxstreet",
+            "title": "Canadian Dollar pares losses vs USD as rallying oil prices counter hawkish Fed bets",
+            "url": "https://www.fxstreet.com/news/canadian-dollar-pares-losses-vs-usd-as-rallying-oil-prices-counter-hawkish-fed-bets-202604130446",
+            "summary": "The USD/CAD pair retreats a few pips from the Asian session high and currently trades around the 1.3860-1.3855 region, up around 0.15% for the day.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_fed_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-13T03:28:20+00:00",
+            "source": "fxstreet",
+            "title": "WTI Price Forecast: Rallies to $98 as Trump aims to blockade Hormuz",
+            "url": "https://www.fxstreet.com/news/wti-price-forecast-rallies-to-98-as-trump-aims-to-blockade-hormuz-202604130328",
+            "summary": "West Texas Intermediate (WTI), futures on NYMEX, trade 7.6% higher to near $98.00 during the Asian trading session on Monday.",
+            "sentiment": 0.0,
+            "impact_score": 0.35,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "general_us_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-13T01:15:31+00:00",
+            "source": "fxstreet",
+            "title": "PBOC sets USD/CNY reference rate at 6.8657 vs. 6.8654 previous",
+            "url": "https://www.fxstreet.com/news/pboc-sets-usd-cny-reference-rate-at-68657-vs-68654-previous-202604130115",
+            "summary": "On Monday, the People’s Bank of China (PBOC) sets the USD/CNY central rate for the trading session ahead at 6.8657 compared to Friday's of 6.8654 and 6.8395 Reuters estimate.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_china_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-13T00:34:00+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.45,
             "event_key": "regulation_iran_risk_sentiment",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-10T21:12:00+00:00",
-            "source": "fxstreet",
-            "title": "KRW: War risk keeps 1,450–1,550 range in focus – ING",
-            "url": "https://www.fxstreet.com/news/krw-war-risk-keeps-1-450-1-550-range-in-focus-ing-202604102112",
-            "summary": "ING’s Min Joo Kang notes that KRW is trading below 1,500, with near-term moves heavily dependent on Middle East developments. The team keeps its 1,450–1,550 trading range, expecting KRW to strengthen rapidly if the war ends.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "geopolitics_us_none",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-10T20:37:00+00:00",
-            "source": "fxstreet",
-            "title": "Singapore: Exports boosted by electronics cycle – DBS",
-            "url": "https://www.fxstreet.com/news/singapore-exports-boosted-by-electronics-cycle-dbs-202604102037",
-            "summary": "DBS Group Research expects Singapore’s non-oil domestic exports to rise for a seventh consecutive month in March 2026, accelerating to 10.3% year-on-year from 4.0% in February.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.55,
-            "event_key": "regulation_none_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-10T20:14:37+00:00",
-            "source": "fxstreet",
-            "title": "Fed’s Daly: If inflation stays elevated, we would hold steady",
-            "url": "https://www.fxstreet.com/news/feds-daly-if-inflation-stays-elevated-we-would-hold-steady-202604102014",
-            "summary": "Mary Daly, President of the Federal Reserve (Fed) Bank of San Francisco, told Reuters in an interview on Friday that if Iran conflict is resolved quickly and Oil prices come back down, a rate cut may not be out of the question.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_fed_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.08,
-        "avg_impact_score": 0.63,
+        "avg_sentiment": -0.09,
+        "avg_impact_score": 0.6117,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
