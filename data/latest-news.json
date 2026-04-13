@@ -1,16 +1,76 @@
 {
-    "updated_at": "2026-04-13T17:10:08.162918+00:00",
+    "updated_at": "2026-04-13T21:10:07.496427+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6306,
+        "risk_off_pressure": 0.6211,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 12
+        "oil_shock_count": 11
     },
     "items": [
+        {
+            "published_at": "2026-04-13T20:34:00+00:00",
+            "source": "fxstreet",
+            "title": "Asia FX: Softer start on Oil and risk – OCBC",
+            "url": "https://www.fxstreet.com/news/asia-fx-softer-start-on-oil-and-risk-ocbc-202604132034",
+            "summary": "OCBC strategists Sim Moh Siong and Christopher Wong expect Asian FX, especially high-beta Oil importers like KRW, THB, PHP and INR, to open weaker as renewed geopolitical uncertainty supports crude and the Dollar. However, resumed Hormuz transit tempers tail risks.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-13T19:09:02+00:00",
+            "source": "fxstreet",
+            "title": "Forex Today: US Dollar falls even as failed talks and Hormuz shutdown spark risk-off wave",
+            "url": "https://www.fxstreet.com/news/forex-today-us-dollar-falls-even-as-failed-talks-and-hormuz-shutdown-spark-risk-off-wave-202604131909",
+            "summary": "The US Dollar Index (DXY) fell on Monday, as markets digest headlines of failed Iran-United States (US) peace talks over the weekend and reports that US President Donald Trump moved the US Navy to close the Strait of Hormuz, a development that would typically fuel a strong safe-haven bid for the Gre",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_us_shipping",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-13T19:07:00+00:00",
+            "source": "fxstreet",
+            "title": "Renminbi: Limited Petroyuan prospects in energy trade – Commerzbank",
+            "url": "https://www.fxstreet.com/news/renminbi-limited-petroyuan-prospects-in-energy-trade-commerzbank-202604131907",
+            "summary": "Commerzbank’s Head of FX and Commodity Research Thu Lan Nguyen examines Iran’s proposal to charge Strait of Hormuz tolls in Renminbi and finds it unlikely to trigger a major Petroyuan shift.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_iran_shipping",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-13T17:07:20+00:00",
+            "source": "fxstreet",
+            "title": "Trump says Iran wants a deal as Hormuz blockade officially begins",
+            "url": "https://www.fxstreet.com/news/trump-says-iran-wants-deal-as-hormuz-blockade-officially-begins-202604131707",
+            "summary": "US President Donald Trump spoke at a press conference at the Oval Office and praised Vice-President JD Vance's work on Iran, saying that he “has done a very good job on Iran.”",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_iran_shipping",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-04-13T16:57:21+00:00",
             "source": "fxstreet",
@@ -130,72 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "macro_fed_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-13T08:47:31+00:00",
-            "source": "fxstreet",
-            "title": "WTI Crude Oil stalls below $98.00 with Iran peace hopes still alive",
-            "url": "https://www.fxstreet.com/news/wti-crude-oil-stalls-below-9800-with-iran-peace-hopes-still-alive-202604130847",
-            "summary": "Oil prices jumped on Monday following the failure of the peace talks between the US and Iran and the US pledge to block the Strait of Hormuz.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_iran_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-13T08:28:28+00:00",
-            "source": "fxstreet",
-            "title": "HUF: Election outcome boosts Forint as EU risk recedes – Danske Bank",
-            "url": "https://www.fxstreet.com/news/huf-election-outcome-boosts-forint-as-eu-risk-recedes-danske-bank-202604130828",
-            "summary": "Danske Research Team reports that Hungary’s election delivered a decisive victory for Péter Magyar’s pro‑EU Tisza party over Viktor Orban’s Fidesz, easing concerns about future EU budget and Ukraine aid negotiations.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.55,
-            "event_key": "geopolitics_eu_none",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-13T08:23:45+00:00",
-            "source": "fxstreet",
-            "title": "Iran criticizes US for blockade of vessels",
-            "url": "https://www.fxstreet.com/news/iran-criticizes-us-for-blockade-of-vessels-202604130823",
-            "summary": "According to a report from the Iranian state media Islamic Republic of Iran Broadcasting (IRIB), a spokesperson from Iran’s Khatam al-Anbiya Central Headquarters said during European trading hours on Monday that Tehran condemns the United States (US) intentions to blockade vessels entering and exiti",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "geopolitics_iran_none",
-            "market_regime_effect": "neutral"
-        },
-        {
-            "published_at": "2026-04-13T08:19:28+00:00",
-            "source": "fxstreet",
-            "title": "S&P 500: Earnings optimism versus conflict shock – Deutsche Bank",
-            "url": "https://www.fxstreet.com/news/sp-500-earnings-optimism-versus-conflict-shock-deutsche-bank-202604130819",
-            "summary": "Deutsche Bank’s strategists highlight that S&P 500 futures are lower as the Iran conflict escalates and energy prices jump, pressuring global risk sentiment.",
-            "sentiment": -0.8,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.55,
-            "event_key": "geopolitics_eu_risk_sentiment",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
         "avg_sentiment": -0.12,
-        "avg_impact_score": 0.62,
+        "avg_impact_score": 0.615,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
