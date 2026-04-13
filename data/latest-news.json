@@ -1,16 +1,61 @@
 {
-    "updated_at": "2026-04-13T09:10:02.798559+00:00",
+    "updated_at": "2026-04-13T13:10:06.593581+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6219,
+        "risk_off_pressure": 0.625,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 9
+        "oil_shock_count": 10
     },
     "items": [
+        {
+            "published_at": "2026-04-13T11:53:08+00:00",
+            "source": "fxstreet",
+            "title": "Oil: Prices surge on Hormuz blockade threat – ING",
+            "url": "https://www.fxstreet.com/news/oil-prices-surge-on-hormuz-blockade-threat-ing-202604131153",
+            "summary": "ING’s Ewa Manthey and Warren Patterson report that Oil markets rallied sharply after US-Iran talks collapsed, with ICE Brent jumping over 9% and NYMEX WTI moving above $105/bbl. The US plans a maritime blockade around Iranian ports, stoking supply fears.",
+            "sentiment": -0.4,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "geopolitics_iran_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-13T11:44:39+00:00",
+            "source": "fxstreet",
+            "title": "Fed: On hold as energy shock lifts inflation – Deutsche Bank",
+            "url": "https://www.fxstreet.com/news/fed-on-hold-as-energy-shock-lifts-inflation-deutsche-bank-202604131144",
+            "summary": "Deutsche Bank economists report the Federal Reserve (Fed) left rates at 3.50%-3.75% in March and still expects a 25 bp cut in September. Markets price only modest easing. They warn a prolonged Strait of Hormuz blockade could push Brent toward USD 120.",
+            "sentiment": -0.6,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_fed_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-13T11:30:21+00:00",
+            "source": "fxstreet",
+            "title": "Canada: Carney majority prospects and fiscal outlook – TD Securities",
+            "url": "https://www.fxstreet.com/news/canada-carney-majority-prospects-and-fiscal-outlook-td-securities-202604131130",
+            "summary": "TD Securities strategists discuss Canadian by-elections in three federal ridings and notes that Prime Minister Carney’s Liberals are close to securing a majority in Parliament.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "regulation_fed_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-13T08:53:31+00:00",
             "source": "fxstreet",
@@ -145,56 +190,11 @@
             "btc_relevance_score": 0.85,
             "event_key": "macro_china_usd",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-13T00:34:00+00:00",
-            "source": "fxstreet",
-            "title": "NZD/USD recovers slightly from daily low, keeps the red above 0.5800 on firmer USD",
-            "url": "https://www.fxstreet.com/news/nzd-usd-recovers-slightly-from-daily-low-keeps-the-red-above-05800-on-firmer-usd-202604130034",
-            "summary": "The NZD/USD pair opens with a bearish gap at the start of a new trading week in reaction to failed US-Iran peace talks over the weekend and trades around the 0.5800 mark during the Asian session.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_iran_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-12T23:46:18+00:00",
-            "source": "fxstreet",
-            "title": "Canadian Dollar falls further as USD haven demand counters WTI surge",
-            "url": "https://www.fxstreet.com/news/canadian-dollar-falls-further-as-usd-haven-demand-counters-wti-surge-202604122346",
-            "summary": "The Canadian Dollar (CAD) is extending its pullback from two-week highs of 1.3844 against the US Dollar (USD) early Monday, with USD/CAD capitalizing on the renewed demand for the Greenback as a go-to safe-haven.",
-            "sentiment": 0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_oil",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-12T23:14:30+00:00",
-            "source": "fxstreet",
-            "title": "WTI jumps roughly 8% toward $100 as US blockades Strait of Hormuz",
-            "url": "https://www.fxstreet.com/news/wti-jumps-roughly-8-toward-100-as-us-blockades-strait-of-hormuz-202604122314",
-            "summary": "West Texas Intermediate (WTI) – the US oil benchmark – has opened the week with a bullish gap, climbing roughly 8%, looking to retarget the $100 threshold.",
-            "sentiment": 0.0,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_us_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.09,
+        "avg_sentiment": -0.1,
         "avg_impact_score": 0.6167,
         "primary_count": 0,
         "secondary_count": 0,
