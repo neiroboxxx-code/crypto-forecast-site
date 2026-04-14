@@ -1,16 +1,76 @@
 {
-    "updated_at": "2026-04-14T09:10:08.126943+00:00",
+    "updated_at": "2026-04-14T17:23:38.022325+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6188,
+        "risk_off_pressure": 0.6321,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 10
+        "oil_shock_count": 8
     },
     "items": [
+        {
+            "published_at": "2026-04-14T16:11:41+00:00",
+            "source": "fxstreet",
+            "title": "Bessent says Fed should wait for Warsh before cutting rates now",
+            "url": "https://www.fxstreet.com/news/bessent-says-fed-should-wait-for-warsh-before-cutting-rates-now-202604141611",
+            "summary": "The US Treasury Secretary Scott Bessent crossed the wires earlier, stating that he’s “quite confident” that core prices would continue to edge lower in the US despite the Iran war, and that he’s pressing the Federal Reserve to cut rates.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "regulation_fed_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-14T15:16:20+00:00",
+            "source": "fxstreet",
+            "title": "BoE’s Greene: Second-round effects",
+            "url": "https://www.fxstreet.com/news/boes-greene-second-round-effects-202604141516",
+            "summary": "Megan Greene, external member of the Bank of England's (BoE) Monetary Policy Committee (MPC), Reuters reported on Tuesday that the United Kingdom’s (UK) economic activity was weak before the Iran war but that at the same time, the war impact is inflationary.",
+            "sentiment": -0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.65,
+            "event_key": "regulation_iran_inflation",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-14T15:07:57+00:00",
+            "source": "fxstreet",
+            "title": "White House Adviser Hassett: Outlook for Fed having room to cut rates is going to be very solid",
+            "url": "https://www.fxstreet.com/news/wh-sr-adviser-hassett-outlook-for-fed-having-room-to-cut-rates-is-going-to-be-very-solid-202604141507",
+            "summary": "Kevin Hassett, Senior Adviser for the White House told Fox Business on Tuesday that they expect a rapid reduction in energy prices once the Strait of Hormuz is reopened.",
+            "sentiment": 0.0,
+            "impact_score": 0.55,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_fed_shipping",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-14T15:03:47+00:00",
+            "source": "fxstreet",
+            "title": "Fed’s Goolsbee: We will get inflation to 2%",
+            "url": "https://www.fxstreet.com/news/feds-goolsbee-we-will-get-inflation-to-2-202604141503",
+            "summary": "Austan Goolsbee, President of the Federal Reserve (Fed) Bank of Chicago, told AP at the Semafor World Economy conference on Tuesday that the longer the Middle East concerns go, the cut could be pushed out of 2026.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_fed_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-14T07:57:14+00:00",
             "source": "fxstreet",
@@ -130,72 +190,12 @@
             "btc_relevance_score": 0.75,
             "event_key": "macro_none_inflation",
             "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-14T00:44:29+00:00",
-            "source": "fxstreet",
-            "title": "US Vice President Vance: No deal yet, but framework for grand deal exists",
-            "url": "https://www.fxstreet.com/news/us-vice-president-vance-no-deal-yet-but-framework-for-grand-deal-exists-202604140044",
-            "summary": "US Vice President JD Vance, speaking in an interview on Fox News, struck a cautiously optimistic tone on negotiations with Iran and suggested that meaningful progress has been made even as talks have yet to deliver a breakthrough.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "geopolitics_us_none",
-            "market_regime_effect": "neutral"
-        },
-        {
-            "published_at": "2026-04-13T21:45:55+00:00",
-            "source": "fxstreet",
-            "title": "NZD/USD rebounds as USD weakness dominates despite geopolitical tensions",
-            "url": "https://www.fxstreet.com/news/nzd-usd-rebounds-as-usd-weakness-dominates-despite-geopolitical-tensions-202604132145",
-            "summary": "The NZD/USD pair is pushing higher on Monday, April 13, climbing back toward the 0.5880 region as broad US Dollar (USD) weakness becomes the dominant market driver.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_usd",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-13T21:12:00+00:00",
-            "source": "fxstreet",
-            "title": "China: Innovation-led sectors stay in focus – HSBC",
-            "url": "https://www.fxstreet.com/news/china-innovation-led-sectors-stay-in-focus-hsbc-202604132112",
-            "summary": "HSBC Asset Management underlines that China’s technology sector remains a key equity theme despite shifting attention to Middle East tensions. The firm points to strong performance of the Shenzhen Chinext index, supported by advanced manufacturing, green energy and semiconductors.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.45,
-            "event_key": "regulation_china_none",
-            "market_regime_effect": "neutral"
-        },
-        {
-            "published_at": "2026-04-13T20:34:00+00:00",
-            "source": "fxstreet",
-            "title": "Asia FX: Softer start on Oil and risk – OCBC",
-            "url": "https://www.fxstreet.com/news/asia-fx-softer-start-on-oil-and-risk-ocbc-202604132034",
-            "summary": "OCBC strategists Sim Moh Siong and Christopher Wong expect Asian FX, especially high-beta Oil importers like KRW, THB, PHP and INR, to open weaker as renewed geopolitical uncertainty supports crude and the Dollar. However, resumed Hormuz transit tempers tail risks.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.75,
-            "event_key": "macro_none_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
         "avg_sentiment": -0.13,
-        "avg_impact_score": 0.615,
+        "avg_impact_score": 0.62,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
