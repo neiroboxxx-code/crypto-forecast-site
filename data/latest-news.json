@@ -1,16 +1,61 @@
 {
-    "updated_at": "2026-04-14T05:38:03.984111+00:00",
+    "updated_at": "2026-04-14T09:10:08.126943+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.6167,
+        "risk_off_pressure": 0.6188,
         "avg_confirmed_btc_relevance": 0,
         "oil_shock_count": 10
     },
     "items": [
+        {
+            "published_at": "2026-04-14T07:57:14+00:00",
+            "source": "fxstreet",
+            "title": "Dow Jones futures gain as oil eases inflation, US-Iran talks eyed",
+            "url": "https://www.fxstreet.com/news/dow-jones-futures-gain-as-oil-eases-inflation-us-iran-talks-eyed-202604140757",
+            "summary": "Dow Jones futures rise 0.12% to near 48,500 during European hours on Tuesday, ahead of the regular opening in the United States (US). Meanwhile, S&P 500 and Nasdaq 100 futures also advance 0.16% and 0.28% to near 6,930 and 25,600, respectively, at the time of writing.",
+            "sentiment": 0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_iran_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-14T07:46:24+00:00",
+            "source": "fxstreet",
+            "title": "Australian Dollar underperforms as RBA’s Hauser warns of stagflation",
+            "url": "https://www.fxstreet.com/news/australian-dollar-underperforms-as-rbas-hauser-warns-of-stagflation-202604140746",
+            "summary": "The Australian Dollar (AUD) underperforms its major currency peers, except the US Dollar (USD), during the European trading session on Tuesday.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_eu_usd",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-14T07:33:37+00:00",
+            "source": "fxstreet",
+            "title": "S&P 500: Optimism returns with deal hopes – Deutsche Bank",
+            "url": "https://www.fxstreet.com/news/sp-500-optimism-returns-with-deal-hopes-deutsche-bank-202604140733",
+            "summary": "Deutsche Bank analysts report that the S&P 500 has recovered above its pre‑strike level as markets price a temporary conflict and potential US–Iran talks.",
+            "sentiment": -0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.55,
+            "event_key": "geopolitics_eu_risk_sentiment",
+            "market_regime_effect": "risk_off"
+        },
         {
             "published_at": "2026-04-14T05:16:12+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.75,
             "event_key": "macro_none_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-13T19:09:02+00:00",
-            "source": "fxstreet",
-            "title": "Forex Today: US Dollar falls even as failed talks and Hormuz shutdown spark risk-off wave",
-            "url": "https://www.fxstreet.com/news/forex-today-us-dollar-falls-even-as-failed-talks-and-hormuz-shutdown-spark-risk-off-wave-202604131909",
-            "summary": "The US Dollar Index (DXY) fell on Monday, as markets digest headlines of failed Iran-United States (US) peace talks over the weekend and reports that US President Donald Trump moved the US Navy to close the Strait of Hormuz, a development that would typically fuel a strong safe-haven bid for the Gre",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_shipping",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-13T19:07:00+00:00",
-            "source": "fxstreet",
-            "title": "Renminbi: Limited Petroyuan prospects in energy trade – Commerzbank",
-            "url": "https://www.fxstreet.com/news/renminbi-limited-petroyuan-prospects-in-energy-trade-commerzbank-202604131907",
-            "summary": "Commerzbank’s Head of FX and Commodity Research Thu Lan Nguyen examines Iran’s proposal to charge Strait of Hormuz tolls in Renminbi and finds it unlikely to trigger a major Petroyuan shift.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_iran_shipping",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-13T17:07:20+00:00",
-            "source": "fxstreet",
-            "title": "Trump says Iran wants a deal as Hormuz blockade officially begins",
-            "url": "https://www.fxstreet.com/news/trump-says-iran-wants-deal-as-hormuz-blockade-officially-begins-202604131707",
-            "summary": "US President Donald Trump spoke at a press conference at the Oval Office and praised Vice-President JD Vance's work on Iran, saying that he “has done a very good job on Iran.”",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "geopolitics_iran_shipping",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.12,
-        "avg_impact_score": 0.6133,
+        "avg_sentiment": -0.13,
+        "avg_impact_score": 0.615,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
