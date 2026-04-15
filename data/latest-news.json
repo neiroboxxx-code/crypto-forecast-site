@@ -1,16 +1,46 @@
 {
-    "updated_at": "2026-04-15T05:23:54.455565+00:00",
+    "updated_at": "2026-04-15T09:10:01.546507+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
     },
     "features": {
         "confirmed_events_count": 0,
-        "risk_off_pressure": 0.625,
+        "risk_off_pressure": 0.6333,
         "avg_confirmed_btc_relevance": 0,
-        "oil_shock_count": 4
+        "oil_shock_count": 5
     },
     "items": [
+        {
+            "published_at": "2026-04-15T08:18:09+00:00",
+            "source": "fxstreet",
+            "title": "Oil: War risks, Hormuz disruption and policy cushions – Rabobank",
+            "url": "https://www.fxstreet.com/news/oil-war-risks-hormuz-disruption-and-policy-cushions-rabobank-202604150818",
+            "summary": "Rabobank’s RaboResearch Global Economics & Markets team highlights that Oil prices have eased even as the IMF warns of a potential world recession if the Hormuz Strait remains closed.",
+            "sentiment": -0.6,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_oil",
+            "market_regime_effect": "risk_off"
+        },
+        {
+            "published_at": "2026-04-15T07:56:51+00:00",
+            "source": "fxstreet",
+            "title": "USD: Mixed signals from PPI and sentiment – Danske Bank",
+            "url": "https://www.fxstreet.com/news/usd-mixed-signals-from-ppi-and-sentiment-danske-bank-202604150756",
+            "summary": "Danske Research Team highlights that softer-than-expected US PPI for March did not materially alter market pricing for Federal Reserve cuts, with only a one-in-three chance of easing this year.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_fed_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-15T04:23:02+00:00",
             "source": "fxstreet",
@@ -160,42 +190,12 @@
             "btc_relevance_score": 0.65,
             "event_key": "geopolitics_china_none",
             "market_regime_effect": "neutral"
-        },
-        {
-            "published_at": "2026-04-14T19:17:00+00:00",
-            "source": "fxstreet",
-            "title": "CNY: Safe-haven role grows with stronger yuan – Societe Generale",
-            "url": "https://www.fxstreet.com/news/cny-safe-haven-role-grows-with-stronger-yuan-societe-generale-202604141917",
-            "summary": "Societe Generale analysts highlight that CNY strength has resumed, with USD/CNY nearing 6.80 for the first time in three years as China-linked tankers transit the Strait of Hormuz.",
-            "sentiment": 0.0,
-            "impact_score": 0.55,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_china_shipping",
-            "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-14T18:47:57+00:00",
-            "source": "fxstreet",
-            "title": "Forex Today: US Dollar extends slide as softer US data and Iran optimism reshape markets",
-            "url": "https://www.fxstreet.com/news/forex-today-us-dollar-extends-slide-as-softer-us-data-and-iran-optimism-reshape-markets-202604141847",
-            "summary": "The US Dollar Index (DXY) fell toward the 98.10 region, reaching multi-week lows as softer inflation data and improving global sentiment led to a broad sell-off of the Greenback. Declining Oil prices and easing yields further contributed to the downward pressure.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_iran_oil",
-            "market_regime_effect": "risk_off"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
-        "avg_sentiment": -0.08,
-        "avg_impact_score": 0.615,
+        "avg_sentiment": -0.1,
+        "avg_impact_score": 0.62,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
