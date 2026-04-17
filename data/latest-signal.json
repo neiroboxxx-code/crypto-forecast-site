@@ -1,26 +1,26 @@
 {
-    "updated_at": "2026-04-17T05:00:00+00:00",
+    "updated_at": "2026-04-17T09:00:00+00:00",
     "symbol": "BTCUSDT",
-    "prediction_time": "2026-04-17T05:11:00.434430+00:00",
-    "target_time": "2026-04-18T05:11:00.434430+00:00",
-    "current_price": 74641.5,
-    "prediction_direction": "down",
-    "probability_up": 0.41,
-    "probability_down": 0.59,
+    "prediction_time": "2026-04-17T09:10:06.510016+00:00",
+    "target_time": "2026-04-18T09:10:06.510016+00:00",
+    "current_price": 75729.1,
+    "prediction_direction": "up",
+    "probability_up": 0.59,
+    "probability_down": 0.41,
     "confidence": 18.0,
     "model_version": "baseline_v12_clean_skeleton",
-    "notes": "Baseline rule: 24h price change is zero or negative | Low relative volume reduces directional conviction | Strict filter: confidence or probability not strong enough | candle_timestamp=2026-04-17T05:00:00+00:00",
-    "market_recommendation": "Нисходящий уклон есть, но чистого входа нет",
-    "summary": "DOWN BIAS / NO TRADE. Baseline rule: 24h price change is zero or negative | Low relative volume reduces directional conviction | Strict filter: confidence or probability not strong enough | candle_timestamp=2026-04-17T05:00:00+00:00",
+    "notes": "Baseline rule: 24h price change is positive | Low relative volume reduces directional conviction | Strict filter: confidence or probability not strong enough | candle_timestamp=2026-04-17T09:00:00+00:00",
+    "market_recommendation": "Лонг-сценарий есть, но вход сейчас неидеален",
+    "summary": "UP BIAS / NO ENTRY. Baseline rule: 24h price change is positive | Low relative volume reduces directional conviction | Strict filter: confidence or probability not strong enough | candle_timestamp=2026-04-17T09:00:00+00:00",
     "market": {
-        "latest_timestamp": "2026-04-17T05:00:00+00:00",
-        "latest_close": 74641.5,
-        "price_change_1h": -0.1916,
-        "price_change_24h": -0.5121,
-        "avg_volume_24h": 568.1481,
-        "latest_volume": 73.761219,
-        "avg_volume_10": 271.490315,
-        "volume_ratio_10": 0.2717,
+        "latest_timestamp": "2026-04-17T09:00:00+00:00",
+        "latest_close": 75729.1,
+        "price_change_1h": -0.06,
+        "price_change_24h": 1.9101,
+        "avg_volume_24h": 456.4049,
+        "latest_volume": 180.490362,
+        "avg_volume_10": 294.430925,
+        "volume_ratio_10": 0.613,
         "high_volume_bar": false,
         "bullish_volume_pressure": false,
         "bearish_volume_pressure": false,
@@ -28,10 +28,10 @@
         "bearish_engulfing": false,
         "doji": false,
         "hammer": false,
-        "volatility_24h": 2117.3,
-        "rsi_14": 49.25,
-        "atr_14": 430.06,
-        "momentum_10": -0.009378
+        "volatility_24h": 2453.4,
+        "rsi_14": 57.01,
+        "atr_14": 344.96,
+        "momentum_10": 0.007714
     },
     "levels": {
         "nearest_resistance": 69043.3,
@@ -98,10 +98,10 @@
         "requires_confirmation_count": 30
     },
     "performance": {
-        "total_predictions": 207,
-        "checked_results": 199,
+        "total_predictions": 208,
+        "checked_results": 200,
         "correct_predictions": 103,
-        "incorrect_predictions": 96,
+        "incorrect_predictions": 97,
         "accuracy": 52
     },
     "position_status": {
@@ -111,6 +111,6 @@
         "stop": null,
         "take": null
     },
-    "market_direction": "down",
+    "market_direction": "up",
     "trade_action": "no_trade"
 }
