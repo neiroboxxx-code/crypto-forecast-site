@@ -1,26 +1,26 @@
 {
-    "updated_at": "2026-04-18T07:00:00+00:00",
+    "updated_at": "2026-04-18T13:00:00+00:00",
     "symbol": "BTCUSDT",
-    "prediction_time": "2026-04-18T09:35:21.048575+00:00",
-    "target_time": "2026-04-19T09:35:21.048575+00:00",
-    "current_price": 76986.0,
-    "prediction_direction": "up",
-    "probability_up": 0.63,
-    "probability_down": 0.37,
-    "confidence": 26.0,
+    "prediction_time": "2026-04-18T13:25:35.847731+00:00",
+    "target_time": "2026-04-19T13:25:35.847731+00:00",
+    "current_price": 76143.0,
+    "prediction_direction": "down",
+    "probability_up": 0.41,
+    "probability_down": 0.59,
+    "confidence": 18.0,
     "model_version": "baseline_v12_clean_skeleton",
-    "notes": "Baseline rule: 24h price change is positive | Buy-side liquidity sweep detected: moderate bullish bias | candle_timestamp=2026-04-18T07:00:00+00:00",
-    "market_recommendation": "Смотреть лонг",
-    "summary": "LONG. Baseline rule: 24h price change is positive | Buy-side liquidity sweep detected: moderate bullish bias | candle_timestamp=2026-04-18T07:00:00+00:00",
+    "notes": "Baseline rule: 24h price change is zero or negative | Low relative volume reduces directional conviction | Strict filter: confidence or probability not strong enough | candle_timestamp=2026-04-18T13:00:00+00:00",
+    "market_recommendation": "Нисходящий уклон есть, но чистого входа нет",
+    "summary": "DOWN BIAS / NO TRADE. Baseline rule: 24h price change is zero or negative | Low relative volume reduces directional conviction | Strict filter: confidence or probability not strong enough | candle_timestamp=2026-04-18T13:00:00+00:00",
     "market": {
-        "latest_timestamp": "2026-04-18T07:00:00+00:00",
-        "latest_close": 76986.0,
-        "price_change_1h": -0.1771,
-        "price_change_24h": 1.5987,
-        "avg_volume_24h": 443.4856,
-        "latest_volume": 128.602895,
-        "avg_volume_10": 171.531436,
-        "volume_ratio_10": 0.7497,
+        "latest_timestamp": "2026-04-18T13:00:00+00:00",
+        "latest_close": 76143.0,
+        "price_change_1h": -0.0785,
+        "price_change_24h": -2.2487,
+        "avg_volume_24h": 401.6377,
+        "latest_volume": 88.515141,
+        "avg_volume_10": 266.486233,
+        "volume_ratio_10": 0.3322,
         "high_volume_bar": false,
         "bullish_volume_pressure": false,
         "bearish_volume_pressure": false,
@@ -28,10 +28,10 @@
         "bearish_engulfing": false,
         "doji": false,
         "hammer": false,
-        "volatility_24h": 3362.0,
-        "rsi_14": 36.48,
-        "atr_14": 282.64,
-        "momentum_10": -0.00595
+        "volatility_24h": 2587.2,
+        "rsi_14": 26.33,
+        "atr_14": 281.06,
+        "momentum_10": -0.011188
     },
     "levels": {
         "nearest_resistance": 69043.3,
@@ -98,9 +98,9 @@
         "requires_confirmation_count": 30
     },
     "performance": {
-        "total_predictions": 214,
-        "checked_results": 207,
-        "correct_predictions": 106,
+        "total_predictions": 215,
+        "checked_results": 208,
+        "correct_predictions": 107,
         "incorrect_predictions": 101,
         "accuracy": 51
     },
@@ -111,6 +111,6 @@
         "stop": null,
         "take": null
     },
-    "market_direction": "up",
-    "trade_action": "enter_long"
+    "market_direction": "down",
+    "trade_action": "no_trade"
 }
