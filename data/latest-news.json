@@ -1,5 +1,5 @@
 {
-    "updated_at": "2026-04-24T19:32:16.354997+00:00",
+    "updated_at": "2026-04-25T01:00:01.207381+00:00",
     "symbol": "BTCUSDT",
     "signal_context": {
         "summary": "Актуальных новостей: 30. Подтверждённых событий: 0."
@@ -11,6 +11,51 @@
         "oil_shock_count": 6
     },
     "items": [
+        {
+            "published_at": "2026-04-24T22:56:00+00:00",
+            "source": "fxstreet",
+            "title": "PHP: BSP starts new hiking cycle – Commerzbank",
+            "url": "https://www.fxstreet.com/news/php-bsp-starts-new-hiking-cycle-commerzbank-202604242256",
+            "summary": "Commerzbank highlights that BSP raised its policy rate by 25bp to 4.50%, signalling the start of a new tightening cycle to anchor inflation expectations.",
+            "sentiment": -0.2,
+            "impact_score": 0.6,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.75,
+            "event_key": "macro_none_inflation",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-24T21:39:00+00:00",
+            "source": "fxstreet",
+            "title": "PBoC: Steepening bias as industrial activity holds – DBS",
+            "url": "https://www.fxstreet.com/news/pboc-steepening-bias-as-industrial-activity-holds-dbs-202604242139",
+            "summary": "DBS Group Research economist Samuel Tse analyses recent steepening in Chinese Yuan (CNY) rates, linking it to a ceasefire between the United States (US) and Iran and stronger-than-expected Q1 growth in China.",
+            "sentiment": 0.4,
+            "impact_score": 0.65,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.85,
+            "event_key": "macro_iran_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
+        {
+            "published_at": "2026-04-24T20:22:00+00:00",
+            "source": "fxstreet",
+            "title": "PHP: BSP tightening supports Peso but risks linger – OCBC",
+            "url": "https://www.fxstreet.com/news/php-bsp-tightening-supports-peso-but-risks-linger-ocbc-202604242022",
+            "summary": "OCBC strategists Sim Moh Siong and Christopher Wong note the central bank of Philippines Bangko Sentral ng Pilipinas' (BSP) 25bp hike to 4.5% and guidance that further increases are possible as inflation forecasts are revised higher and second-round effects emerge.",
+            "sentiment": -0.4,
+            "impact_score": 0.7,
+            "requires_confirmation": true,
+            "is_confirmed": false,
+            "source_layer": "global_primary",
+            "btc_relevance_score": 0.55,
+            "event_key": "regulation_none_rates",
+            "market_regime_effect": "macro_uncertainty"
+        },
         {
             "published_at": "2026-04-24T18:37:41+00:00",
             "source": "fxstreet",
@@ -145,57 +190,12 @@
             "btc_relevance_score": 0.85,
             "event_key": "geopolitics_iran_oil",
             "market_regime_effect": "risk_off"
-        },
-        {
-            "published_at": "2026-04-23T18:11:39+00:00",
-            "source": "fxstreet",
-            "title": "Brazil: Gradual easing path intact – Standard Chartered",
-            "url": "https://www.fxstreet.com/news/brazil-gradual-easing-path-intact-standard-chartered-202604231811",
-            "summary": "Standard Chartered’s Dan Pan expects Banco Central do Brasil (BCB) to continue its cautious easing cycle, projecting a 25bps cut at the 29 April meeting as inflation risks remain elevated.",
-            "sentiment": -0.4,
-            "impact_score": 0.65,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_inflation",
-            "market_regime_effect": "macro_uncertainty"
-        },
-        {
-            "published_at": "2026-04-23T17:33:05+00:00",
-            "source": "fxstreet",
-            "title": "Iran speaker Ghalibaf quits talks team, markets turn risk-off",
-            "url": "https://www.fxstreet.com/news/iran-speaker-ghalibaf-quits-talks-team-markets-turn-risk-off-202604231729",
-            "summary": "Iranian Parliament speaker Mohammad Bagher Ghalibaf has resigned from the negotiating team, Israel N12 News reported on Thursday.",
-            "sentiment": -0.2,
-            "impact_score": 0.6,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.65,
-            "event_key": "geopolitics_iran_none",
-            "market_regime_effect": "neutral"
-        },
-        {
-            "published_at": "2026-04-23T16:55:36+00:00",
-            "source": "fxstreet",
-            "title": "LatAm FX: Positioning risks after strong gains – BNY",
-            "url": "https://www.fxstreet.com/news/latam-fx-positioning-risks-after-strong-gains-bny-202604231655",
-            "summary": "BNY’s Geoff Yu notes that Latin American (LatAm) currencies have been the standout Emerging Markets (EM) FX performers, with holdings remaining strong throughout the conflict and supported by attractive nominal and real rates.",
-            "sentiment": -0.4,
-            "impact_score": 0.7,
-            "requires_confirmation": true,
-            "is_confirmed": false,
-            "source_layer": "global_primary",
-            "btc_relevance_score": 0.85,
-            "event_key": "macro_us_rates",
-            "market_regime_effect": "macro_uncertainty"
         }
     ],
     "legacy_summary": {
         "news_count": 30,
         "avg_sentiment": -0.17,
-        "avg_impact_score": 0.625,
+        "avg_impact_score": 0.6283,
         "primary_count": 0,
         "secondary_count": 0,
         "requires_confirmation_count": 30
