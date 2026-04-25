@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-04-25T09:31:57Z",
+  "updatedAt": "2026-04-25T13:12:25Z",
   "title": "Маркет-дайджест",
-  "bodyMarkdown": "## Маркет-снимок\n\nДанные Bybit недоступны.\n\n\n*Макро-блок пуст (нет ключа FRED или ошибка запроса).*\n\n## Статус источников\n\n- `bybit`: error: ConnectError\n- `fred`: skipped: FRED_API_KEY not set\n- `gnews_crypto`: skipped: GNEWS_API_KEY not set\n- `gnews_geo`: skipped: GNEWS_API_KEY not set\n- `newsdata`: skipped: NEWSDATA_API_KEY not set\n\n_Собрано: 2026-04-25T09:31:56.946848+00:00_",
+  "bodyMarkdown": "## Маркет-снимок\n\nКрипторынок оценивается по BTC, ETH, ONDO, SOL и LINK за последние 24 часа.\n\n- **BTC** — 77615.7 USDT (-1.01%), тон: нейтрально.\n- **ETH** — 2316.63 USDT (-0.57%), тон: нейтрально.\n- **ONDO** — 0.2618 USDT (-1.06%), тон: нейтрально.\n- **SOL** — 86.5 USDT (0.01%), тон: нейтрально.\n- **LINK** — 9.409 USDT (0.20%), тон: нейтрально.\n\n*Макро-блок пуст (нет ключа FRED или ошибка запроса).*\n\n## Статус источников\n\n- `bybit`: ok\n- `fred`: skipped: FRED_API_KEY not set\n- `gnews_crypto`: skipped: GNEWS_API_KEY not set\n- `gnews_geo`: skipped: GNEWS_API_KEY not set\n- `newsdata`: skipped: NEWSDATA_API_KEY not set\n\n_Собрано: 2026-04-25T13:12:24.999523+00:00_",
   "meta": {
     "source": "fallback",
     "model": null,
     "llmError": "нет YC_FOLDER_ID / YC_API_KEY (Yandex Cloud)",
     "fetchStatus": {
-      "bybit": "error: ConnectError",
+      "bybit": "ok",
       "fred": "skipped: FRED_API_KEY not set",
       "newsdata": "skipped: NEWSDATA_API_KEY not set",
       "gnews_crypto": "skipped: GNEWS_API_KEY not set",
