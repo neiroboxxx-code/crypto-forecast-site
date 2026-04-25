@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { SupportChat } from "@/components/ui/support-chat";
+import { TradeCompanion } from "@/components/widgets/trade-companion";
 
 type PageShellProps = {
     children: ReactNode;
@@ -7,12 +7,11 @@ type PageShellProps = {
 
 export function PageShell({ children }: PageShellProps) {
     return (
-        <main className="min-h-screen bg-[var(--color-bg)] text-[var(--color-text)]">
-            <section className="mx-auto flex min-h-screen w-full max-w-[1440px] items-center px-6 py-16 md:px-10 lg:px-16">
+        <main className="min-h-screen w-full bg-[#0A0C12] text-[var(--color-text)]">
+            <div className="mx-auto w-full max-w-[1760px] px-4 py-3 md:px-5 md:py-4">
                 {children}
-            </section>
-
-            <SupportChat />
+            </div>
+            <TradeCompanion />
         </main>
     );
 }
