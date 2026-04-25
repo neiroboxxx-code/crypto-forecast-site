@@ -250,7 +250,7 @@ export type NewsData = {
 };
 
 export async function getNews(): Promise<NewsData> {
-    const raw = await request<unknown>("/api/news");
+    const raw = await request<unknown>("/api/news", undefined, "");
     return unwrap<NewsData>(raw);
 }
 
