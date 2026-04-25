@@ -1,7 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    outputFileTracingExcludes: {
+      "*": [
+        "./public/**/*.pdf",
+        "./public/**/*.jpg",
+        "./public/**/*.jpeg",
+        "./public/**/*.png",
+      ],
+    },
+  },
 };
 
 export default nextConfig;
