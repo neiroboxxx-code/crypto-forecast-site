@@ -1,0 +1,29 @@
+{
+  "updatedAt": "2026-04-25T00:59:18Z",
+  "title": "Маркет-дайджест",
+  "bodyMarkdown": "## Рынок в режиме выжидания\n\nКрипторынок демонстрирует сдержанную, преимущественно нейтральную динамику. Основные активы не показывают единого тренда: Bitcoin и Ethereum слегка снижаются, в то время как Solana и Chainlink демонстрируют незначительный рост. Эта картина говорит об отсутствии сильных внутренних драйверов и общем выжидательном настроении.\n\nГлавным событием, задающим тон, стало ужесточение регуляторного контроля в Китае. Власти представили новые правила, касающиеся маркетинга криптовалют. Хотя прямой запрет на владение активами в стране уже давно является нормой, подобные шаги создают дополнительный фон неопределенности, особенно для платформ, ориентированных на азиатский регион. Это классический пример того, как регуляторный сигнал из крупной экономики способен временно отодвинуть на второй план все остальные нарративы.\n\nНа фоне этого другие новости выглядят второстепенными:\n*   Отчет Binance Research указывает на то, что венчурное финансирование в первом квартале сконцентрировалось вокруг искусственного интеллекта, при этом криптосфера рассматривается как потенциальная среда для его исполнения. Это долгосрочный тренд, не оказывающий прямого давления на текущие котировки.\n*   История со стартапом Tempo от Stripe служит отрезвляющим напоминанием о разрыве между амбициозными заявлениями и реальным использованием. Несмотря на привлечение $500 млн, блокчейн показывает скромные результаты по сравнению с мейнстрим-сетями. Это важный кейс для индустрии, но скорее фоновый шум для широкого рынка.\n\n**Итог:** Рынок находится в состоянии паузы, оценивая последствия регуляторных шагов. Отсутствие резких движений в ценах основных активов говорит о том, что участники пока не видят в новостях из Китая повода для паники, но и игнорировать их не готовы. Основной тон — осторожный, с акцентом на управление рисками, а не на поиск возможностей для роста.",
+  "meta": {
+    "source": "llm",
+    "model": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+    "llmError": null,
+    "fetchStatus": {
+      "bybit": "ok",
+      "fred": "error: Client error '400 Bad Request' for url 'https://api.stlouisfed.org/fred/series/observations?series_id=SP500&api_key=SGAyDMNWj88%2A38P&file_type=json&sort_order=desc&limit=1'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/400",
+      "newsdata": "ok",
+      "gnews_crypto": "ok",
+      "gnews_geo": "error: Client error '429 Too Many Requests' for url 'https://gnews.io/api/v4/search?apikey=27a8eab6beb8c5888b7cbe0c981c49c3&q=%28%28%22Donald+Trump%22+OR+Trump+OR+Iran+OR+China+OR+sanctions+OR+tariffs+OR+war+OR+%22Middle+East%22+OR+oil%29+AND+%28market+OR+economy+OR+inflation+OR+trade%29%29&lang=en&max=10&sortby=publishedAt'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/429"
+    },
+    "llmPipeline": {
+      "filterModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+      "finalModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+      "filterSteps": 5,
+      "filterFiles": [
+        "filter_01_system.txt",
+        "filter_02_system.txt",
+        "filter_03_system.txt",
+        "filter_04_system.txt",
+        "filter_05_system.txt"
+      ]
+    }
+  }
+}
