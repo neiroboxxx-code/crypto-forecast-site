@@ -106,7 +106,9 @@ function renderMarkdown(raw: string): string {
             buf.push(lines[i]);
             i++;
         }
-        out.push(`<p>${inline(buf.join(" "))}</p>`);
+        for (const lineText of buf) {
+            out.push(`<p>${inline(lineText)}</p>`);
+        }
     }
 
     return out.join("\n");

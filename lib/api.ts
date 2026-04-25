@@ -8,17 +8,29 @@ export class ApiError extends Error {
     }
 }
 
-async function request<T>(path: string, init?: RequestInit, base: string = API_URL): Promise<T> {
+async function request<T>(path: string, init?: RequestInit, base: string = API_URL, timeoutMs = 30_000): Promise<T> {
     const url = path.startsWith("http") ? path : `${base}${path}`;
-    const res = await fetch(url, {
-        ...init,
-        headers: { "Accept": "application/json", ...(init?.headers ?? {}) },
-        cache: "no-store",
-    });
-    if (!res.ok) {
-        throw new ApiError(`HTTP ${res.status} @ ${url}`, res.status);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+        const res = await fetch(url, {
+            ...init,
+            headers: { "Accept": "application/json", ...(init?.headers ?? {}) },
+            cache: "no-store",
+            signal: controller.signal,
+        });
+        if (!res.ok) {
+            throw new ApiError(`HTTP ${res.status} @ ${url}`, res.status);
+        }
+        return res.json() as Promise<T>;
+    } catch (e) {
+        if (e instanceof Error && e.name === "AbortError") {
+            throw new ApiError(`Timeout @ ${url}`, 408);
+        }
+        throw e;
+    } finally {
+        clearTimeout(timer);
     }
-    return res.json() as Promise<T>;
 }
 
 // ---------- Reversal (Macro) ----------
@@ -137,7 +149,7 @@ export type MarketThesis = {
 };
 
 export async function getMarketThesis(): Promise<MarketThesis> {
-    const raw = await request<unknown>("/api/reversal/thesis?mode=historical");
+    const raw = await request<unknown>("/api/reversal/thesis?mode=historical", undefined, API_URL, 200_000);
     const thesis = unwrap<MarketThesis>(raw);
     if (process.env.NODE_ENV !== "production") {
         console.log("[getMarketThesis] raw payload:", raw, "→ unpacked:", thesis);
