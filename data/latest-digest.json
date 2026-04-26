@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-04-25T21:11:51Z",
+  "updatedAt": "2026-04-26T02:14:05Z",
   "title": "Маркет-дайджест",
-  "bodyMarkdown": "## Рынки в режиме ожидания после целевой санкционной атаки\n\nКрипторынок демонстрирует сдержанную реакцию на самое громкое событие дня — целевую операцию Министерства финансов США. Власти подтвердили заморозку **$344 млн** в стейблкоине USDT на блокчейне TRON, связав эти средства с попытками Ирана обойти санкции. Это самый чёткий на сегодня сигнал: регуляторы перешли от разговоров к точечным действиям, фокусируясь на каналах нелегального финансирования.\n\nНепосредственная ценовая реакция оказалась минимальной, что говорит о восприятии инцидента как адресного, а не системного риска. Рынок продолжает двигаться в узком диапазоне: **BTC — $77 509.3 (−0.26%)**, **ETH — $2 315.05 (−0.49%)**. Более заметную коррекцию показывают альткоины: **SOL — $86.03 (−1.00%)**, **LINK — $9.336 (−1.01%)**, а **ONDO — $0.2599 (−2.11%)**.\n\nЭто происходит на фоне внешнего спокойствия. Традиционные рынки сохраняют силу: **S&P 500 на отметке 7 165.08, а Nasdaq — 24 836.6** (данные на 24 апреля). Однако индекс волатильности **VIX держится на 19.31**, что отражает сохраняющуюся настороженность инвесторов. Цена на нефть марки **WTI остаётся высокой — $91.06** за баррель.\n\nВ остальных новостях:\n*   В центре внимания Solana-экосистемы — анонсированный запуск токена **PRINT** через платформу Sonar с жёсткими рамками продажи (FDV $50 млн).\n*   Медиа обсуждают новости о квантовых вычислениях, но эксперты единодушно считают, что угроза для Bitcoin и Ethereum на текущем этапе сильно преувеличена.\n*   Политический нарратив представлен новостью о том, что Дональд Трамп в эти выходные примет в Mar-a-Lago держателей его мемкоина $TRUMP, который, по данным Reuters, упал на **96%** от своих пиковых значений.\n\n**Итог:** Рынок переваривает конкретный прецедент регуляторного вмешательства, не впадая в панику. Основной фокус смещается в сторону комплаенса и контроля со стороны стейблкоин-эмитентов. Общий тон остаётся нейтральным, с лёгким давлением на альткоины, в то время как макрофон сохраняет устойчивость.",
+  "bodyMarkdown": "## Маркет-снимок\n\nКрипторынок оценивается по BTC, ETH, ONDO, SOL и LINK за последние 24 часа.\n\n- **BTC** — 77520 USDT (0.08%), тон: нейтрально.\n- **ETH** — 2314.85 USDT (-0.06%), тон: нейтрально.\n- **ONDO** — 0.259 USDT (-0.92%), тон: нейтрально.\n- **SOL** — 86.03 USDT (-0.19%), тон: нейтрально.\n- **LINK** — 9.311 USDT (-0.83%), тон: нейтрально.\n\n## Макро (FRED)\n\n- **S&P 500** = 7165.08 (2026-04-24), сильный.\n- **Nasdaq** = 24836.6 (2026-04-24), сильный.\n- **VIX** = 19.31 (2026-04-23), осторожность.\n- **Oil** = 91.06 (2026-04-20), высоко.\n\n## Новости (крипто-тематика, топ по скорингу)\n\n- SpaceX's $75 Billion IPO Could Drain Crypto Liquidity as Tech Mega-Listings Target $240 Billion in H2 2026 — _binance_\n- Bitcoin News Today: Bitcoin Whales Accumulate $3.17 Billion in BTC Since April 10 as $80,000 Break Could Trigger Bull Market Signal — _binance_\n- Bitcoin’s Big Players Are Accumulating — Is $80K Just The Start? — _bitcoinethereumnews_\n- Coinbase’s Jesse Pollak says AI agents are the next big wave for crypto payments — _bitcoinethereumnews_\n- Morgan Stanley launches a Treasury bond fund for stablecoin reserves — _cointribuneen_\n\n## Гео / макро-заголовки\n\n- West Asia War: US says it's hunting for explosive mines in latest push to open Strait of Hormuz — _The Economic Times_\n- Iran rules out direct talks with US as ceasefire diplomacy set to resume in Pakistan — _Baltimore News_\n- Iran rules out direct talks with US as ceasefire diplomacy set to resume in Pakistan — _WJLA_\n- US says it's hunting for explosive mines in latest push to open Strait of Hormuz — _The Hindu Business Line_\n- Close Watch on How Trump and Journalists Will Get Along at White House Correspondents' Dinner — _U.S. News & World Report_\n\n## Статус источников\n\n- `bybit`: ok\n- `fred`: ok\n- `gnews_crypto`: ok\n- `gnews_geo`: ok\n- `newsdata`: ok\n\n_Собрано: 2026-04-26T01:11:25.106344+00:00_",
   "meta": {
-    "source": "llm",
-    "model": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
-    "llmError": null,
+    "source": "fallback",
+    "model": null,
+    "llmError": "The read operation timed out",
     "fetchStatus": {
       "bybit": "ok",
       "fred": "ok",
@@ -13,17 +13,6 @@
       "gnews_crypto": "ok",
       "gnews_geo": "ok"
     },
-    "llmPipeline": {
-      "filterModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
-      "finalModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
-      "filterSteps": 5,
-      "filterFiles": [
-        "filter_01_system.txt",
-        "filter_02_system.txt",
-        "filter_03_system.txt",
-        "filter_04_system.txt",
-        "filter_05_system.txt"
-      ]
-    }
+    "llmPipeline": null
   }
 }
