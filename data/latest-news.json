@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-27T22:15:34Z",
+  "updated_at": "2026-04-27T22:20:37Z",
   "features": {
     "confirmed_events_count": 0,
     "risk_off_pressure": 0.0,
@@ -7,7 +7,53 @@
     "oil_shock_count": 0
   },
   "signal_context": {
-    "summary": "Нет значимых новостей за последние 48 часов."
+    "summary": "Значимых новостей за 48ч: 3. Режим: macro_uncertainty."
   },
-  "items": []
+  "items": [
+    {
+      "published_at": "2026-04-27T21:52:49+00:00",
+      "source": "fxstreet",
+      "title": "NZD/USD climbs above 0.59 as hot CPI fuels RBNZ hike bets ahead of Fed",
+      "url": "https://www.fxstreet.com/news/nzd-usd-climbs-above-059-as-hot-cpi-fuels-rbnz-hike-bets-ahead-of-fed-202604272152",
+      "summary": "NZD/USD posted limited gains of around 0.4% on Monday, settling close to 0.5905 but stalling just below the 0.5925 area that capped last week's recovery.",
+      "sentiment": 0.4,
+      "impact_score": 0.65,
+      "requires_confirmation": true,
+      "is_confirmed": false,
+      "source_layer": "global_primary",
+      "btc_relevance_score": 0.85,
+      "event_key": "macro_fed_rates",
+      "market_regime_effect": "macro_uncertainty"
+    },
+    {
+      "published_at": "2026-04-27T19:00:49+00:00",
+      "source": "fxstreet",
+      "title": "FX Today: US Dollar falls as markets brace for central bank week and Iran headlines",
+      "url": "https://www.fxstreet.com/news/fxtoday-us-dollar-falls-as-markets-brace-for-central-bank-week-and-iran-headlines-202604271900",
+      "summary": "The US Dollar Index (DXY) is trading cautiously near the 98.50 level as markets prepare for a busy week of central bank meetings.",
+      "sentiment": -0.2,
+      "impact_score": 0.6,
+      "requires_confirmation": true,
+      "is_confirmed": false,
+      "source_layer": "global_primary",
+      "btc_relevance_score": 0.85,
+      "event_key": "macro_iran_rates",
+      "market_regime_effect": "macro_uncertainty"
+    },
+    {
+      "published_at": "2026-04-27T20:51:00+00:00",
+      "source": "fxstreet",
+      "title": "US: Growth normalizes as Iran shock fades – TD Securities",
+      "url": "https://www.fxstreet.com/news/us-growth-normalizes-as-iran-shock-fades-td-securities-202604272051",
+      "summary": "TD Securities strategists Oscar Munoz and Eli Nir project output growth gradually slowing to potential by late 2026 as Iran-related stagflationary risks keep the Federal Reserve (Fed) cautious.",
+      "sentiment": -0.4,
+      "impact_score": 0.7,
+      "requires_confirmation": true,
+      "is_confirmed": false,
+      "source_layer": "global_primary",
+      "btc_relevance_score": 0.65,
+      "event_key": "regulation_iran_rates",
+      "market_regime_effect": "macro_uncertainty"
+    }
+  ]
 }
