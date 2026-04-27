@@ -1,18 +1,29 @@
 {
-  "updatedAt": "2026-04-27T19:55:57Z",
+  "updatedAt": "2026-04-27T21:33:38Z",
   "title": "Маркет-дайджест",
-  "bodyMarkdown": "## Маркет-снимок\n\nКрипторынок оценивается по BTC, ETH, ONDO, SOL и LINK за последние 24 часа.\n\n- **BTC** — 77779.1 USDT (-0.23%), тон: нейтрально.\n- **ETH** — 2314.26 USDT (-0.85%), тон: нейтрально.\n- **ONDO** — 0.2621 USDT (-2.46%), тон: умеренно слабый.\n- **SOL** — 85.22 USDT (-1.16%), тон: нейтрально.\n- **LINK** — 9.307 USDT (-1.51%), тон: нейтрально.\n\n## Макро (FRED)\n\n- **S&P 500** = 7165.08 (2026-04-24), сильный.\n- **Nasdaq** = 24836.6 (2026-04-24), сильный.\n- **VIX** = 19.31 (2026-04-23), осторожность.\n\n## Новости (крипто-тематика, топ по скорингу)\n\n- Survey Finds 36% of Crypto Traders Cut Spending Amid BTC Slump — _bitcoinethereumnews_\n- Trump to hold Situation Room meeting on Iran amid Bitcoin price concerns — _bitcoinethereumnews_\n- Ascending Triangle Breakout Loading? Top 5 Altcoins With 5x Upside Potential — _cryptonewsland_\n- ETH Consolidation Phase Persists: Key Support Levels Signal Potential Trend Reversal — _bitcoinethereumnews_\n- CME Bitcoin Futures Gap Widens: A $580 Opening Signals Volatility Ahead — _bitcoinethereumnews_\n\n## Гео / макро-заголовки\n\n- US-Iran War LIVE: Araghchi Turns to Moscow After Trump Rejects New Peace Proposal in Islamabad, Israeli Strikes Kill 14 In Lebanon — _Republic World_\n- Iran Offers Deal to US to Reopen Strait, Delay Nuclear Talks, Axios Says — _Bloomberg_\n- Trump says Iran can phone if it wants to talk, as Iranian envoy returns to Pakistan — _The Japan Times_\n- Trump calls suspect in press dinner attack 'pretty sick guy' whose views alarmed relatives — _The Economic Times_\n- US-Israel-Iran Ceasefire Live Updates: US Must Lift Blockade Before Fresh Talks, Iran Tells Pakistan — _NDTV.com_\n\n## Статус источников\n\n- `bybit`: ok\n- `fred`: error: ReadTimeout\n- `gnews_crypto`: ok\n- `gnews_geo`: ok\n- `newsdata`: ok\n\n_Собрано: 2026-04-27T13:35:53.238112+00:00_",
+  "bodyMarkdown": "## Рыночный дайджест: осторожность перед лицом монетарной риторики\n\nКрипторынок демонстрирует сдержанную, но однозначную динамику, двигаясь в фарватере общего настроения на глобальных риск-активах. Настроения определяются ожиданиями ужесточения монетарных условий, что создаёт фоновое давление.\n\n**Ключевые движения**\nЗа последние 24 часа все основные криптоактивы зафиксировали снижение. Лидер рынка, Bitcoin (BTC), торгуется на отметке $76 875.9, потеряв 1.80%. Ethereum (ETH) показывает более выраженное снижение на 3.29%, до $2 289.39. Схожая картина наблюдается у альткойнов: Solana (SOL) — $84.22 (−3.16%), Chainlink (LINK) — $9.223 (−2.62%), ONDO — $0.2609 (−2.87%). Динамика универсальна и указывает на отсутствие внутренних драйверов для роста в сегменте.\n\n**Макроконтекст: сила индексов и скрытое напряжение**\nФондовый рынок, по последним доступным данным (на 24 апреля 2026 года), демонстрирует силу: S&P 500 на уровне 7 165.08, а Nasdaq Composite — 24 836.6. Однако индикатор рыночных ожиданий волатильности VIX остаётся на повышенной отметке 18.71, сигнализируя о сохраняющейся осторожности инвесторов. Цена нефти марки WTI, важный индикатор инфляционных ожиданий, высока — $91.06 (данные на 20 апреля). Эта комбинация — сильные индексы при настороженном VIX и дорогая нефть — формирует противоречивую среду.\n\n**Новостной фон**\nДоминирующий сюжет задаёт геополитика и монетарная политика. Центральные банки стран G7, как сообщается, готовы удерживать высокие процентные ставки на фоне опасений, что конфликт на Ближнем Востоке может привести к длительному инфляционному давлению. Это прямое указание на политику «above neutral for longer» (выше нейтральной на дольше). Параллельно появляются точечные позитивные сигналы: например, надежды на разрядку в отношениях США и Китая на фоне возможной встречи лидеров могут поддержать китайские акции, но это пока локальная история.\n\n**Итог**\nРынок криптоактивов в полной мере отражает общий тренд: в условиях ужесточающейся риторики центральных банков и геополитической неопределённости капитал проявляет осторожность. Криптовалюты, выступая высокобета-активом, усиливают общее оборонительное настроение, а не противостоят ему. Текущие движения выглядят скорее как реакция на макрофон, чем на внутренние отраслевые новости. Ключевым ориентиром остаются дальнейшие заявления регуляторов и динамика индикаторов рыночного страха, таких как VIX.",
   "meta": {
-    "source": "fallback",
-    "model": null,
-    "llmError": "The read operation timed out",
+    "source": "llm",
+    "model": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+    "llmError": null,
     "fetchStatus": {
       "bybit": "ok",
-      "fred": "error: ReadTimeout",
-      "newsdata": "ok",
+      "fred": "ok",
+      "newsdata": "error: ConnectTimeout",
       "gnews_crypto": "ok",
       "gnews_geo": "ok"
     },
-    "llmPipeline": null
+    "llmPipeline": {
+      "filterModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+      "finalModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+      "filterSteps": 5,
+      "filterFiles": [
+        "filter_01_system.txt",
+        "filter_02_system.txt",
+        "filter_03_system.txt",
+        "filter_04_system.txt",
+        "filter_05_system.txt"
+      ]
+    }
   }
 }
