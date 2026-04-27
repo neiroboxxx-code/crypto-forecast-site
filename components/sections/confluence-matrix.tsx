@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/error-state";
 import { InfoDialog, InfoIconButton } from "@/components/ui/info-dialog";
-import { fmtPrice } from "@/lib/format";
+;
 
 function bool(v: number | boolean | undefined): boolean {
     return v === true || v === 1;
@@ -97,25 +97,6 @@ export function ConfluenceMatrix() {
                                 ))}
                             </div>
 
-                            {data.price_action.active_pools.length > 0 && (
-                                <div className="mt-3 border-t border-white/8 pt-2">
-                                    <div className="mb-1.5 text-[10px] uppercase tracking-[0.14em] text-white/40">
-                                        Liquidity pools
-                                    </div>
-                                    <div className="space-y-1">
-                                        {data.price_action.active_pools.slice(0, 4).map((p, i) => (
-                                            <div key={i} className="flex items-center justify-between text-[11px]">
-                                                <span className="text-white/50">
-                                                    {p.pool_type === "swing_high" ? "High" : "Low"}
-                                                </span>
-                                                <span className="tabular-nums text-white/80">
-                                                    ${fmtPrice(p.level)}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
                         </>
                     )}
                 </Card>
