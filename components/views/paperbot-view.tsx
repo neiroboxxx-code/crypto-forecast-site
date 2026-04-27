@@ -153,22 +153,41 @@ export function PaperbotView() {
                     </p>
 
                     {/* Status bar — read-only */}
-                    <div className="mt-4 flex items-center gap-3 rounded-xl border border-emerald-500/10 bg-black/35 p-4 backdrop-blur-sm">
-                        <span className={`h-2.5 w-2.5 shrink-0 rounded-full ring-1 ring-white/10 ${statusDot(isActive)}`} />
-                        <div>
-                            <div className="text-[11px] font-medium text-white/85">
+                    <div className={`mt-4 rounded-2xl border p-5 backdrop-blur-sm transition-colors ${
+                        loading
+                            ? "border-white/8 bg-black/30"
+                            : isActive
+                            ? "border-emerald-500/30 bg-emerald-500/[0.07] shadow-[0_0_40px_rgba(52,211,153,0.06)_inset]"
+                            : "border-white/8 bg-black/30"
+                    }`}>
+                        <div className="flex items-center gap-3">
+                            <span className={`h-3 w-3 shrink-0 rounded-full ring-2 ring-white/10 ${statusDot(isActive)}`} />
+                            <div className="text-base font-semibold text-white">
                                 {loading
                                     ? "Загрузка..."
                                     : isActive
-                                    ? "Бот активен · отслеживает сигналы"
+                                    ? "Бот активен · отслеживает рынок"
                                     : "Бот остановлен"}
                             </div>
-                            {isActive && (
-                                <div className="text-[10px] text-white/45">
-                                    Риск {effectiveSettings.riskPct}% · плечо {effectiveSettings.leverage}x · мин. {effectiveSettings.minConfidence.toUpperCase()} · ≥{effectiveSettings.minProbabilityPct}%
-                                </div>
-                            )}
                         </div>
+                        {!loading && isActive && (
+                            <div className="mt-3 flex flex-wrap gap-2">
+                                {[
+                                    { label: "Риск", value: `${effectiveSettings.riskPct}%` },
+                                    { label: "Плечо", value: `${effectiveSettings.leverage}x` },
+                                    { label: "Сигнал", value: `≥ ${effectiveSettings.minConfidence.toUpperCase()}` },
+                                    { label: "Вероятность", value: `≥ ${effectiveSettings.minProbabilityPct}%` },
+                                ].map(({ label, value }) => (
+                                    <div key={label} className="flex items-center gap-1.5 rounded-lg border border-emerald-500/15 bg-emerald-500/[0.06] px-3 py-1.5">
+                                        <span className="text-[11px] text-white/45">{label}</span>
+                                        <span className="text-[12px] font-semibold text-emerald-300">{value}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {!loading && !isActive && (
+                            <div className="mt-2 text-[12px] text-white/35">Ожидает запуска</div>
+                        )}
                     </div>
 
                     {/* Pipeline steps */}
