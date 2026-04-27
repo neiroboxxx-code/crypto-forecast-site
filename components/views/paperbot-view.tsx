@@ -1,25 +1,17 @@
 "use client";
 
-import { useCallback, useState } from "react";
-import { Bot, ChevronRight, Play, Square } from "lucide-react";
-import {
-    getPaperbotState,
-    startPaperbot,
-    stopPaperbot,
-    updatePaperbotSettings,
-    type PaperBotSettings,
-    type PaperBotState,
-} from "@/lib/api";
+import { Bot, ChevronRight } from "lucide-react";
+import { getPaperbotState, type PaperBotState } from "@/lib/api";
 import { useApi } from "@/hooks/use-api";
 import { PaperbotSummary } from "@/components/sections/paperbot/paperbot-summary";
 import { PaperbotPositionsTable } from "@/components/sections/paperbot/paperbot-positions-table";
 import { PaperbotClosedTrades } from "@/components/sections/paperbot/paperbot-closed-trades";
 import { PaperbotActivityLog } from "@/components/sections/paperbot/paperbot-activity-log";
 import { PaperbotSignalBox } from "@/components/sections/paperbot/paperbot-signal-box";
-import { PaperbotSettings } from "@/components/sections/paperbot/paperbot-settings";
 import { PaperbotMascot } from "@/components/sections/paperbot/paperbot-mascot";
 import { Card } from "@/components/ui/card";
 import type { PaperSettings, PaperSignalState } from "@/components/sections/paperbot/types";
+import type { PaperBotSettings } from "@/lib/api";
 
 const PIPELINE_STEPS = [
     { key: "signal", label: "Сигнал", hint: "forward Reversal · 4–8ч" },
@@ -29,7 +21,6 @@ const PIPELINE_STEPS = [
     { key: "close", label: "Закрытие", hint: "журнал и история" },
 ] as const;
 
-// Map API response to local component types
 function toSettings(s: PaperBotSettings): PaperSettings {
     return {
         depositUsd: s.depositUsd,
@@ -61,53 +52,18 @@ function statusDot(active: boolean) {
 }
 
 export function PaperbotView() {
-    const [actionPending, setActionPending] = useState(false);
-    const [settingsPending, setSettingsPending] = useState(false);
-
-    const { data, loading, refreshing, refresh } = useApi<PaperBotState>(
+    const { data, loading, refreshing } = useApi<PaperBotState>(
         getPaperbotState,
         [],
-        { intervalMs: 30_000 }, // poll every 30s
+        { intervalMs: 30_000 },
     );
 
     const isActive = data?.settings.isActive ?? false;
-
-    // Local settings draft (editable while bot is stopped)
-    const [localSettings, setLocalSettings] = useState<PaperSettings | null>(null);
-    const effectiveSettings: PaperSettings = localSettings ??
-        (data ? toSettings(data.settings) : {
-            depositUsd: 1000, riskPct: 2, leverage: 10,
-            minConfidence: "medium", minProbabilityPct: 60,
-            allowLong: true, allowShort: true, maxPositions: 1,
-        });
-
-    const handleSettingsChange = useCallback((s: PaperSettings) => {
-        setLocalSettings(s);
-    }, []);
-
-    async function handleToggle() {
-        setActionPending(true);
-        try {
-            if (isActive) {
-                await stopPaperbot();
-            } else {
-                // Save pending settings before start
-                if (localSettings) {
-                    setSettingsPending(true);
-                    try {
-                        await updatePaperbotSettings(localSettings);
-                    } finally {
-                        setSettingsPending(false);
-                    }
-                }
-                await startPaperbot();
-                setLocalSettings(null); // clear draft, server is now source of truth
-            }
-            refresh();
-        } finally {
-            setActionPending(false);
-        }
-    }
+    const effectiveSettings: PaperSettings = data ? toSettings(data.settings) : {
+        depositUsd: 1000, riskPct: 2, leverage: 10,
+        minConfidence: "medium", minProbabilityPct: 60,
+        allowLong: true, allowShort: true, maxPositions: 1,
+    };
 
     const summary = data ? {
         equityUsd: data.summary.equityUsd,
@@ -196,40 +152,23 @@ export function PaperbotView() {
                         Вся история, изменения и выходы записываются в журнал.
                     </p>
 
-                    {/* Status bar + start/stop */}
-                    <div className="mt-4 flex flex-col gap-3 rounded-xl border border-emerald-500/10 bg-black/35 p-4 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
-                        <div className="flex items-center gap-3">
-                            <span className={`h-2.5 w-2.5 shrink-0 rounded-full ring-1 ring-white/10 ${statusDot(isActive)}`} />
-                            <div>
-                                <div className="text-[11px] font-medium text-white/85">
-                                    {loading
-                                        ? "Загрузка..."
-                                        : isActive
-                                        ? "Бот активен · отслеживает сигналы"
-                                        : "Бот остановлен · ожидает запуска"}
-                                </div>
-                                <div className="text-[10px] text-white/45">
-                                    {isActive
-                                        ? `Риск ${effectiveSettings.riskPct}% · плечо ${effectiveSettings.leverage}x · мин. ${effectiveSettings.minConfidence.toUpperCase()} · ≥${effectiveSettings.minProbabilityPct}%`
-                                        : "Настройте параметры и нажмите Запустить"}
-                                </div>
+                    {/* Status bar — read-only */}
+                    <div className="mt-4 flex items-center gap-3 rounded-xl border border-emerald-500/10 bg-black/35 p-4 backdrop-blur-sm">
+                        <span className={`h-2.5 w-2.5 shrink-0 rounded-full ring-1 ring-white/10 ${statusDot(isActive)}`} />
+                        <div>
+                            <div className="text-[11px] font-medium text-white/85">
+                                {loading
+                                    ? "Загрузка..."
+                                    : isActive
+                                    ? "Бот активен · отслеживает сигналы"
+                                    : "Бот остановлен"}
                             </div>
-                        </div>
-                        <button
-                            onClick={handleToggle}
-                            disabled={actionPending || loading}
-                            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-[11px] font-semibold uppercase tracking-wider transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-                                isActive
-                                    ? "border-rose-400/30 bg-rose-400/10 text-rose-200 hover:bg-rose-400/20"
-                                    : "border-emerald-400/35 bg-emerald-400/10 text-emerald-200 hover:bg-emerald-400/20"
-                            }`}
-                        >
-                            {isActive ? (
-                                <><Square className="h-3.5 w-3.5" aria-hidden /> Остановить</>
-                            ) : (
-                                <><Play className="h-3.5 w-3.5" aria-hidden /> Запустить</>
+                            {isActive && (
+                                <div className="text-[10px] text-white/45">
+                                    Риск {effectiveSettings.riskPct}% · плечо {effectiveSettings.leverage}x · мин. {effectiveSettings.minConfidence.toUpperCase()} · ≥{effectiveSettings.minProbabilityPct}%
+                                </div>
                             )}
-                        </button>
+                        </div>
                     </div>
 
                     {/* Pipeline steps */}
@@ -263,15 +202,8 @@ export function PaperbotView() {
                     </div>
                 </Card>
 
-                {/* Signal + Settings */}
-                <div className="grid gap-3 lg:grid-cols-[1fr_1fr]">
-                    <PaperbotSignalBox signal={toSignal(data?.signal ?? null)} settings={effectiveSettings} />
-                    <PaperbotSettings
-                        settings={effectiveSettings}
-                        onChange={handleSettingsChange}
-                        disabled={isActive || settingsPending}
-                    />
-                </div>
+                {/* Signal box — read-only, no settings comparison */}
+                <PaperbotSignalBox signal={toSignal(data?.signal ?? null)} settings={effectiveSettings} />
 
                 {/* Summary */}
                 <PaperbotSummary summary={summary} />
