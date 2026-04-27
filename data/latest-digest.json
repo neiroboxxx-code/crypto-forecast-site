@@ -1,29 +1,18 @@
 {
-  "updatedAt": "2026-04-27T09:12:14Z",
+  "updatedAt": "2026-04-27T19:55:57Z",
   "title": "Маркет-дайджест",
-  "bodyMarkdown": "## Рынки в режиме сдержанной консолидации\n\nКрипторынок завершает неделю в нейтральном, слегка корректирующемся тоне. За последние 24 часа основные активы демонстрируют незначительные снижения: **BTC — $77 783.6 (−0.26%)**, **ETH — $2 319.14 (−0.48%)**, **SOL — $85.52 (−1.13%)**, **LINK — $9.326 (−1.05%)**. Движение выглядит техническим, без признаков агрессивной распродажи.\n\nНа общем фоне выделяется макроэкономический контекст. Фондовые индексы, по данным на 24 апреля, сохраняют силу: **S&P 500 на отметке 7 165.08**, **Nasdaq — 24 836.6**. Однако индикатор страха **VIX держится на уровне 19.31** (данные на 23 апреля), что указывает на сохраняющуюся осторожность инвесторов. Цена на нефть марки **WTI остается высокой — $91.06** за баррель, добавляя инфляционный фон.\n\nГеополитическая новостная лента, где фигурируют темы вокруг Ирана и внутренней политики США, продолжает создавать общую атмосферу неопределенности, сдерживая аппетит к риску.\n\nВнутри криптоиндустрии ключевым структурным сюжетом остается институциональное накопление. Новость о том, что **Bitcoin-холдинг компании Strategy достиг рекордных $63.46 млрд**, служит мощным фундаментальным якорем. Этот устойчивый, долгосрочный спрос помогает Bitcoin демонстрировать относительную устойчивость на фоне общей рыночной осторожности.\n\nПараллельно рынок готовится к серии крупных отраслевых событий, таких как Bitcoin 2026 в Лас-Вегасе, а также разбирается с последствиями технического инцидента в сети Litecoin, где для стабилизации блокчейна потребовалась экстренная реорганизация.\n\n**Итог:** Рынок находится в состоянии выжидательной консолидации. С одной стороны, его сдерживают макро- и геополитические риски, с другой — поддерживает растущий институциональный спрос на Bitcoin, создавая противоречивую, но в целом сбалансированную картину.",
+  "bodyMarkdown": "## Маркет-снимок\n\nКрипторынок оценивается по BTC, ETH, ONDO, SOL и LINK за последние 24 часа.\n\n- **BTC** — 77779.1 USDT (-0.23%), тон: нейтрально.\n- **ETH** — 2314.26 USDT (-0.85%), тон: нейтрально.\n- **ONDO** — 0.2621 USDT (-2.46%), тон: умеренно слабый.\n- **SOL** — 85.22 USDT (-1.16%), тон: нейтрально.\n- **LINK** — 9.307 USDT (-1.51%), тон: нейтрально.\n\n## Макро (FRED)\n\n- **S&P 500** = 7165.08 (2026-04-24), сильный.\n- **Nasdaq** = 24836.6 (2026-04-24), сильный.\n- **VIX** = 19.31 (2026-04-23), осторожность.\n\n## Новости (крипто-тематика, топ по скорингу)\n\n- Survey Finds 36% of Crypto Traders Cut Spending Amid BTC Slump — _bitcoinethereumnews_\n- Trump to hold Situation Room meeting on Iran amid Bitcoin price concerns — _bitcoinethereumnews_\n- Ascending Triangle Breakout Loading? Top 5 Altcoins With 5x Upside Potential — _cryptonewsland_\n- ETH Consolidation Phase Persists: Key Support Levels Signal Potential Trend Reversal — _bitcoinethereumnews_\n- CME Bitcoin Futures Gap Widens: A $580 Opening Signals Volatility Ahead — _bitcoinethereumnews_\n\n## Гео / макро-заголовки\n\n- US-Iran War LIVE: Araghchi Turns to Moscow After Trump Rejects New Peace Proposal in Islamabad, Israeli Strikes Kill 14 In Lebanon — _Republic World_\n- Iran Offers Deal to US to Reopen Strait, Delay Nuclear Talks, Axios Says — _Bloomberg_\n- Trump says Iran can phone if it wants to talk, as Iranian envoy returns to Pakistan — _The Japan Times_\n- Trump calls suspect in press dinner attack 'pretty sick guy' whose views alarmed relatives — _The Economic Times_\n- US-Israel-Iran Ceasefire Live Updates: US Must Lift Blockade Before Fresh Talks, Iran Tells Pakistan — _NDTV.com_\n\n## Статус источников\n\n- `bybit`: ok\n- `fred`: error: ReadTimeout\n- `gnews_crypto`: ok\n- `gnews_geo`: ok\n- `newsdata`: ok\n\n_Собрано: 2026-04-27T13:35:53.238112+00:00_",
   "meta": {
-    "source": "llm",
-    "model": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
-    "llmError": null,
+    "source": "fallback",
+    "model": null,
+    "llmError": "The read operation timed out",
     "fetchStatus": {
       "bybit": "ok",
-      "fred": "ok",
+      "fred": "error: ReadTimeout",
       "newsdata": "ok",
       "gnews_crypto": "ok",
       "gnews_geo": "ok"
     },
-    "llmPipeline": {
-      "filterModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
-      "finalModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
-      "filterSteps": 5,
-      "filterFiles": [
-        "filter_01_system.txt",
-        "filter_02_system.txt",
-        "filter_03_system.txt",
-        "filter_04_system.txt",
-        "filter_05_system.txt"
-      ]
-    }
+    "llmPipeline": null
   }
 }
