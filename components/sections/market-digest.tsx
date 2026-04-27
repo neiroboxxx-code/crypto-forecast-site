@@ -14,6 +14,10 @@ function renderMarkdownLite(md: string): string {
         .split(/\n\n+/)
         .map((block) => {
             const t = block.trim();
+            if (t.startsWith("### ")) {
+                const rest = t.slice(4).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+                return `<h3 class="mb-2 mt-5 first:mt-0 text-base font-semibold tracking-tight text-white/90">${rest}</h3>`;
+            }
             if (t.startsWith("## ")) {
                 const rest = t.slice(3).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
                 return `<h2 class="mb-3 mt-7 first:mt-0 text-2xl font-semibold tracking-tight text-white">${rest}</h2>`;
