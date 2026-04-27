@@ -9,7 +9,7 @@ import { ErrorState } from "@/components/ui/error-state";
 import { InfoDialog, InfoIconButton } from "@/components/ui/info-dialog";
 import { fmtTime } from "@/lib/format";
 
-function sentimentBadge(s: NewsItem["sentiment"]): { label: string; cls: string } {
+function sentimentBadge(s: NewsItem["sentiment"]): { label: string; cls: string } | null {
     let val = 0;
     if (typeof s === "number") val = s;
     else if (s === "bullish") val = 1;
@@ -17,7 +17,7 @@ function sentimentBadge(s: NewsItem["sentiment"]): { label: string; cls: string 
 
     if (val > 0.12) return { label: "BULL", cls: "border-emerald-400/25 bg-emerald-400/10 text-emerald-300" };
     if (val < -0.12) return { label: "BEAR", cls: "border-rose-400/25 bg-rose-400/10 text-rose-300" };
-    return { label: "NEUT", cls: "border-white/12 bg-white/5 text-white/55" };
+    return null; // нейтральный — не показываем
 }
 
 function regimeBadge(v: string | null | undefined): { label: string; cls: string } | null {
@@ -31,8 +31,8 @@ type CatalystFeedProps = {
     maxItems?: number;
 };
 
-export function CatalystFeed({ maxItems = 6 }: CatalystFeedProps) {
-    const { data, loading, error } = useApi<NewsData>(getNews);
+export function CatalystFeed({ maxItems = 5 }: CatalystFeedProps) {
+    const { data, loading, error } = useApi<NewsData>(getNews, [], { intervalMs: 5 * 60 * 1000 });
     const [openKey, setOpenKey] = useState<string | null>(null);
     const [infoOpen, setInfoOpen] = useState(false);
 
@@ -81,9 +81,11 @@ export function CatalystFeed({ maxItems = 6 }: CatalystFeedProps) {
                                                     {reg.label}
                                                 </span>
                                             )}
-                                            <span className={`rounded border px-1.5 py-0.5 ${sent.cls}`}>
-                                                {sent.label}
-                                            </span>
+                                            {sent && (
+                                                <span className={`rounded border px-1.5 py-0.5 ${sent.cls}`}>
+                                                    {sent.label}
+                                                </span>
+                                            )}
                                             {item.is_confirmed && (
                                                 <span className="rounded border border-emerald-400/25 bg-emerald-400/10 px-1.5 py-0.5 text-emerald-300">
                                                     CONF
