@@ -1,15 +1,15 @@
 {
-  "updatedAt": "2026-04-26T18:15:09Z",
+  "updatedAt": "2026-04-27T03:51:30Z",
   "title": "Маркет-дайджест",
-  "bodyMarkdown": "## Маркет-снимок\n\nКрипторынок оценивается по BTC, ETH, ONDO, SOL и LINK за последние 24 часа.\n\n- **BTC** — 78009.6 USDT (0.83%), тон: нейтрально.\n- **ETH** — 2345.18 USDT (1.57%), тон: нейтрально.\n- **ONDO** — 0.2678 USDT (3.36%), тон: умеренно сильный.\n- **SOL** — 86.45 USDT (0.78%), тон: нейтрально.\n- **LINK** — 9.445 USDT (1.24%), тон: нейтрально.\n\n## Макро (FRED)\n\n- **S&P 500** = 7165.08 (2026-04-24), сильный.\n- **Nasdaq** = 24836.6 (2026-04-24), сильный.\n- **VIX** = 19.31 (2026-04-23), осторожность.\n- **Oil** = 91.06 (2026-04-20), высоко.\n\n## Новости (крипто-тематика, топ по скорингу)\n\n- XRP Price Prediction After 3x ETFs Hit Nasdaq: Pepeto Presale Crosses $9.5M as Analysts Eye 100x — _coingabbar_\n- South Africa Crypto Draft Triggers 1M Rand Fine Warning From Valr CEO – Bitcoin News — _bitcoinethereumnews_\n- BlackRock's IBIT Options Open Interest Surpasses Deribit for the First Time, Accelerating Bitcoin's Institutionalization Process — _binance_\n- Shark Tank Kevin O’Leary Now Says Forget Alts, Hold Bitcoin, Ethereum — _bitcoinethereumnews_\n- Shark Tank Kevin O’Leary Now Says Forget Alts, Hold Bitcoin, Ethereum — _cryptopotato_\n\n## Гео / макро-заголовки\n\n- Decades-Old Iranian Jet Breached US Defenses, Struck Gulf Base in Early Phase of War - Reports — _Sputnik News_\n- Here’s what we know about security measures at the White House Correspondents’ Association dinner — _Baltimore Sun_\n- Here's What We Know About Security Measures at the White House Correspondents' Association Dinner — _U.S. News & World Report_\n- Shots will be fired: Karoline Leavitt's remarks before White House dinner go viral — _India Today_\n- Woman asked if she 'had work done' after using new anti-ageing salmon serum — _South Wales Echo_\n\n## Статус источников\n\n- `bybit`: ok\n- `fred`: ok\n- `gnews_crypto`: ok\n- `gnews_geo`: ok\n- `newsdata`: ok\n\n_Собрано: 2026-04-26T17:10:04.846067+00:00_",
+  "bodyMarkdown": "## Маркет-снимок\n\nДанные Bybit недоступны.\n\n\n*Макро-блок пуст (нет ключа FRED или ошибка запроса).*\n\n## Новости (крипто-тематика, топ по скорингу)\n\n- Stock Market Outlook (April 27-30): Nifty Enters Consolidation Phase After Rally; Fed Meet, Q4 Results, Crude Oil Surge Key Triggers — _NewsX_\n- Government reveals exactly how long Iran war's impact on cost of living to last — _Metro.co.uk_\n- Robot Dance Drama: Tech Glitch or Autonomous Move? — _Devdiscourse_\n- Concerns for King's safety top priority after Donald Trump shooting chaos at White House event — _The Mirror_\n\n## Гео / макро-заголовки\n\n- China warns EU to remove firms and citizens from Russian sanctions list — _South China Morning Post_\n- Transatlantic Unity Against Political Violence — _Devdiscourse_\n- Government reveals exactly how long Iran war's impact on cost of living to last — _Metro.co.uk_\n- Stock Market Outlook (April 27-30): Nifty Enters Consolidation Phase After Rally; Fed Meet, Q4 Results, Crude Oil Surge Key Triggers — _NewsX_\n- Concerns for King's safety top priority after Donald Trump shooting chaos at White House event — _The Mirror_\n\n## Статус источников\n\n- `bybit`: error: ConnectError\n- `fred`: error: ConnectError\n- `gnews_crypto`: ok\n- `gnews_geo`: ok\n- `newsdata`: error: ConnectError\n\n_Собрано: 2026-04-26T22:08:01.699558+00:00_",
   "meta": {
     "source": "fallback",
     "model": null,
-    "llmError": "The read operation timed out",
+    "llmError": "[Errno 8] nodename nor servname provided, or not known",
     "fetchStatus": {
-      "bybit": "ok",
-      "fred": "ok",
-      "newsdata": "ok",
+      "bybit": "error: ConnectError",
+      "fred": "error: ConnectError",
+      "newsdata": "error: ConnectError",
       "gnews_crypto": "ok",
       "gnews_geo": "ok"
     },
