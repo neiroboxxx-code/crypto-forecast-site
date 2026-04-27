@@ -1,11 +1,11 @@
 {
-  "updatedAt": "2026-04-27T03:51:30Z",
+  "updatedAt": "2026-04-27T07:24:48Z",
   "title": "Маркет-дайджест",
-  "bodyMarkdown": "## Маркет-снимок\n\nДанные Bybit недоступны.\n\n\n*Макро-блок пуст (нет ключа FRED или ошибка запроса).*\n\n## Новости (крипто-тематика, топ по скорингу)\n\n- Stock Market Outlook (April 27-30): Nifty Enters Consolidation Phase After Rally; Fed Meet, Q4 Results, Crude Oil Surge Key Triggers — _NewsX_\n- Government reveals exactly how long Iran war's impact on cost of living to last — _Metro.co.uk_\n- Robot Dance Drama: Tech Glitch or Autonomous Move? — _Devdiscourse_\n- Concerns for King's safety top priority after Donald Trump shooting chaos at White House event — _The Mirror_\n\n## Гео / макро-заголовки\n\n- China warns EU to remove firms and citizens from Russian sanctions list — _South China Morning Post_\n- Transatlantic Unity Against Political Violence — _Devdiscourse_\n- Government reveals exactly how long Iran war's impact on cost of living to last — _Metro.co.uk_\n- Stock Market Outlook (April 27-30): Nifty Enters Consolidation Phase After Rally; Fed Meet, Q4 Results, Crude Oil Surge Key Triggers — _NewsX_\n- Concerns for King's safety top priority after Donald Trump shooting chaos at White House event — _The Mirror_\n\n## Статус источников\n\n- `bybit`: error: ConnectError\n- `fred`: error: ConnectError\n- `gnews_crypto`: ok\n- `gnews_geo`: ok\n- `newsdata`: error: ConnectError\n\n_Собрано: 2026-04-26T22:08:01.699558+00:00_",
+  "bodyMarkdown": "## Обзор рынка\n\nТекущий снимок рынка не содержит количественных данных. Информация о ценах криптоактивов и значениях макроэкономических индикаторов (таких как S&P 500, Nasdaq, VIX) временно недоступна из-за ошибок подключения к источникам данных.\n\nОсновной контекст задают новости. Рынки начинают неделю в состоянии повышенной неопределённости после инцидента в Вашингтоне. В субботу, 25 апреля, в ходе ужина Ассоциации корреспондентов Белого дома в отеле Washington Hilton прозвучали выстрелы. Президент Дональд Трамп и вице-президент Дж. Д. Вэнс были эвакуированы. Подозреваемый, 31-летний Коул Томас Аллен, задержан.\n\nЭто внутреннее событие немедленно создаёт атмосферу политического и социального стресса, что исторически провоцирует классический уход инвесторов от риска («risk-off»). В таких условиях капитал традиционно перетекает в защитные активы, оказывая давление на фондовый рынок и рискованные активы, включая криптовалюты.\n\nПараллельно сохраняется внешнеполитическая напряжённость: переговоры по Ближнему Востоку, согласно The Guardian, зашли в тупик, поскольку США и Иран не проявляют готовности к компромиссу.\n\n**Итог:** Рынки находятся в режиме ожидания и переоценки рисков. Без точных ценовых данных сложно оценить степень реакции, однако новостной фон однозначно смещён в сторону осторожности. Дальнейшая динамика будет зависеть от развития ситуации в Вашингтоне и поведения институциональных инвесторов в первые часы торгов.",
   "meta": {
-    "source": "fallback",
-    "model": null,
-    "llmError": "[Errno 8] nodename nor servname provided, or not known",
+    "source": "llm",
+    "model": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+    "llmError": null,
     "fetchStatus": {
       "bybit": "error: ConnectError",
       "fred": "error: ConnectError",
@@ -13,6 +13,17 @@
       "gnews_crypto": "ok",
       "gnews_geo": "ok"
     },
-    "llmPipeline": null
+    "llmPipeline": {
+      "filterModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+      "finalModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+      "filterSteps": 5,
+      "filterFiles": [
+        "filter_01_system.txt",
+        "filter_02_system.txt",
+        "filter_03_system.txt",
+        "filter_04_system.txt",
+        "filter_05_system.txt"
+      ]
+    }
   }
 }
