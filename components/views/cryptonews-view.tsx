@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { MarketDigestData } from "@/lib/api";
 import { DigestPipelineVisual } from "@/components/sections/digest-pipeline-visual";
 import { MarketDigest } from "@/components/sections/market-digest";
+import { NewsArchive } from "@/components/sections/news-archive";
 
 const REFRESH_MS = 10 * 60 * 1000; // re-check every 10 min
 
@@ -43,6 +44,7 @@ export function CryptoNewsView() {
             </div>
             <div className="lg:justify-self-end">
                 <MarketDigest data={data} error={err} />
+                <NewsArchive />
             </div>
         </div>
     );
