@@ -167,6 +167,9 @@ function pickThesisText(data: MarketThesis | null): string | null {
 }
 
 type ThesisEvent = NonNullable<MarketThesis["events"]>[number];
+type ThesisBlock =
+    | { kind: "intro"; content: string }
+    | { kind: "event"; ordinal: number; titleRest: string; content: string; event?: ThesisEvent };
 
 function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () => void }) {
     const [mounted, setMounted] = useState(false);
@@ -227,6 +230,71 @@ function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () 
     );
 }
 
+function parseThesisBlocks(text: string, events: ThesisEvent[]): ThesisBlock[] {
+    const re = /^###\s+(?:\*\*)?Событие\s+(\d+)([^*\n]*)(?:\*\*)?\s*$/gim;
+    const matches = Array.from(text.matchAll(re));
+    if (matches.length === 0) return [{ kind: "intro", content: text }];
+
+    const blocks: ThesisBlock[] = [];
+    const first = matches[0];
+    if (first.index && first.index > 0) {
+        const intro = text.slice(0, first.index).trim();
+        if (intro) blocks.push({ kind: "intro", content: intro });
+    }
+
+    for (let i = 0; i < matches.length; i++) {
+        const match = matches[i];
+        const next = matches[i + 1];
+        const start = (match.index ?? 0) + match[0].length;
+        const end = next?.index ?? text.length;
+        const ordinal = Number(match[1]);
+        const content = text.slice(start, end).trim();
+        const titleRest = (match[2] ?? "").replace(/^:\s*/, "").trim();
+        blocks.push({
+            kind: "event",
+            ordinal,
+            titleRest,
+            content,
+            event: events.find((event) => event.ordinal === ordinal),
+        });
+    }
+    return blocks;
+}
+
+function EventHeading({
+    block,
+    onOpen,
+}: {
+    block: Extract<ThesisBlock, { kind: "event" }>;
+    onOpen: (event: ThesisEvent) => void;
+}) {
+    const clickable = Boolean(block.event?.snapshot_url);
+    const title = block.titleRest ? `: ${block.titleRest}` : "";
+    return (
+        <div className="mb-2 mt-5 flex flex-wrap items-center gap-2 border-t border-white/8 pt-4 first:mt-0 first:border-t-0 first:pt-0">
+            <button
+                type="button"
+                disabled={!clickable}
+                onClick={() => {
+                    if (block.event) onOpen(block.event);
+                }}
+                className={`rounded-lg border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] transition ${
+                    clickable
+                        ? "border-cyan-400/35 bg-cyan-400/[0.08] text-cyan-100 hover:border-cyan-400/60 hover:bg-cyan-400/[0.14]"
+                        : "cursor-not-allowed border-white/10 bg-white/[0.03] text-white/30"
+                }`}
+            >
+                Событие {block.ordinal}
+            </button>
+            {title && (
+                <span className="text-[13px] font-semibold leading-snug text-white/85">
+                    {title}
+                </span>
+            )}
+        </div>
+    );
+}
+
 /**
  * Fetches the DeepSeek thesis and renders its body as Markdown.
  * Used by the analytics dropdown inside ChartPanel.
@@ -253,7 +321,7 @@ export function MarketThesisContent() {
     const task = data.task ?? "unknown";
     const generatedAt = data.generated_at;
     const text = pickThesisText(data);
-    const events = (data.events ?? []).filter((event) => event.snapshot_url);
+    const events = data.events ?? [];
 
     const meta = (
         <div className="mb-3 flex items-center gap-1.5">
@@ -294,24 +362,26 @@ export function MarketThesisContent() {
     return (
         <>
             {meta}
-            {events.length > 0 && (
-                <div className="mb-3 flex flex-wrap gap-1.5">
-                    {events.map((event) => (
-                        <button
-                            key={event.id}
-                            type="button"
-                            onClick={() => setActiveEvent(event)}
-                            className="rounded-lg border border-cyan-400/25 bg-cyan-400/[0.06] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-200 transition hover:border-cyan-400/45 hover:bg-cyan-400/[0.12]"
-                        >
-                            Событие {event.ordinal}
-                        </button>
-                    ))}
-                </div>
-            )}
-            <div
-                className="thesis-prose text-[12.5px] leading-[1.65] text-white/80"
-                dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }}
-            />
+            <div className="thesis-prose text-[12.5px] leading-[1.65] text-white/80">
+                {parseThesisBlocks(text, events).map((block, idx) => {
+                    if (block.kind === "intro") {
+                        return (
+                            <div
+                                key={`intro-${idx}`}
+                                dangerouslySetInnerHTML={{ __html: renderMarkdown(block.content) }}
+                            />
+                        );
+                    }
+                    return (
+                        <section key={`event-${block.ordinal}-${idx}`}>
+                            <EventHeading block={block} onOpen={setActiveEvent} />
+                            <div
+                                dangerouslySetInnerHTML={{ __html: renderMarkdown(block.content) }}
+                            />
+                        </section>
+                    );
+                })}
+            </div>
             {activeEvent && (
                 <SnapshotLightbox event={activeEvent} onClose={() => setActiveEvent(null)} />
             )}
