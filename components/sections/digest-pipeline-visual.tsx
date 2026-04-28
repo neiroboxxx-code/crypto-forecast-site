@@ -1,6 +1,7 @@
 import type { MarketDigestData } from "@/lib/api";
 import type { LucideIcon } from "lucide-react";
 import { BarChart3, Bitcoin, Droplet, Gauge, Globe, Landmark, LineChart } from "lucide-react";
+import type { ComponentType, SVGProps } from "react";
 
 type Badge = {
     id: string;
@@ -8,8 +9,7 @@ type Badge = {
     kind: "coin" | "tag";
     text?: string;
     icon?: LucideIcon;
-    bg?: string;
-    fg?: string;
+    glyph?: ComponentType<SVGProps<SVGSVGElement>>;
 };
 
 const SOURCES: readonly {
@@ -23,11 +23,11 @@ const SOURCES: readonly {
         name: "Bybit",
         tone: "cyan" as const,
         assets: [
-            { id: "btc", label: "Bitcoin (BTC)", kind: "coin", text: "₿", bg: "#F7931A", fg: "#101318" },
-            { id: "eth", label: "Ethereum (ETH)", kind: "coin", text: "Ξ", bg: "#627EEA", fg: "#0B0D12" },
-            { id: "sol", label: "Solana (SOL)", kind: "coin", text: "◎", bg: "#22C55E", fg: "#07110B" },
-            { id: "ondo", label: "ONDO", kind: "coin", text: "O", bg: "#14B8A6", fg: "#04100E" },
-            { id: "link", label: "Chainlink (LINK)", kind: "coin", text: "⬡", bg: "#2A5ADA", fg: "#0B0D12" },
+            { id: "btc", label: "Bitcoin (BTC)", kind: "coin", glyph: BitcoinGlyph },
+            { id: "eth", label: "Ethereum (ETH)", kind: "coin", glyph: EthereumGlyph },
+            { id: "sol", label: "Solana (SOL)", kind: "coin", glyph: SolanaGlyph },
+            { id: "ondo", label: "ONDO", kind: "coin", glyph: OndoGlyph },
+            { id: "link", label: "Chainlink (LINK)", kind: "coin", glyph: ChainlinkGlyph },
         ],
     },
     {
@@ -35,8 +35,8 @@ const SOURCES: readonly {
         name: "FRED",
         tone: "amber" as const,
         assets: [
-            { id: "spx", label: "S&P 500", kind: "tag", text: "S&P", icon: LineChart },
             { id: "ndx", label: "NASDAQ 100", kind: "tag", text: "NDX", icon: BarChart3 },
+            { id: "spx", label: "S&P 500", kind: "tag", text: "S&P", icon: LineChart },
             { id: "vix", label: "VIX", kind: "tag", text: "VIX", icon: Gauge },
             { id: "wti", label: "WTI", kind: "tag", text: "WTI", icon: Droplet },
         ],
@@ -96,15 +96,124 @@ function parseStatus(v: string | undefined): "ok" | "warn" | "error" | "idle" {
 
 type Props = { data?: MarketDigestData | null };
 
+function toneTextClass(tone: Tone): string {
+    if (tone === "cyan") return "text-cyan-200/85";
+    if (tone === "amber") return "text-amber-200/85";
+    if (tone === "emerald") return "text-emerald-200/85";
+    return "text-fuchsia-200/85";
+}
+
+function toneCoinClass(tone: Tone): string {
+    if (tone === "cyan") return "border-cyan-400/30 bg-cyan-400/[0.08] text-cyan-200/90";
+    if (tone === "amber") return "border-amber-400/30 bg-amber-400/[0.08] text-amber-200/90";
+    if (tone === "emerald") return "border-emerald-400/30 bg-emerald-400/[0.08] text-emerald-200/90";
+    return "border-fuchsia-400/30 bg-fuchsia-400/[0.08] text-fuchsia-200/90";
+}
+
+function BitcoinGlyph(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" {...props}>
+            <path
+                d="M11.2 5.2h2.6c2.6 0 4.2 1.2 4.2 3.2 0 1.5-.9 2.6-2.5 3.0 2.0.4 3.1 1.7 3.1 3.4 0 2.3-1.8 3.7-4.8 3.7h-2.6"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+            />
+            <path d="M10 4v16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+            <path d="M14 4v16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.65" />
+        </svg>
+    );
+}
+
+function EthereumGlyph(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" {...props}>
+            <path
+                d="M12 3l6 9-6 4-6-4 6-9Z"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M12 21l6-7-6 4-6-4 6 7Z"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinejoin="round"
+                opacity="0.8"
+            />
+        </svg>
+    );
+}
+
+function SolanaGlyph(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" {...props}>
+            <path
+                d="M7.2 7.2h11.2l-1.6 2H5.6l1.6-2Z"
+                fill="currentColor"
+                opacity="0.95"
+            />
+            <path
+                d="M7.2 11.0h11.2l-1.6 2H5.6l1.6-2Z"
+                fill="currentColor"
+                opacity="0.78"
+            />
+            <path
+                d="M7.2 14.8h11.2l-1.6 2H5.6l1.6-2Z"
+                fill="currentColor"
+                opacity="0.62"
+            />
+        </svg>
+    );
+}
+
+function ChainlinkGlyph(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" {...props}>
+            <path
+                d="M12 3.6 19 7.7v8.6L12 20.4 5 16.3V7.7L12 3.6Z"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinejoin="round"
+            />
+            <path
+                d="M12 7.2 15.6 9.3v5.4L12 16.8 8.4 14.7V9.3L12 7.2Z"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+                opacity="0.75"
+            />
+        </svg>
+    );
+}
+
+function OndoGlyph(props: SVGProps<SVGSVGElement>) {
+    return (
+        <svg viewBox="0 0 24 24" fill="none" {...props}>
+            <path
+                d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12Z"
+                stroke="currentColor"
+                strokeWidth="2"
+            />
+            <path
+                d="M12 15.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Z"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                opacity="0.7"
+            />
+        </svg>
+    );
+}
+
 function BadgePill({ b, tone }: { b: Badge; tone: Tone }) {
     if (b.kind === "coin") {
+        const Glyph = b.glyph;
         return (
             <span
                 title={b.label}
-                className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/15 shadow-[0_0_0_1px_rgba(0,0,0,0.18)]"
-                style={{ backgroundColor: b.bg ?? "#111827", color: b.fg ?? "#0B0D12" }}
+                className={`inline-flex h-5 w-5 items-center justify-center rounded-full border shadow-[0_0_0_1px_rgba(0,0,0,0.18)] ${toneCoinClass(tone)}`}
             >
-                <span className="text-[10px] font-black leading-none">{b.text ?? "•"}</span>
+                {Glyph ? <Glyph className="h-3.5 w-3.5" aria-hidden /> : <span className="text-[10px] font-black leading-none">•</span>}
             </span>
         );
     }
@@ -178,7 +287,13 @@ export function DigestPipelineVisual({ data }: Props) {
                                 <span className="text-[11px] font-semibold uppercase tracking-[0.12em] shrink-0">
                                     {src.name}
                                 </span>
-                                <div className="ml-auto flex flex-wrap justify-end gap-1">
+                                <div
+                                    className={`ml-auto ${
+                                        src.key === "fred"
+                                            ? "grid grid-cols-2 justify-end gap-1"
+                                            : "flex flex-wrap justify-end gap-1"
+                                    }`}
+                                >
                                     {src.assets.map((b) => (
                                         <BadgePill key={b.id} b={b} tone={src.tone} />
                                     ))}
