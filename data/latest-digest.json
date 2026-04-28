@@ -1,18 +1,29 @@
 {
-  "updatedAt": "2026-04-28T08:26:51Z",
+  "updatedAt": "2026-04-28T08:27:13Z",
   "title": "Маркет-дайджест",
-  "bodyMarkdown": "## Маркет-снимок\n\nКрипторынок оценивается по BTC, ETH, ONDO, SOL и LINK за последние 24 часа.\n\n- **BTC** — 76751.2 USDT (-3.20%), тон: умеренно слабый.\n- **ETH** — 2285.02 USDT (-4.75%), тон: умеренно слабый.\n- **ONDO** — 0.2626 USDT (-3.67%), тон: умеренно слабый.\n- **SOL** — 84.04 USDT (-4.48%), тон: умеренно слабый.\n- **LINK** — 9.265 USDT (-3.29%), тон: умеренно слабый.\n\n## Макро (FRED)\n\n- **S&P 500** = 7173.91 (2026-04-27), сильный.\n- **Nasdaq** = 24836.6 (2026-04-24), сильный.\n- **VIX** = 18.71 (2026-04-24), осторожность.\n- **Oil** = 91.06 (2026-04-20), высоко.\n\n## Новости (крипто-тематика, топ по скорингу)\n\n- Bitmine amasses $13.3B treasury with 5.08M ETH, aims for 5% supply — _bitcoinethereumnews_\n- Circle mints 500M USDC on Solana amid regulatory clarity, institutional interest — _cryptobriefing_\n- Ethereum Price Prediction: ETH Eyes Breakout as $2,400 Becomes Key Trigger — _bitcoinethereumnews_\n- WhiteBIT, FC Barcelona announce agreement to drive global innovation in sport — _invezz_\n- French police record 135 crypto kidnapping cases since 2023 as crime wave swells — _dlnews_\n\n## Гео / макро-заголовки\n\n- Archbishop of Canterbury praises Pope Leo’s call for peace — _The Sunday Times_\n- Crude Oil Prices Rally on Stalled US-Iran Peace Talks — _Barchart_\n- Germany calls on UN to take responsibility for settling Iran conflict — _Middle East Monitor_\n- Donald Trump and King Charles Popularity Compared Ahead of Meeting — _Newsweek_\n- Iran FM Araghchi says Trump requested for talks after US failed to achieve goals, proposal under review — _Moneycontrol_\n\n## Статус источников\n\n- `bybit`: ok\n- `fred`: ok\n- `gnews_crypto`: ok\n- `gnews_geo`: ok\n- `newsdata`: ok\n\n_Собрано: 2026-04-28T03:16:28.765122+00:00_",
+  "bodyMarkdown": "## Рынки в минусе на фоне геополитической неопределенности\n\nКрипторынки демонстрируют сдержанную, но уверенную отрицательную динамику в воскресной сессии. Основные активы торгуются в красной зоне: Bitcoin — $77 366.6 (−2.23%), Ethereum — $2 307.8 (−3.35%), Solana — $84.82 (−3.02%). Более устойчиво выглядит ONDO на отметке $0.267 (−1.22%), в то время как Chainlink корректируется до $9.324 (−2.07%).\n\nНа общий тон влияет рост геополитических рисков. В субботу суперяхта, связанная с санкционным российским олигархом Алексеем Мордашовым, прошла через блокированный Ормузский пролив. Это один из немногих подобных транзитов с начала конфликта, что добавляет премию за неопределенность на глобальных рынках.\n\nФондовый рынок, судя по последним доступным данным, демонстрирует силу: S&P 500 находится на уровне 7 173.91 пункта (данные на 27 апреля 2026 года). Данные по индексу VIX и нефти в текущем снимке отсутствуют.\n\nИнтересно, что на фоне общей коррекции продолжается структурное накопление институциональными игроками. На этой неделе компания Strategy добавила к своим резервам 3 273 BTC на сумму $255 млн по средней цене $77 906. Одновременно с этим бывший майнер BitMine, председателем правления которого является Том Ли, нарастил свои холдинги Ethereum более чем до 5 млн ETH после крупнейшей с декабря покупки в 101 901 токен.\n\nТаким образом, картина остается смешанной: краткосрочная слабость широкого рынка, подпитываемая внешними рисками, встречается с устойчивым долгосрочным спросом со стороны крупного капитала. Это создает основу для волатильности, но не указывает на смену фундаментального тренда.",
   "meta": {
-    "source": "fallback",
-    "model": null,
-    "llmError": "The read operation timed out",
+    "source": "llm",
+    "model": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+    "llmError": null,
     "fetchStatus": {
       "bybit": "ok",
-      "fred": "ok",
+      "fred": "error: ReadTimeout",
       "newsdata": "ok",
       "gnews_crypto": "ok",
       "gnews_geo": "ok"
     },
-    "llmPipeline": null
+    "llmPipeline": {
+      "filterModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+      "finalModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
+      "filterSteps": 5,
+      "filterFiles": [
+        "filter_01_system.txt",
+        "filter_02_system.txt",
+        "filter_03_system.txt",
+        "filter_04_system.txt",
+        "filter_05_system.txt"
+      ]
+    }
   }
 }
