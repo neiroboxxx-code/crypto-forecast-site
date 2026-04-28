@@ -26,6 +26,7 @@ const FOLDERS = [
   "zone/Trend_Anatomy",
   "zone/Magic_zones",
   "zone/Important_about_volume",
+  "zone/RSI_Market_Pulse",
   "zone/Anatomy_of_a_candle",
 ];
 

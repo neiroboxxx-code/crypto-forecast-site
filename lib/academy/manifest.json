@@ -309,6 +309,19 @@
     "/zone/Important_about_volume/slide-15.png",
     "/zone/Important_about_volume/slide-16.png"
   ],
+  "zone/RSI_Market_Pulse": [
+    "/zone/RSI_Market_Pulse/slide-1.png",
+    "/zone/RSI_Market_Pulse/slide-2.png",
+    "/zone/RSI_Market_Pulse/slide-3.png",
+    "/zone/RSI_Market_Pulse/slide-4.png",
+    "/zone/RSI_Market_Pulse/slide-5.png",
+    "/zone/RSI_Market_Pulse/slide-6.png",
+    "/zone/RSI_Market_Pulse/slide-7.png",
+    "/zone/RSI_Market_Pulse/slide-8.png",
+    "/zone/RSI_Market_Pulse/slide-9.png",
+    "/zone/RSI_Market_Pulse/slide-10.png",
+    "/zone/RSI_Market_Pulse/slide-11.png"
+  ],
   "zone/Anatomy_of_a_candle": [
     "/zone/Anatomy_of_a_candle/slide-1.png"
   ]

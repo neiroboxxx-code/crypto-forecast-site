@@ -19,7 +19,12 @@ export const ACADEMY_FOLDER_GROUPS: Record<AcademyCategoryId, readonly string[]>
         "Market_Microstructure_Blueprint",
     ],
     local: ["Smart_Money_Protocol", "The_Volume_Compass", "Whale_Hunting", "Liquidity_Trap_Mastery"],
-    zones: ["zone/Trend_Anatomy", "zone/Magic_zones", "zone/Important_about_volume"],
+    zones: [
+        "zone/Trend_Anatomy",
+        "zone/Magic_zones",
+        "zone/Important_about_volume",
+        "zone/RSI_Market_Pulse",
+    ],
     infographic: ["zone/Anatomy_of_a_candle"],
 };
 
