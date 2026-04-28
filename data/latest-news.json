@@ -1,15 +1,45 @@
 {
-  "updated_at": "2026-04-27T22:20:37Z",
+  "updated_at": "2026-04-28T04:15:03Z",
   "features": {
-    "confirmed_events_count": 0,
-    "risk_off_pressure": 0.0,
-    "avg_confirmed_btc_relevance": 0.0,
+    "confirmed_events_count": 2,
+    "risk_off_pressure": 0.75,
+    "avg_confirmed_btc_relevance": 0.85,
     "oil_shock_count": 0
   },
   "signal_context": {
-    "summary": "Значимых новостей за 48ч: 3. Режим: macro_uncertainty."
+    "summary": "Значимых новостей за 48ч: 5. Режим: risk_off."
   },
   "items": [
+    {
+      "published_at": "2026-04-28T02:00:02+00:00",
+      "source": "rbc",
+      "title": "В России запретили продажу партии минеральной воды из Армении",
+      "url": "https://www.rbc.ru/rbcfreenews/69efb0299a794733e03780cf",
+      "summary": "Государственная система маркировки «Честный знак» приостановила реализацию партии минеральной воды «Джермук» (Армения) в офлайн‑ и онлайн-магазинах.",
+      "sentiment": -0.2,
+      "impact_score": 0.75,
+      "requires_confirmation": true,
+      "is_confirmed": true,
+      "source_layer": "ru_confirmation",
+      "btc_relevance_score": 0.85,
+      "event_key": "geopolitics_russia_gas",
+      "market_regime_effect": "risk_off"
+    },
+    {
+      "published_at": "2026-04-28T01:55:45+00:00",
+      "source": "rbc",
+      "title": "Евродепутат объяснил отказ ЕС включать один пункт в меры против России",
+      "url": "https://www.rbc.ru/rbcfreenews/69f0109a9a7947f2f2860620",
+      "summary": "Евросоюз отказался от полного запрета на морские перевозки российской нефти в 20-м пакете санкций против России из-за экономической ситуации и риска конфликта с партнерами, заявил депутат Европарламента от Люксембурга Фернан Картайзер, передает «РИА Новости».",
+      "sentiment": -0.4,
+      "impact_score": 0.75,
+      "requires_confirmation": true,
+      "is_confirmed": true,
+      "source_layer": "ru_confirmation",
+      "btc_relevance_score": 0.85,
+      "event_key": "geopolitics_russia_oil",
+      "market_regime_effect": "risk_off"
+    },
     {
       "published_at": "2026-04-27T21:52:49+00:00",
       "source": "fxstreet",
@@ -26,6 +56,21 @@
       "market_regime_effect": "macro_uncertainty"
     },
     {
+      "published_at": "2026-04-28T01:15:51+00:00",
+      "source": "fxstreet",
+      "title": "PBOC sets USD/CNY reference rate at 6.8589 vs. 6.8579 previous",
+      "url": "https://www.fxstreet.com/news/pboc-sets-usd-cny-reference-rate-at-68589-vs-68579-previous-202604280115",
+      "summary": "The People’s Bank of China (PBOC) sets the USD/CNY central rate for the trading session ahead on Tuesday at 6.8589 compared to the previous day's fix of 6.8579 and 6.8282 Reuters estimate.",
+      "sentiment": -0.2,
+      "impact_score": 0.6,
+      "requires_confirmation": true,
+      "is_confirmed": false,
+      "source_layer": "global_primary",
+      "btc_relevance_score": 0.85,
+      "event_key": "macro_china_usd",
+      "market_regime_effect": "macro_uncertainty"
+    },
+    {
       "published_at": "2026-04-27T19:00:49+00:00",
       "source": "fxstreet",
       "title": "FX Today: US Dollar falls as markets brace for central bank week and Iran headlines",
@@ -38,21 +83,6 @@
       "source_layer": "global_primary",
       "btc_relevance_score": 0.85,
       "event_key": "macro_iran_rates",
-      "market_regime_effect": "macro_uncertainty"
-    },
-    {
-      "published_at": "2026-04-27T20:51:00+00:00",
-      "source": "fxstreet",
-      "title": "US: Growth normalizes as Iran shock fades – TD Securities",
-      "url": "https://www.fxstreet.com/news/us-growth-normalizes-as-iran-shock-fades-td-securities-202604272051",
-      "summary": "TD Securities strategists Oscar Munoz and Eli Nir project output growth gradually slowing to potential by late 2026 as Iran-related stagflationary risks keep the Federal Reserve (Fed) cautious.",
-      "sentiment": -0.4,
-      "impact_score": 0.7,
-      "requires_confirmation": true,
-      "is_confirmed": false,
-      "source_layer": "global_primary",
-      "btc_relevance_score": 0.65,
-      "event_key": "regulation_iran_rates",
       "market_regime_effect": "macro_uncertainty"
     }
   ]
