@@ -231,7 +231,7 @@ function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () 
 }
 
 function parseThesisBlocks(text: string, events: ThesisEvent[]): ThesisBlock[] {
-    const re = /^###\s+(?:\*\*)?Событие\s+(\d+)([^*\n]*)(?:\*\*)?\s*$/gim;
+    const re = /^###\s+(.+)$/gim;
     const matches = Array.from(text.matchAll(re));
     if (matches.length === 0) return [{ kind: "intro", content: text }];
 
@@ -247,9 +247,14 @@ function parseThesisBlocks(text: string, events: ThesisEvent[]): ThesisBlock[] {
         const next = matches[i + 1];
         const start = (match.index ?? 0) + match[0].length;
         const end = next?.index ?? text.length;
-        const ordinal = Number(match[1]);
+        const rawHeading = (match[1] ?? "").replace(/\*\*/g, "").trim();
+        const explicit = /Событие\s+(\d+)/i.exec(rawHeading);
+        const ordinal = explicit ? Number(explicit[1]) : i + 1;
         const content = text.slice(start, end).trim();
-        const titleRest = (match[2] ?? "").replace(/^:\s*/, "").trim();
+        const titleRest = rawHeading
+            .replace(/Событие\s+\d+/i, "")
+            .replace(/^:\s*/, "")
+            .trim();
         blocks.push({
             kind: "event",
             ordinal,
