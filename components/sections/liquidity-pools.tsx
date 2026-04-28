@@ -62,7 +62,7 @@ export function LiquidityPools() {
 
     const above = pools
         .filter((p) => p.level > currentPrice)
-        .sort((a, b) => a.level - b.level); // ближние сверху
+        .sort((a, b) => b.level - a.level); // дальние сверху, ближние у NOW
 
     const below = pools
         .filter((p) => p.level <= currentPrice)
@@ -104,7 +104,7 @@ export function LiquidityPools() {
                             distPct={distPct}
                             side="above"
                             sweep={sweep}
-                            isKey={i === 0}
+                            isKey={i === above.length - 1}
                         />
                     );
                 })}
