@@ -1,29 +1,18 @@
 {
-  "updatedAt": "2026-04-27T21:33:38Z",
+  "updatedAt": "2026-04-28T08:26:51Z",
   "title": "Маркет-дайджест",
-  "bodyMarkdown": "## Рыночный дайджест: осторожность перед лицом монетарной риторики\n\nКрипторынок демонстрирует сдержанную, но однозначную динамику, двигаясь в фарватере общего настроения на глобальных риск-активах. Настроения определяются ожиданиями ужесточения монетарных условий, что создаёт фоновое давление.\n\n**Ключевые движения**\nЗа последние 24 часа все основные криптоактивы зафиксировали снижение. Лидер рынка, Bitcoin (BTC), торгуется на отметке $76 875.9, потеряв 1.80%. Ethereum (ETH) показывает более выраженное снижение на 3.29%, до $2 289.39. Схожая картина наблюдается у альткойнов: Solana (SOL) — $84.22 (−3.16%), Chainlink (LINK) — $9.223 (−2.62%), ONDO — $0.2609 (−2.87%). Динамика универсальна и указывает на отсутствие внутренних драйверов для роста в сегменте.\n\n**Макроконтекст: сила индексов и скрытое напряжение**\nФондовый рынок, по последним доступным данным (на 24 апреля 2026 года), демонстрирует силу: S&P 500 на уровне 7 165.08, а Nasdaq Composite — 24 836.6. Однако индикатор рыночных ожиданий волатильности VIX остаётся на повышенной отметке 18.71, сигнализируя о сохраняющейся осторожности инвесторов. Цена нефти марки WTI, важный индикатор инфляционных ожиданий, высока — $91.06 (данные на 20 апреля). Эта комбинация — сильные индексы при настороженном VIX и дорогая нефть — формирует противоречивую среду.\n\n**Новостной фон**\nДоминирующий сюжет задаёт геополитика и монетарная политика. Центральные банки стран G7, как сообщается, готовы удерживать высокие процентные ставки на фоне опасений, что конфликт на Ближнем Востоке может привести к длительному инфляционному давлению. Это прямое указание на политику «above neutral for longer» (выше нейтральной на дольше). Параллельно появляются точечные позитивные сигналы: например, надежды на разрядку в отношениях США и Китая на фоне возможной встречи лидеров могут поддержать китайские акции, но это пока локальная история.\n\n**Итог**\nРынок криптоактивов в полной мере отражает общий тренд: в условиях ужесточающейся риторики центральных банков и геополитической неопределённости капитал проявляет осторожность. Криптовалюты, выступая высокобета-активом, усиливают общее оборонительное настроение, а не противостоят ему. Текущие движения выглядят скорее как реакция на макрофон, чем на внутренние отраслевые новости. Ключевым ориентиром остаются дальнейшие заявления регуляторов и динамика индикаторов рыночного страха, таких как VIX.",
+  "bodyMarkdown": "## Маркет-снимок\n\nКрипторынок оценивается по BTC, ETH, ONDO, SOL и LINK за последние 24 часа.\n\n- **BTC** — 76751.2 USDT (-3.20%), тон: умеренно слабый.\n- **ETH** — 2285.02 USDT (-4.75%), тон: умеренно слабый.\n- **ONDO** — 0.2626 USDT (-3.67%), тон: умеренно слабый.\n- **SOL** — 84.04 USDT (-4.48%), тон: умеренно слабый.\n- **LINK** — 9.265 USDT (-3.29%), тон: умеренно слабый.\n\n## Макро (FRED)\n\n- **S&P 500** = 7173.91 (2026-04-27), сильный.\n- **Nasdaq** = 24836.6 (2026-04-24), сильный.\n- **VIX** = 18.71 (2026-04-24), осторожность.\n- **Oil** = 91.06 (2026-04-20), высоко.\n\n## Новости (крипто-тематика, топ по скорингу)\n\n- Bitmine amasses $13.3B treasury with 5.08M ETH, aims for 5% supply — _bitcoinethereumnews_\n- Circle mints 500M USDC on Solana amid regulatory clarity, institutional interest — _cryptobriefing_\n- Ethereum Price Prediction: ETH Eyes Breakout as $2,400 Becomes Key Trigger — _bitcoinethereumnews_\n- WhiteBIT, FC Barcelona announce agreement to drive global innovation in sport — _invezz_\n- French police record 135 crypto kidnapping cases since 2023 as crime wave swells — _dlnews_\n\n## Гео / макро-заголовки\n\n- Archbishop of Canterbury praises Pope Leo’s call for peace — _The Sunday Times_\n- Crude Oil Prices Rally on Stalled US-Iran Peace Talks — _Barchart_\n- Germany calls on UN to take responsibility for settling Iran conflict — _Middle East Monitor_\n- Donald Trump and King Charles Popularity Compared Ahead of Meeting — _Newsweek_\n- Iran FM Araghchi says Trump requested for talks after US failed to achieve goals, proposal under review — _Moneycontrol_\n\n## Статус источников\n\n- `bybit`: ok\n- `fred`: ok\n- `gnews_crypto`: ok\n- `gnews_geo`: ok\n- `newsdata`: ok\n\n_Собрано: 2026-04-28T03:16:28.765122+00:00_",
   "meta": {
-    "source": "llm",
-    "model": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
-    "llmError": null,
+    "source": "fallback",
+    "model": null,
+    "llmError": "The read operation timed out",
     "fetchStatus": {
       "bybit": "ok",
       "fred": "ok",
-      "newsdata": "error: ConnectTimeout",
+      "newsdata": "ok",
       "gnews_crypto": "ok",
       "gnews_geo": "ok"
     },
-    "llmPipeline": {
-      "filterModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
-      "finalModel": "gpt://b1g8q7lh83udhhe4nu4b/deepseek-v32/latest",
-      "filterSteps": 5,
-      "filterFiles": [
-        "filter_01_system.txt",
-        "filter_02_system.txt",
-        "filter_03_system.txt",
-        "filter_04_system.txt",
-        "filter_05_system.txt"
-      ]
-    }
+    "llmPipeline": null
   }
 }
