@@ -4,9 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import type { MarketDigestData } from "@/lib/api";
 import { DigestPipelineVisual } from "@/components/sections/digest-pipeline-visual";
 import { MarketDigest } from "@/components/sections/market-digest";
-import { NewsArchive } from "@/components/sections/news-archive";
+import { DigestArchive } from "@/components/sections/digest-archive";
 
-const REFRESH_MS = 10 * 60 * 1000; // re-check every 10 min
+const REFRESH_MS = 10 * 60 * 1000;
 
 export function CryptoNewsView() {
     const [data, setData] = useState<MarketDigestData | null>(null);
@@ -27,9 +27,7 @@ export function CryptoNewsView() {
     useEffect(() => {
         fetchData();
         const timer = setInterval(fetchData, REFRESH_MS);
-        const onVisibility = () => {
-            if (!document.hidden) fetchData();
-        };
+        const onVisibility = () => { if (!document.hidden) fetchData(); };
         document.addEventListener("visibilitychange", onVisibility);
         return () => {
             clearInterval(timer);
@@ -38,13 +36,16 @@ export function CryptoNewsView() {
     }, [fetchData]);
 
     return (
-        <div className="mx-auto grid w-full max-w-[1540px] gap-4 lg:grid-cols-[minmax(320px,0.85fr)_minmax(620px,760px)] lg:items-start">
+        <div className="mx-auto grid w-full max-w-[1540px] gap-4 lg:grid-cols-[280px_1fr] lg:items-start">
+            {/* Left — compact pipeline map */}
             <div className="lg:sticky lg:top-4">
                 <DigestPipelineVisual data={data} />
             </div>
-            <div className="lg:justify-self-end">
+
+            {/* Right — current digest + archive */}
+            <div className="min-w-0">
                 <MarketDigest data={data} error={err} />
-                <NewsArchive />
+                <DigestArchive />
             </div>
         </div>
     );
