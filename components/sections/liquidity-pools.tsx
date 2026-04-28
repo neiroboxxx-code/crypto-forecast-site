@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { getMicro, type MicroData, type LiquidityPool, type LiquiditySweep } from "@/lib/api";
 import { useApi } from "@/hooks/use-api";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/error-state";
+import { InfoDialog, InfoIconButton } from "@/components/ui/info-dialog";
 import { fmtPrice } from "@/lib/format";
 
 // ── Cluster близких уровней в один (в пределах 0.15%) ────────────────────
@@ -33,17 +35,21 @@ function findSweep(level: number, sweeps: LiquiditySweep[]): LiquiditySweep | nu
 
 export function LiquidityPools() {
     const { data, loading, error } = useApi<MicroData>(getMicro, [], { intervalMs: 60_000 });
+    const [infoOpen, setInfoOpen] = useState(false);
+    const openInfo = (e: React.MouseEvent) => { e.stopPropagation(); setInfoOpen(true); };
+
+    const infoButton = <InfoIconButton onClick={openInfo} label="Показать пояснение к Liquidity Pools" interactive={false} />;
 
     if (loading) {
         return (
-            <Card title="Liquidity Pools" subtitle="Ближайшие уровни ликвидности">
+            <Card title="Liquidity Pools" subtitle="Ближайшие уровни ликвидности" right={infoButton}>
                 <Skeleton className="h-48 w-full rounded-xl" />
             </Card>
         );
     }
     if (error) {
         return (
-            <Card title="Liquidity Pools" subtitle="Ближайшие уровни ликвидности">
+            <Card title="Liquidity Pools" subtitle="Ближайшие уровни ликвидности" right={infoButton}>
                 <ErrorState message={error} />
             </Card>
         );
@@ -66,10 +72,12 @@ export function LiquidityPools() {
     const hasBearishSweep = data.price_action.bearish_sweep_detected === true || data.price_action.bearish_sweep_detected === 1;
 
     return (
+        <>
         <Card
             title="Liquidity Pools"
             subtitle="Уровни, где скопились стопы"
             padded
+            right={<InfoIconButton onClick={openInfo} label="Показать пояснение к Liquidity Pools" />}
         >
             {/* Пояснение одной строкой */}
             <p className="mb-3 text-[11px] leading-relaxed text-white/45">
@@ -86,7 +94,7 @@ export function LiquidityPools() {
                         sell-side · сопротивление
                     </div>
                 )}
-                {above.map((p) => {
+                {above.map((p, i) => {
                     const distPct = ((p.level - currentPrice) / currentPrice) * 100;
                     const sweep = findSweep(p.level, sweeps);
                     return (
@@ -96,6 +104,7 @@ export function LiquidityPools() {
                             distPct={distPct}
                             side="above"
                             sweep={sweep}
+                            isKey={i === 0}
                         />
                     );
                 })}
@@ -113,7 +122,7 @@ export function LiquidityPools() {
                 </div>
 
                 {/* Уровни ниже цены — buy-side (поддержка) */}
-                {below.map((p) => {
+                {below.map((p, i) => {
                     const distPct = ((currentPrice - p.level) / currentPrice) * 100;
                     const sweep = findSweep(p.level, sweeps);
                     return (
@@ -123,6 +132,7 @@ export function LiquidityPools() {
                             distPct={distPct}
                             side="below"
                             sweep={sweep}
+                            isKey={i === 0}
                         />
                     );
                 })}
@@ -174,52 +184,122 @@ export function LiquidityPools() {
                 )}
             </div>
         </Card>
+
+        <InfoDialog
+            open={infoOpen}
+            onClose={() => setInfoOpen(false)}
+            title="Liquidity Pools"
+            subtitle="Как читать уровни ликвидности"
+        >
+            <div className="space-y-4 text-[13px] leading-6 text-white/75">
+                <p>
+                    <span className="font-semibold text-white">Liquidity Pool</span> — это ценовой уровень,
+                    вблизи которого скопились стоп-ордера других участников рынка. Такие уровни возникают
+                    на swing-экстремумах (локальных максимумах и минимумах) с повышенным объёмом.
+                </p>
+
+                <div>
+                    <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-rose-300/80">Sell-side · Сопротивление</div>
+                    <p>
+                        Уровни <span className="font-semibold text-white">выше текущей цены</span> — здесь стоят стопы шортистов и лимитные продажи.
+                        Ближайший уровень <span className="font-semibold text-white">KEY</span> — первая цель для бычьего движения
+                        и наиболее вероятная зона разворота.
+                    </p>
+                </div>
+
+                <div>
+                    <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-emerald-300/80">Buy-side · Поддержка</div>
+                    <p>
+                        Уровни <span className="font-semibold text-white">ниже текущей цены</span> — здесь стоят стопы лонгистов и лимитные покупки.
+                        Ближайший уровень <span className="font-semibold text-white">KEY</span> — первая цель для медвежьего движения
+                        и наиболее вероятная зона разворота.
+                    </p>
+                </div>
+
+                <div>
+                    <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-300/80">Свип (Sweep)</div>
+                    <p>
+                        Когда цена пробивает уровень ликвидности, собирает стопы, но <span className="font-semibold text-white">возвращается обратно</span> в том же баре — это ликвидационный свип.
+                        Он говорит о том, что институциональный игрок «съел» ликвидность и теперь движение продолжится в обратную сторону.
+                    </p>
+                    <ul className="mt-2 space-y-1 pl-3">
+                        <li className="text-emerald-300/90">↑ Бычий свип — пробой поддержки снизу с возвратом выше: +7% к вероятности лонга</li>
+                        <li className="text-rose-300/90">↓ Медвежий свип — пробой сопротивления сверху с возвратом ниже: +7% к вероятности шорта</li>
+                    </ul>
+                </div>
+
+                <div className="rounded-lg border border-white/8 bg-white/[0.03] p-3 text-[12px] text-white/55">
+                    Все уровни отображаются целиком. Уровни с пометкой <span className="font-semibold text-white/80">KEY</span> — ближайшие к цене с каждой стороны, наиболее актуальные для текущего движения.
+                </div>
+            </div>
+        </InfoDialog>
+        </>
     );
 }
 
 // ── Строка одного уровня ──────────────────────────────────────────────────
 
 function PoolRow({
-    level, distPct, side, sweep,
+    level, distPct, side, sweep, isKey = false,
 }: {
     level: number;
     distPct: number;
     side: "above" | "below";
     sweep: LiquiditySweep | null;
+    isKey?: boolean;
 }) {
     const isAbove = side === "above";
     const wasSwept = !!sweep;
 
     return (
         <div className={`flex items-center gap-2 rounded-lg px-2 py-1.5 transition ${
+            !isKey ? "opacity-45" : ""
+        } ${
             wasSwept
                 ? sweep!.signal_bias === "bullish"
                     ? "bg-emerald-500/[0.07]"
                     : "bg-rose-500/[0.07]"
-                : "hover:bg-white/[0.02]"
+                : isKey
+                  ? isAbove ? "bg-rose-500/[0.05]" : "bg-emerald-500/[0.05]"
+                  : "hover:bg-white/[0.02]"
         }`}>
             {/* Цветной маркер уровня */}
-            <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+            <span className={`shrink-0 rounded-full ${isKey ? "h-2 w-2" : "h-1.5 w-1.5"} ${
                 wasSwept
                     ? sweep!.signal_bias === "bullish"
                         ? "bg-emerald-400"
                         : "bg-rose-400"
                     : isAbove
-                      ? "bg-rose-400/40"
-                      : "bg-emerald-400/40"
+                      ? isKey ? "bg-rose-400 shadow-[0_0_6px_rgba(251,113,133,0.5)]" : "bg-rose-400/40"
+                      : isKey ? "bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" : "bg-emerald-400/40"
             }`} />
 
             {/* Цена */}
-            <span className="flex-1 font-mono text-[12px] font-semibold tabular-nums text-white/85">
+            <span className={`flex-1 font-mono tabular-nums ${
+                isKey ? "text-[13px] font-bold text-white/95" : "text-[12px] font-semibold text-white/85"
+            }`}>
                 ${fmtPrice(level)}
             </span>
 
             {/* Дистанция */}
             <span className={`font-mono text-[10px] tabular-nums ${
-                isAbove ? "text-rose-300/70" : "text-emerald-300/70"
+                isAbove
+                    ? isKey ? "text-rose-300/90" : "text-rose-300/70"
+                    : isKey ? "text-emerald-300/90" : "text-emerald-300/70"
             }`}>
                 {isAbove ? "+" : "-"}{distPct.toFixed(2)}%
             </span>
+
+            {/* KEY бейдж */}
+            {isKey && !wasSwept && (
+                <span className={`rounded px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider ${
+                    isAbove
+                        ? "bg-rose-400/15 text-rose-300"
+                        : "bg-emerald-400/15 text-emerald-300"
+                }`}>
+                    key
+                </span>
+            )}
 
             {/* Свип бейдж */}
             {wasSwept && (
