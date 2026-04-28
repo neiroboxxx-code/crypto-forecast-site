@@ -1,29 +1,64 @@
 import type { MarketDigestData } from "@/lib/api";
+import type { LucideIcon } from "lucide-react";
+import { BarChart3, Bitcoin, Droplet, Gauge, Globe, Landmark, LineChart } from "lucide-react";
 
-const SOURCES = [
+type Badge = {
+    id: string;
+    label: string;
+    kind: "coin" | "tag";
+    text?: string;
+    icon?: LucideIcon;
+    bg?: string;
+    fg?: string;
+};
+
+const SOURCES: readonly {
+    key: string;
+    name: string;
+    tone: "cyan" | "amber" | "emerald" | "fuchsia";
+    assets: readonly Badge[];
+}[] = [
     {
         key: "bybit",
         name: "Bybit",
         tone: "cyan" as const,
-        assets: ["₿", "Ξ", "◎", "ONDO", "LINK"],
+        assets: [
+            { id: "btc", label: "BTC", kind: "coin", text: "₿", bg: "#F7931A", fg: "#101318" },
+            { id: "eth", label: "ETH", kind: "coin", text: "Ξ", bg: "#627EEA", fg: "#0B0D12" },
+            { id: "sol", label: "SOL", kind: "coin", text: "◎", bg: "#22C55E", fg: "#07110B" },
+            { id: "ondo", label: "ONDO", kind: "coin", text: "O", bg: "#14B8A6", fg: "#04100E" },
+            { id: "link", label: "LINK", kind: "coin", text: "⬡", bg: "#2A5ADA", fg: "#0B0D12" },
+        ],
     },
     {
         key: "fred",
         name: "FRED",
         tone: "amber" as const,
-        assets: ["S&P", "NDX", "VIX", "WTI"],
+        assets: [
+            { id: "spx", label: "S&P 500", kind: "tag", text: "S&P", icon: LineChart },
+            { id: "ndx", label: "NASDAQ 100", kind: "tag", text: "NDX", icon: BarChart3 },
+            { id: "vix", label: "VIX", kind: "tag", text: "VIX", icon: Gauge },
+            { id: "wti", label: "WTI", kind: "tag", text: "WTI", icon: Droplet },
+        ],
     },
     {
         key: "newsdata",
         name: "NewsData",
         tone: "emerald" as const,
-        assets: ["BTC", "ETH", "crypto"],
+        assets: [
+            { id: "btc_news", label: "BTC", kind: "tag", text: "BTC", icon: Bitcoin },
+            { id: "eth_news", label: "ETH", kind: "tag", text: "ETH", icon: Bitcoin },
+            { id: "crypto_news", label: "crypto", kind: "tag", text: "crypto", icon: Bitcoin },
+        ],
     },
     {
         key: "gnews_crypto",
         name: "GNews",
         tone: "fuchsia" as const,
-        assets: ["geo", "macro"],
+        assets: [
+            { id: "geo", label: "Geo", kind: "tag", text: "geo", icon: Globe },
+            { id: "macro", label: "Macro", kind: "tag", text: "macro", icon: Landmark },
+        ],
     },
 ] as const;
 
@@ -60,6 +95,39 @@ function parseStatus(v: string | undefined): "ok" | "warn" | "error" | "idle" {
 }
 
 type Props = { data?: MarketDigestData | null };
+
+function BadgePill({ b, tone }: { b: Badge; tone: Tone }) {
+    if (b.kind === "coin") {
+        return (
+            <span
+                title={b.label}
+                className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/15 shadow-[0_0_0_1px_rgba(0,0,0,0.18)]"
+                style={{ backgroundColor: b.bg ?? "#111827", color: b.fg ?? "#0B0D12" }}
+            >
+                <span className="text-[10px] font-black leading-none">{b.text ?? "•"}</span>
+            </span>
+        );
+    }
+
+    const Icon = b.icon;
+    return (
+        <span
+            title={b.label}
+            className={`inline-flex h-5 items-center gap-1 rounded-full border px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.12em] ${
+                tone === "cyan"
+                    ? "border-cyan-400/20 bg-cyan-400/[0.06] text-cyan-200/80"
+                    : tone === "amber"
+                      ? "border-amber-400/20 bg-amber-400/[0.06] text-amber-200/80"
+                      : tone === "emerald"
+                        ? "border-emerald-400/20 bg-emerald-400/[0.06] text-emerald-200/80"
+                        : "border-fuchsia-400/20 bg-fuchsia-400/[0.06] text-fuchsia-200/80"
+            }`}
+        >
+            {Icon ? <Icon className="h-3 w-3 opacity-80" aria-hidden /> : null}
+            <span className="leading-none">{b.text ?? b.id}</span>
+        </span>
+    );
+}
 
 export function DigestPipelineVisual({ data }: Props) {
     const fetchStatus = data?.meta?.fetchStatus;
@@ -111,13 +179,8 @@ export function DigestPipelineVisual({ data }: Props) {
                                     {src.name}
                                 </span>
                                 <div className="ml-auto flex flex-wrap justify-end gap-1">
-                                    {src.assets.map((a) => (
-                                        <span
-                                            key={a}
-                                            className="rounded bg-white/[0.06] px-1 py-0.5 font-mono text-[9px] text-white/45"
-                                        >
-                                            {a}
-                                        </span>
+                                    {src.assets.map((b) => (
+                                        <BadgePill key={b.id} b={b} tone={src.tone} />
                                     ))}
                                 </div>
                             </div>
