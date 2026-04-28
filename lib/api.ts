@@ -98,6 +98,15 @@ export type Forecast = {
     candles_used: number;
 };
 
+export type ReversalDiagnostics = {
+    latest_rsi_4h?: number;
+    latest_rsi_1d?: number;
+    momentum_slowdown_status_4h?: string;
+    momentum_slowdown_status_1d?: string;
+    bias_4h?: string;
+    bias_1d?: string;
+};
+
 export type ReversalData = {
     meta: {
         symbol: string;
@@ -105,6 +114,7 @@ export type ReversalData = {
     };
     market_context: MarketContext;
     candidates: ReversalCandidate[];
+    diagnostics?: ReversalDiagnostics;
     forecast?: Forecast;
 };
 

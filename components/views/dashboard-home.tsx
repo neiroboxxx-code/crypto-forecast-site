@@ -6,6 +6,7 @@ import { LiquidityPools } from "@/components/sections/liquidity-pools";
 import { CatalystFeed } from "@/components/sections/catalyst-feed";
 import { MarketBias } from "@/components/sections/market-bias";
 import { ReversalRadar } from "@/components/sections/reversal-radar";
+import { RsiGauges } from "@/components/sections/rsi-gauge";
 
 export function DashboardHome() {
     return (
@@ -22,6 +23,7 @@ export function DashboardHome() {
                 <section className="flex flex-col gap-3">
                     <ChartPanel />
                     <ReversalRadar />
+                    <RsiGauges />
                 </section>
 
                 <aside className="flex flex-col gap-3">
