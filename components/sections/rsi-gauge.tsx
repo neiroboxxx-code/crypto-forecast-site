@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getReversal, type ForecastFactor, type ReversalDiagnostics } from "@/lib/api";
 import { useApi } from "@/hooks/use-api";
 import { Card } from "@/components/ui/card";
@@ -60,10 +60,18 @@ function Gauge({ rsi, label, uid }: { rsi: number; label: string; uid: string })
 
     const zone    = zoneFor(rsi);
     const needDeg = rsiToDeg(animated);
-    const n       = pt(needDeg, NL);
-    const nb1     = pt(needDeg + 90, 6);
-    const nb2     = pt(needDeg - 90, 6);
     const filterId = `glow-${uid}`;
+
+    // Геометрия иглы всегда в базовой позиции (START=135°),
+    // поворот управляется только CSS transform — без двойной трансформации.
+    const baseEnd  = pt(START, NL);
+    const baseTip1 = pt(START + 90, 6);
+    const baseTip2 = pt(START - 90, 6);
+    const needleStyle: React.CSSProperties = {
+        transformOrigin: `${CX}px ${CY}px`,
+        transform: `rotate(${needDeg - START}deg)`,
+        transition: "transform 1.4s cubic-bezier(0.34, 1.4, 0.64, 1)",
+    };
 
     return (
         <div className="flex flex-col items-center gap-1.5">
@@ -129,44 +137,21 @@ function Gauge({ rsi, label, uid }: { rsi: number; label: string; uid: string })
                     );
                 })()}
 
-                {/* Иголка */}
-                <g style={{
-                    transform: `rotate(${needDeg}deg)`,
-                    transformOrigin: `${CX}px ${CY}px`,
-                    transition: "transform 1.4s cubic-bezier(0.34, 1.4, 0.64, 1)",
-                }}>
-                    <polygon
-                        points={`${pt(0, NL).x},${pt(0, NL).y} ${CX + 6},${CY} ${CX},${CY + 6} ${CX - 6},${CY}`}
-                        fill={zone.color}
-                        opacity="0"
-                    />
-                </g>
-
-                {/* Игла как animated line */}
+                {/* Игла */}
                 <line
                     x1={CX} y1={CY}
-                    x2={n.x} y2={n.y}
+                    x2={baseEnd.x} y2={baseEnd.y}
                     stroke={zone.color}
                     strokeWidth="2.5"
                     strokeLinecap="round"
-                    style={{
-                        filter: `drop-shadow(0 0 5px ${zone.color})`,
-                        transformOrigin: `${CX}px ${CY}px`,
-                        transform: `rotate(${needDeg - 135}deg)`,
-                        transition: "transform 1.4s cubic-bezier(0.34, 1.4, 0.64, 1)",
-                    }}
+                    style={{ filter: `drop-shadow(0 0 5px ${zone.color})`, ...needleStyle }}
                 />
-                {/* Треугольник иглы */}
+                {/* Треугольный кончик иглы */}
                 <polygon
-                    points={`${nb1.x},${nb1.y} ${n.x},${n.y} ${nb2.x},${nb2.y}`}
+                    points={`${baseTip1.x},${baseTip1.y} ${baseEnd.x},${baseEnd.y} ${baseTip2.x},${baseTip2.y}`}
                     fill={zone.color}
                     opacity="0.85"
-                    style={{
-                        filter: `drop-shadow(0 0 6px ${zone.color})`,
-                        transformOrigin: `${CX}px ${CY}px`,
-                        transform: `rotate(${needDeg - 135}deg)`,
-                        transition: "transform 1.4s cubic-bezier(0.34, 1.4, 0.64, 1)",
-                    }}
+                    style={{ filter: `drop-shadow(0 0 6px ${zone.color})`, ...needleStyle }}
                 />
 
                 {/* Центральная заглушка */}
