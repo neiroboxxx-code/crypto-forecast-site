@@ -23,11 +23,11 @@ const SOURCES: readonly {
         name: "Bybit",
         tone: "cyan" as const,
         assets: [
-            { id: "btc", label: "BTC", kind: "coin", text: "₿", bg: "#F7931A", fg: "#101318" },
-            { id: "eth", label: "ETH", kind: "coin", text: "Ξ", bg: "#627EEA", fg: "#0B0D12" },
-            { id: "sol", label: "SOL", kind: "coin", text: "◎", bg: "#22C55E", fg: "#07110B" },
+            { id: "btc", label: "Bitcoin (BTC)", kind: "coin", text: "₿", bg: "#F7931A", fg: "#101318" },
+            { id: "eth", label: "Ethereum (ETH)", kind: "coin", text: "Ξ", bg: "#627EEA", fg: "#0B0D12" },
+            { id: "sol", label: "Solana (SOL)", kind: "coin", text: "◎", bg: "#22C55E", fg: "#07110B" },
             { id: "ondo", label: "ONDO", kind: "coin", text: "O", bg: "#14B8A6", fg: "#04100E" },
-            { id: "link", label: "LINK", kind: "coin", text: "⬡", bg: "#2A5ADA", fg: "#0B0D12" },
+            { id: "link", label: "Chainlink (LINK)", kind: "coin", text: "⬡", bg: "#2A5ADA", fg: "#0B0D12" },
         ],
     },
     {
