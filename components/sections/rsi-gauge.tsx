@@ -6,78 +6,71 @@ import { useApi } from "@/hooks/use-api";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// ── SVG геометрия ─────────────────────────────────────────────────────────
+// ── SVG константы ─────────────────────────────────────────────────────────
 
-const CX = 100, CY = 92;
-const R_OUT = 72, R_IN = 54;
-const R_NEEDLE = 66;
+const CX = 90, CY = 90;       // центр
+const R  = 68;                 // радиус дорожки
+const TW = 12;                 // ширина дорожки (stroke)
+const NL = 56;                 // длина иглы от центра
+const START = 135;             // начальный угол (135° = 7.5 часов)
+const SWEEP = 270;             // общий размах
 
-function rsiPt(rsi: number, r: number): [number, number] {
-    const theta = Math.PI * (1 - Math.max(0, Math.min(100, rsi)) / 100);
-    return [+(CX + r * Math.cos(theta)).toFixed(2), +(CY - r * Math.sin(theta)).toFixed(2)];
+function toRad(d: number) { return d * Math.PI / 180; }
+
+function pt(deg: number, r: number) {
+    return {
+        x: +(CX + r * Math.cos(toRad(deg))).toFixed(2),
+        y: +(CY + r * Math.sin(toRad(deg))).toFixed(2),
+    };
 }
 
-function arcSeg(from: number, to: number): string {
-    const [x1o, y1o] = rsiPt(from, R_OUT);
-    const [x2o, y2o] = rsiPt(to,   R_OUT);
-    const [x1i, y1i] = rsiPt(from, R_IN);
-    const [x2i, y2i] = rsiPt(to,   R_IN);
-    const la = (to - from) > 50 ? 1 : 0;
-    return [
-        `M ${x1o} ${y1o}`,
-        `A ${R_OUT} ${R_OUT} 0 ${la} 0 ${x2o} ${y2o}`,
-        `L ${x2i} ${y2i}`,
-        `A ${R_IN} ${R_IN} 0 ${la} 1 ${x1i} ${y1i}`,
-        "Z",
-    ].join(" ");
+function arc(a1: number, a2: number, r = R): string {
+    const s = pt(a1, r);
+    const e = pt(a2, r);
+    const la = (a2 - a1) > 180 ? 1 : 0;
+    return `M ${s.x} ${s.y} A ${r} ${r} 0 ${la} 1 ${e.x} ${e.y}`;
 }
 
-// ── Конфиг зон ───────────────────────────────────────────────────────────
+function rsiToDeg(rsi: number): number {
+    return START + (Math.max(0, Math.min(100, rsi)) / 100) * SWEEP;
+}
+
+// ── Зоны ─────────────────────────────────────────────────────────────────
 
 const ZONES = [
-    { from: 0,  to: 30,  fill: "rgba(52,211,153,0.22)",  color: "#34d399", label: "Перепродан",    textCls: "text-emerald-400" },
-    { from: 30, to: 50,  fill: "rgba(248,113,113,0.18)", color: "#f87171", label: "Медвежья зона", textCls: "text-rose-400"   },
-    { from: 50, to: 70,  fill: "rgba(34,211,238,0.16)",  color: "#22d3ee", label: "Бычья зона",    textCls: "text-cyan-400"   },
-    { from: 70, to: 100, fill: "rgba(251,146,60,0.22)",  color: "#fb923c", label: "Перекуплен",    textCls: "text-amber-400"  },
+    { from: 0,  to: 30,  color: "#34d399", dim: "rgba(52,211,153,0.18)",  label: "Перепродан",    hint: "Возможный разворот вверх", textCls: "text-emerald-400" },
+    { from: 30, to: 50,  color: "#f87171", dim: "rgba(248,113,113,0.15)", label: "Медвежья зона", hint: "Давление вниз",             textCls: "text-rose-400"   },
+    { from: 50, to: 70,  color: "#22d3ee", dim: "rgba(34,211,238,0.14)",  label: "Бычья зона",    hint: "Давление вверх",            textCls: "text-cyan-400"   },
+    { from: 70, to: 100, color: "#fb923c", dim: "rgba(251,146,60,0.18)",  label: "Перекуплен",    hint: "Возможный разворот вниз",   textCls: "text-amber-400"  },
 ] as const;
 
 function zoneFor(rsi: number) {
-    return ZONES.find((z) => rsi >= z.from && rsi < z.to) ?? ZONES[ZONES.length - 1];
+    return ZONES.find(z => rsi >= z.from && rsi < z.to) ?? ZONES[ZONES.length - 1];
 }
 
-// ── Одиночный спидометр ──────────────────────────────────────────────────
+// ── Круглый спидометр ─────────────────────────────────────────────────────
 
-function Gauge({ rsi, timeframe, uid }: { rsi: number; timeframe: string; uid: string }) {
+function Gauge({ rsi, label, uid }: { rsi: number; label: string; uid: string }) {
     const [animated, setAnimated] = useState(50);
 
     useEffect(() => {
-        const t = setTimeout(() => setAnimated(rsi), 180);
+        const t = setTimeout(() => setAnimated(rsi), 200);
         return () => clearTimeout(t);
     }, [rsi]);
 
-    const zone = zoneFor(rsi);
-    const needleDeg = -90 + (animated / 100) * 180;
+    const zone    = zoneFor(rsi);
+    const needDeg = rsiToDeg(animated);
+    const n       = pt(needDeg, NL);
+    const nb1     = pt(needDeg + 90, 6);
+    const nb2     = pt(needDeg - 90, 6);
+    const filterId = `glow-${uid}`;
 
     return (
-        <div className="flex flex-col items-center gap-1">
-            {/* Подпись таймфрейма */}
-            <div className="text-[9px] font-semibold uppercase tracking-[0.22em] text-white/30">
-                {timeframe}
-            </div>
-
-            <svg viewBox="0 0 200 102" width={158} height={81} style={{ overflow: "visible" }}>
+        <div className="flex flex-col items-center gap-1.5">
+            <svg viewBox="0 0 180 180" width={150} height={150}>
                 <defs>
-                    {/* Glow-фильтр для иглы */}
-                    <filter id={`glow-${uid}`} x="-60%" y="-60%" width="220%" height="220%">
-                        <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
-                        <feMerge>
-                            <feMergeNode in="blur" />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                    </filter>
-                    {/* Glow-фильтр для подсветки дуги */}
-                    <filter id={`glow-arc-${uid}`} x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+                    <filter id={filterId} x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
                         <feMerge>
                             <feMergeNode in="blur" />
                             <feMergeNode in="SourceGraphic" />
@@ -85,152 +78,257 @@ function Gauge({ rsi, timeframe, uid }: { rsi: number; timeframe: string; uid: s
                     </filter>
                 </defs>
 
-                {/* Серая подложка */}
-                <path d={arcSeg(0, 100)} fill="rgba(255,255,255,0.04)" />
-
-                {/* Цветные зоны */}
-                {ZONES.map((z) => (
-                    <path key={z.from} d={arcSeg(z.from, z.to)} fill={z.fill} />
-                ))}
-
-                {/* Активная зона — выделение неоном */}
+                {/* Фоновая дорожка */}
                 <path
-                    d={arcSeg(zone.from, zone.to)}
-                    fill="transparent"
-                    stroke={zone.color}
-                    strokeWidth="1"
-                    strokeOpacity="0.35"
-                    filter={`url(#glow-arc-${uid})`}
+                    d={arc(START, START + SWEEP)}
+                    fill="none"
+                    stroke="rgba(255,255,255,0.06)"
+                    strokeWidth={TW}
+                    strokeLinecap="round"
                 />
 
-                {/* Разделительные риски на 30 / 50 / 70 */}
-                {[30, 50, 70].map((v) => {
-                    const [x1, y1] = rsiPt(v, R_IN  - 2);
-                    const [x2, y2] = rsiPt(v, R_OUT + 3);
+                {/* Неактивные зоны */}
+                {ZONES.map(z => {
+                    if (z === zone) return null;
+                    const a1 = START + (z.from / 100) * SWEEP;
+                    const a2 = START + (z.to   / 100) * SWEEP;
                     return (
-                        <line key={v}
-                            x1={x1} y1={y1} x2={x2} y2={y2}
-                            stroke="rgba(255,255,255,0.18)" strokeWidth="1"
+                        <path key={z.from}
+                            d={arc(a1, a2)}
+                            fill="none"
+                            stroke={z.dim}
+                            strokeWidth={TW}
                         />
                     );
                 })}
 
-                {/* Метки снаружи */}
-                {([0, 30, 50, 70, 100] as const).map((v) => {
-                    const [x, y] = rsiPt(v, R_OUT + 12);
+                {/* Активная зона — светится */}
+                {(() => {
+                    const a1 = START + (zone.from / 100) * SWEEP;
+                    const a2 = START + (zone.to   / 100) * SWEEP;
                     return (
-                        <text key={v} x={x} y={y}
-                            textAnchor="middle" dominantBaseline="middle"
-                            fill="rgba(255,255,255,0.25)" fontSize="7" fontFamily="monospace"
-                        >
-                            {v}
-                        </text>
+                        <>
+                            {/* Широкий glow под зоной */}
+                            <path
+                                d={arc(a1, a2)}
+                                fill="none"
+                                stroke={zone.color}
+                                strokeWidth={TW + 8}
+                                strokeOpacity="0.18"
+                                filter={`url(#${filterId})`}
+                            />
+                            {/* Сама зона — яркая */}
+                            <path
+                                d={arc(a1, a2)}
+                                fill="none"
+                                stroke={zone.color}
+                                strokeWidth={TW}
+                                strokeOpacity="0.85"
+                            />
+                        </>
                     );
-                })}
+                })()}
 
-                {/* Игла — анимируется через CSS transform */}
-                <g
-                    style={{
-                        transform: `rotate(${needleDeg}deg)`,
-                        transformOrigin: `${CX}px ${CY}px`,
-                        transition: "transform 1.35s cubic-bezier(0.34, 1.46, 0.64, 1)",
-                    }}
-                    filter={`url(#glow-${uid})`}
-                >
+                {/* Иголка */}
+                <g style={{
+                    transform: `rotate(${needDeg}deg)`,
+                    transformOrigin: `${CX}px ${CY}px`,
+                    transition: "transform 1.4s cubic-bezier(0.34, 1.4, 0.64, 1)",
+                }}>
                     <polygon
-                        points={`${CX},${CY - R_NEEDLE} ${CX - 2.8},${CY + 8} ${CX + 2.8},${CY + 8}`}
+                        points={`${pt(0, NL).x},${pt(0, NL).y} ${CX + 6},${CY} ${CX},${CY + 6} ${CX - 6},${CY}`}
                         fill={zone.color}
-                        opacity="0.95"
+                        opacity="0"
                     />
                 </g>
 
-                {/* Центральная заглушка */}
-                <circle cx={CX} cy={CY} r="5.5"
-                    fill="#080c12"
-                    stroke={zone.color} strokeWidth="1.5" strokeOpacity="0.6"
+                {/* Игла как animated line */}
+                <line
+                    x1={CX} y1={CY}
+                    x2={n.x} y2={n.y}
+                    stroke={zone.color}
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    style={{
+                        filter: `drop-shadow(0 0 5px ${zone.color})`,
+                        transformOrigin: `${CX}px ${CY}px`,
+                        transform: `rotate(${needDeg - 135}deg)`,
+                        transition: "transform 1.4s cubic-bezier(0.34, 1.4, 0.64, 1)",
+                    }}
                 />
+                {/* Треугольник иглы */}
+                <polygon
+                    points={`${nb1.x},${nb1.y} ${n.x},${n.y} ${nb2.x},${nb2.y}`}
+                    fill={zone.color}
+                    opacity="0.85"
+                    style={{
+                        filter: `drop-shadow(0 0 6px ${zone.color})`,
+                        transformOrigin: `${CX}px ${CY}px`,
+                        transform: `rotate(${needDeg - 135}deg)`,
+                        transition: "transform 1.4s cubic-bezier(0.34, 1.4, 0.64, 1)",
+                    }}
+                />
+
+                {/* Центральная заглушка */}
+                <circle cx={CX} cy={CY} r="7"
+                    fill="#080c12"
+                    stroke={zone.color} strokeWidth="1.5" strokeOpacity="0.55"
+                />
+
+                {/* RSI значение в центре */}
+                <text x={CX} y={CY - 14}
+                    textAnchor="middle" dominantBaseline="middle"
+                    fill={zone.color}
+                    fontSize="28" fontWeight="700" fontFamily="monospace"
+                    style={{ filter: `drop-shadow(0 0 10px ${zone.color}90)` }}
+                >
+                    {rsi.toFixed(1)}
+                </text>
+
+                {/* Название зоны под значением */}
+                <text x={CX} y={CY + 10}
+                    textAnchor="middle" dominantBaseline="middle"
+                    fill={zone.color} fillOpacity="0.65"
+                    fontSize="9" fontFamily="sans-serif" fontWeight="600"
+                    letterSpacing="1.2"
+                >
+                    {zone.label.toUpperCase()}
+                </text>
+
+                {/* Метки 0 / 50 / 100 */}
+                {([0, 50, 100] as const).map(v => {
+                    const p = pt(START + (v / 100) * SWEEP, R + 12);
+                    return (
+                        <text key={v} x={p.x} y={p.y}
+                            textAnchor="middle" dominantBaseline="middle"
+                            fill="rgba(255,255,255,0.22)" fontSize="8" fontFamily="monospace"
+                        >{v}</text>
+                    );
+                })}
             </svg>
 
-            {/* Числовое значение */}
-            <div
-                className="font-mono text-[21px] font-bold tabular-nums leading-none -mt-1"
-                style={{ color: zone.color, filter: `drop-shadow(0 0 8px ${zone.color}60)` }}
-            >
-                {rsi.toFixed(1)}
-            </div>
-
-            {/* Название зоны */}
-            <div className={`text-[10px] font-semibold ${zone.textCls}`}>
-                {zone.label}
+            {/* Подпись таймфрейма под кругом */}
+            <div className="text-[9px] font-semibold uppercase tracking-[0.22em] text-white/30 -mt-1">
+                {label}
             </div>
         </div>
     );
 }
 
-// ── Панель объяснения ────────────────────────────────────────────────────
+// ── Contribution bar ──────────────────────────────────────────────────────
 
-function InfoPanel({
-    diag,
-    rsiFactor,
-}: {
+function ContribBar({ value }: { value: number }) {
+    // value диапазон примерно -2..+2 (RSI вклад в прогноз)
+    const MAX = 2;
+    const pct = Math.max(0, Math.min(100, ((value + MAX) / (MAX * 2)) * 100));
+    const isBear = value < 0;
+    const color = isBear ? "#f87171" : "#34d399";
+    const label = isBear
+        ? `Медвежий · ${value.toFixed(2)}`
+        : `Бычий · +${value.toFixed(2)}`;
+
+    return (
+        <div className="space-y-1.5">
+            <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/30">
+                Вклад RSI в прогноз
+            </div>
+            <div className="relative h-2 rounded-full bg-white/6 overflow-hidden">
+                {/* Центральная отметка */}
+                <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20" />
+                {/* Заполнение */}
+                <div
+                    className="absolute top-0 bottom-0 rounded-full transition-all duration-700"
+                    style={{
+                        backgroundColor: color,
+                        boxShadow: `0 0 8px ${color}80`,
+                        left: value < 0 ? `${pct}%` : "50%",
+                        right: value < 0 ? "50%" : `${100 - pct}%`,
+                    }}
+                />
+            </div>
+            <div className="text-[11px] font-semibold" style={{ color }}>
+                {label}
+            </div>
+        </div>
+    );
+}
+
+// ── Правая панель ─────────────────────────────────────────────────────────
+
+function InfoPanel({ diag, rsiFactor }: {
     diag: ReversalDiagnostics;
     rsiFactor: ForecastFactor | undefined;
 }) {
-    const momentum = diag.momentum_slowdown_status_4h;
-    const momentumLabel = momentum === "slowing" ? "замедляется ↓" : momentum === "not_slowing" ? "стабильный →" : "—";
-    const momentumCls  = momentum === "slowing" ? "text-amber-300" : "text-white/50";
-
-    const contrib = rsiFactor?.contribution;
-    const contribStr = contrib !== undefined
-        ? `${contrib > 0 ? "+" : ""}${contrib.toFixed(2)}`
-        : "—";
-    const contribCls = contrib !== undefined
-        ? contrib > 0 ? "text-emerald-400" : "text-rose-400"
-        : "text-white/40";
-
-    const bias4h = diag.bias_4h ?? "—";
-    const biasCls = bias4h === "bullish" ? "text-emerald-400" : bias4h === "bearish" ? "text-rose-400" : "text-white/50";
+    const contrib    = rsiFactor?.contribution ?? 0;
+    const momentum   = diag.momentum_slowdown_status_4h;
+    const isSlowing  = momentum === "slowing";
+    const rsi4h      = diag.latest_rsi_4h ?? 50;
+    const rsi1d      = diag.latest_rsi_1d ?? 50;
+    const zone4h     = zoneFor(rsi4h);
+    const zone1d     = zoneFor(rsi1d);
 
     return (
-        <div className="flex flex-col gap-3 text-[11px] leading-relaxed">
-            {/* Вклад в прогноз */}
-            <div className="rounded-xl border border-white/8 bg-white/[0.025] px-3 py-2.5 space-y-1.5">
-                <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/30 mb-1">
-                    Влияние на прогноз
+        <div className="flex flex-col gap-4 text-[11px]">
+
+            {/* Contribution bar */}
+            <ContribBar value={contrib} />
+
+            {/* Разделитель */}
+            <div className="h-px bg-white/6" />
+
+            {/* Таблица состояний */}
+            <div className="space-y-2.5">
+                <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/30">
+                    Текущее состояние
                 </div>
+
+                {/* RSI 4H зона */}
                 <div className="flex items-center justify-between gap-2">
-                    <span className="text-white/45">Вклад RSI</span>
-                    <span className={`font-mono font-semibold ${contribCls}`}>{contribStr}</span>
+                    <span className="text-white/40">RSI 4H</span>
+                    <span className={`font-semibold text-[11px] ${zone4h.textCls}`}
+                        style={{ filter: `drop-shadow(0 0 6px ${zone4h.color}60)` }}>
+                        {zone4h.label}
+                    </span>
                 </div>
+
+                {/* RSI 1D зона */}
                 <div className="flex items-center justify-between gap-2">
-                    <span className="text-white/45">Импульс 4H</span>
-                    <span className={`font-semibold ${momentumCls}`}>{momentumLabel}</span>
+                    <span className="text-white/40">RSI 1D</span>
+                    <span className={`font-semibold text-[11px] ${zone1d.textCls}`}
+                        style={{ filter: `drop-shadow(0 0 6px ${zone1d.color}60)` }}>
+                        {zone1d.label}
+                    </span>
                 </div>
+
+                {/* Импульс */}
                 <div className="flex items-center justify-between gap-2">
-                    <span className="text-white/45">Байас 4H</span>
-                    <span className={`font-semibold capitalize ${biasCls}`}>{bias4h}</span>
+                    <span className="text-white/40">Импульс 4H</span>
+                    <span className={`font-semibold ${isSlowing ? "text-amber-300" : "text-white/50"}`}>
+                        {isSlowing ? "↓ замедляется" : "→ стабильный"}
+                    </span>
                 </div>
             </div>
 
-            {/* Легенда зон */}
+            {/* Разделитель */}
+            <div className="h-px bg-white/6" />
+
+            {/* Легенда зон — компактная */}
             <div className="space-y-1.5">
-                <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/30">
-                    Зоны RSI
+                <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/30">
+                    Зоны
                 </div>
-                {ZONES.map((z) => (
+                {ZONES.map(z => (
                     <div key={z.from} className="flex items-center gap-2">
-                        <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: z.color, boxShadow: `0 0 5px ${z.color}80` }} />
-                        <span className="text-white/35 font-mono text-[10px] w-9 shrink-0">{z.from}–{z.to}</span>
-                        <span className="text-white/55">{z.label}</span>
+                        <span
+                            className="h-1.5 w-1.5 shrink-0 rounded-full"
+                            style={{ backgroundColor: z.color, boxShadow: `0 0 5px ${z.color}80` }}
+                        />
+                        <span className="font-mono text-[9px] text-white/25 w-8 shrink-0">{z.from}–{z.to}</span>
+                        <span className="text-white/45 text-[10px]">{z.hint}</span>
                     </div>
                 ))}
             </div>
 
-            {/* Краткое пояснение */}
-            <p className="text-[10px] leading-relaxed text-white/30">
-                RSI измеряет скорость и величину ценовых движений. Экстремальные значения
-                сигнализируют о возможном развороте. Вес фактора в прогнозе — 1.5×.
-            </p>
         </div>
     );
 }
@@ -240,15 +338,15 @@ function InfoPanel({
 export function RsiGauges() {
     const { data, loading } = useApi(getReversal, [], { intervalMs: 4 * 60 * 60 * 1000 });
 
-    const diag = data?.diagnostics;
-    const rsi4h = diag?.latest_rsi_4h;
-    const rsi1d = diag?.latest_rsi_1d;
+    const diag      = data?.diagnostics;
+    const rsi4h     = diag?.latest_rsi_4h;
+    const rsi1d     = diag?.latest_rsi_1d;
     const rsiFactor = data?.forecast?.factors?.find((f: ForecastFactor) => f.name === "RSI");
 
     if (loading && !data) {
         return (
             <Card title="RSI Monitor" subtitle="Индикатор импульса" padded>
-                <Skeleton className="h-32 w-full rounded-xl" />
+                <Skeleton className="h-40 w-full rounded-xl" />
             </Card>
         );
     }
@@ -257,17 +355,18 @@ export function RsiGauges() {
 
     return (
         <Card title="RSI Monitor" subtitle="Индикатор перекупленности / перепроданности" padded>
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
-                {/* Два спидометра */}
-                <div className="flex gap-4 shrink-0">
-                    <Gauge rsi={rsi4h} timeframe="RSI · 4H" uid="rsi4h" />
-                    <Gauge rsi={rsi1d} timeframe="RSI · 1D" uid="rsi1d" />
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+
+                {/* Два круглых спидометра */}
+                <div className="flex gap-2 shrink-0 justify-center sm:justify-start">
+                    <Gauge rsi={rsi4h} label="RSI · 4H" uid="rsi4h" />
+                    <Gauge rsi={rsi1d} label="RSI · 1D" uid="rsi1d" />
                 </div>
 
                 {/* Вертикальный разделитель */}
                 <div className="hidden sm:block w-px self-stretch bg-white/8" />
 
-                {/* Панель информации */}
+                {/* Правая панель */}
                 <div className="flex-1 min-w-0">
                     <InfoPanel diag={diag!} rsiFactor={rsiFactor} />
                 </div>
