@@ -146,6 +146,20 @@ export type MarketThesis = {
     generated_at: string;
     cached: boolean;
     error: string | null;
+    events?: Array<{
+        id: string;
+        ordinal: number;
+        anchor_ts: string | null;
+        direction: string;
+        bias: "long" | "short" | "wait" | string;
+        snapshot_url: string | null;
+        snapshot_status?: string | null;
+        zone?: {
+            kind: "support" | "resistance" | string;
+            low: number | null;
+            high: number | null;
+        } | null;
+    }>;
 };
 
 export async function getMarketThesis(): Promise<MarketThesis> {

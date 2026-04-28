@@ -5,6 +5,9 @@ import { useApi } from "@/hooks/use-api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/error-state";
 import { fmtTime } from "@/lib/format";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { X } from "lucide-react";
 
 function escapeHtml(s: string): string {
     return s
@@ -163,12 +166,74 @@ function pickThesisText(data: MarketThesis | null): string | null {
     return null;
 }
 
+type ThesisEvent = NonNullable<MarketThesis["events"]>[number];
+
+function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () => void }) {
+    const [mounted, setMounted] = useState(false);
+    useEffect(() => setMounted(true), []);
+    useEffect(() => {
+        if (!event) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose();
+        };
+        document.addEventListener("keydown", onKey);
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.removeEventListener("keydown", onKey);
+            document.body.style.overflow = prev;
+        };
+    }, [event, onClose]);
+
+    if (!mounted || !event.snapshot_url) return null;
+
+    return createPortal(
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/88 p-3 backdrop-blur-sm">
+            <button
+                type="button"
+                aria-label="Закрыть снимок"
+                onClick={onClose}
+                className="absolute inset-0 cursor-default"
+            />
+            <div className="relative z-10 flex max-h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0E1117] shadow-2xl">
+                <header className="flex items-center justify-between gap-3 border-b border-white/8 px-4 py-3">
+                    <div className="min-w-0">
+                        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-200/65">
+                            Историческое событие {event.ordinal}
+                        </div>
+                        <div className="mt-0.5 truncate text-sm font-semibold text-white">
+                            BTCUSDT · 4H · {event.bias === "long" ? "long" : event.bias === "short" ? "short" : "wait"}
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        aria-label="Закрыть"
+                        className="rounded-lg border border-white/10 bg-white/5 p-2 text-white/70 transition hover:border-white/25 hover:text-white"
+                    >
+                        <X className="h-4 w-4" />
+                    </button>
+                </header>
+                <div className="min-h-0 flex-1 overflow-auto bg-black p-2">
+                    <img
+                        src={event.snapshot_url}
+                        alt={`Снимок события ${event.ordinal}`}
+                        className="mx-auto max-h-[82vh] max-w-full rounded-lg object-contain"
+                    />
+                </div>
+            </div>
+        </div>,
+        document.body,
+    );
+}
+
 /**
  * Fetches the DeepSeek thesis and renders its body as Markdown.
  * Used by the analytics dropdown inside ChartPanel.
  */
 export function MarketThesisContent() {
     const { data, loading, error } = useApi<MarketThesis>(getMarketThesis);
+    const [activeEvent, setActiveEvent] = useState<ThesisEvent | null>(null);
 
     if (loading) {
         return (
@@ -188,6 +253,7 @@ export function MarketThesisContent() {
     const task = data.task ?? "unknown";
     const generatedAt = data.generated_at;
     const text = pickThesisText(data);
+    const events = (data.events ?? []).filter((event) => event.snapshot_url);
 
     const meta = (
         <div className="mb-3 flex items-center gap-1.5">
@@ -228,10 +294,27 @@ export function MarketThesisContent() {
     return (
         <>
             {meta}
+            {events.length > 0 && (
+                <div className="mb-3 flex flex-wrap gap-1.5">
+                    {events.map((event) => (
+                        <button
+                            key={event.id}
+                            type="button"
+                            onClick={() => setActiveEvent(event)}
+                            className="rounded-lg border border-cyan-400/25 bg-cyan-400/[0.06] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-cyan-200 transition hover:border-cyan-400/45 hover:bg-cyan-400/[0.12]"
+                        >
+                            Событие {event.ordinal}
+                        </button>
+                    ))}
+                </div>
+            )}
             <div
                 className="thesis-prose text-[12.5px] leading-[1.65] text-white/80"
                 dangerouslySetInnerHTML={{ __html: renderMarkdown(text) }}
             />
+            {activeEvent && (
+                <SnapshotLightbox event={activeEvent} onClose={() => setActiveEvent(null)} />
+            )}
         </>
     );
 }
