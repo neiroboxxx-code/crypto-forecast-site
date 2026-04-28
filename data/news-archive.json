@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-28T11:22:26Z",
-  "total_items": 170,
+  "generated_at": "2026-04-28T15:55:51Z",
+  "total_items": 161,
   "days": [
     {
       "date": "2026-04-28",
@@ -1894,7 +1894,7 @@
     },
     {
       "date": "2026-04-08",
-      "count": 18,
+      "count": 9,
       "items": [
         {
           "published_at": "2026-04-08T21:56:29+00:00",
@@ -2002,114 +2002,6 @@
           "impact_score": 0.6,
           "btc_relevance_score": 0.85,
           "market_regime_effect": "macro_uncertainty",
-          "source_layer": "global_primary"
-        },
-        {
-          "published_at": "2026-04-08T15:00:45+00:00",
-          "source": "fxstreet",
-          "title": "Brent: Elevated prices after ceasefire relief – Commerzbank",
-          "url": "https://www.fxstreet.com/news/brent-elevated-prices-after-ceasefire-relief-commerzbank-202604081500",
-          "summary": "Commerzbank’s Thu Lan Nguyen notes that Brent prices dropped by USD 15 on news of a two‑week U.S.–Iran ceasefire and reopening of the Strait of Hormuz, but still trade near USD 95, well above pre‑war levels.",
-          "sentiment": -0.6,
-          "impact_score": 0.7,
-          "btc_relevance_score": 0.85,
-          "market_regime_effect": "risk_off",
-          "source_layer": "global_primary"
-        },
-        {
-          "published_at": "2026-04-08T14:58:32+00:00",
-          "source": "fxstreet",
-          "title": "Oil tankers passing through Hormuz stopped after Israel's ceasefire breach – Fars News Agency",
-          "url": "https://www.fxstreet.com/news/oil-tankers-passing-through-hormuz-stopped-after-israels-ceasefire-breach-fars-news-agency-202604081458",
-          "summary": "Iran's Fars News Agency reported on Wednesday that oil tankers passing through the Strait of Hormuz have been stopped after Israel breached the ceasefire, per Reuters.",
-          "sentiment": 0.2,
-          "impact_score": 0.6,
-          "btc_relevance_score": 0.75,
-          "market_regime_effect": "risk_off",
-          "source_layer": "global_primary"
-        },
-        {
-          "published_at": "2026-04-08T14:49:38+00:00",
-          "source": "fxstreet",
-          "title": "Eurozone: Weak demand offsets supply constraints – BNP Paribas",
-          "url": "https://www.fxstreet.com/news/eurozone-weak-demand-offsets-supply-constraints-bnp-paribas-202604081449",
-          "summary": "BNP Paribas analysts argue that weaker demand in the Eurozone compared to 2022 is helping to contain inflation, even as supply constraints remain above historical averages.",
-          "sentiment": 0.0,
-          "impact_score": 0.55,
-          "btc_relevance_score": 0.75,
-          "market_regime_effect": "macro_uncertainty",
-          "source_layer": "global_primary"
-        },
-        {
-          "published_at": "2026-04-08T12:06:50+00:00",
-          "source": "fxstreet",
-          "title": "Oil: Prices slump below $100 on ceasefire – ING",
-          "url": "https://www.fxstreet.com/news/oil-prices-slump-below-100-on-ceasefire-ing-202604081206",
-          "summary": "ING’s commodities team of Ewa Manthey and Warren Patterson report that Oil prices have dropped sharply, with Brent and WTI falling well below $100 as a US–Iran two‑week ceasefire eases supply disruption fears.",
-          "sentiment": -0.6,
-          "impact_score": 0.7,
-          "btc_relevance_score": 0.85,
-          "market_regime_effect": "risk_off",
-          "source_layer": "global_primary"
-        },
-        {
-          "published_at": "2026-04-08T12:02:05+00:00",
-          "source": "fxstreet",
-          "title": "USD: Relief-driven downside potential – BBH",
-          "url": "https://www.fxstreet.com/news/usd-relief-driven-downside-potential-bbh-202604081202",
-          "summary": "Brown Brothers Harriman’s (BBH) Elias Haddad notes that the US-Iran ceasefire has pushed financial markets into relief mode, with Brent, equities and bonds reacting positively and the Dollar falling sharply.",
-          "sentiment": 0.2,
-          "impact_score": 0.6,
-          "btc_relevance_score": 0.85,
-          "market_regime_effect": "risk_off",
-          "source_layer": "global_primary"
-        },
-        {
-          "published_at": "2026-04-08T11:54:08+00:00",
-          "source": "fxstreet",
-          "title": "UK: PMI inflation surge clouds outlook – MUFG",
-          "url": "https://www.fxstreet.com/news/uk-pmi-inflation-surge-clouds-outlook-mufg-202604081154",
-          "summary": "MUFG’s Head of Research Derek Halpenny underlines that United Kingdom (UK) PMI Services and Composite data show a larger downturn than in Europe, with a record jump in input prices driven by energy concerns.",
-          "sentiment": 0.4,
-          "impact_score": 0.65,
-          "btc_relevance_score": 0.75,
-          "market_regime_effect": "macro_uncertainty",
-          "source_layer": "global_primary"
-        },
-        {
-          "published_at": "2026-04-08T11:44:40+00:00",
-          "source": "fxstreet",
-          "title": "NZD/USD rallies to near 0.5850 amid risk-on mood, RBNZ’s hawkish remarks",
-          "url": "https://www.fxstreet.com/news/nzd-usd-rallies-to-near-05850-amid-risk-on-mood-rbnzs-hawkish-remarks-202604081144",
-          "summary": "The NZD/USD pair is up 1.6% to near 0.5830 in the European trading session on Wednesday.",
-          "sentiment": -0.2,
-          "impact_score": 0.6,
-          "btc_relevance_score": 0.75,
-          "market_regime_effect": "macro_uncertainty",
-          "source_layer": "global_primary"
-        },
-        {
-          "published_at": "2026-04-08T11:43:41+00:00",
-          "source": "fxstreet",
-          "title": "Euro steadies at five-week highs near 1.1700 amid market optimism",
-          "url": "https://www.fxstreet.com/news/eur-usd-nears-11700-as-markets-welcome-the-ceasefire-in-iran-202604080620",
-          "summary": "The announcement of a two-week ceasefire in Iran triggered a relief rally during Wednesday’s Asian trading session that sent the safe-haven US Dollar (USD) tumbling against its main peers.",
-          "sentiment": 0.4,
-          "impact_score": 0.65,
-          "btc_relevance_score": 0.75,
-          "market_regime_effect": "macro_uncertainty",
-          "source_layer": "global_primary"
-        },
-        {
-          "published_at": "2026-04-08T11:38:14+00:00",
-          "source": "fxstreet",
-          "title": "US President Trump: Talking tariff and sanctions relief with Iran",
-          "url": "https://www.fxstreet.com/news/us-president-trump-talking-tariff-and-sanctions-relief-with-iran-202604081138",
-          "summary": "United States (US) President Donald Trump said on Truth Social on Wednesday that the US will work closely with Iran through a \"very productive regime change.\"",
-          "sentiment": -0.4,
-          "impact_score": 0.65,
-          "btc_relevance_score": 0.85,
-          "market_regime_effect": "risk_off",
           "source_layer": "global_primary"
         }
       ]
