@@ -5,6 +5,7 @@ import type { AcademyCategoryId } from "./types";
  * «Локальные стратегии», «Зоны влияния», «Инфографика» (внизу страницы).
  */
 export const ACADEMY_FOLDER_GROUPS: Record<AcademyCategoryId, readonly string[]> = {
+    neophiles: ["zone/Trading_Survival_Architecture"],
     technical: [
         "Candlestick_Mastery.",
         "Tactical_Candlestick_Analysis",
@@ -23,6 +24,11 @@ export const ACADEMY_FOLDER_GROUPS: Record<AcademyCategoryId, readonly string[]>
 };
 
 export const CATEGORY_META: readonly { id: AcademyCategoryId; label: string; hint: string }[] = [
+    {
+        id: "neophiles",
+        label: "Неофилам",
+        hint: "Старт: архитектура выживания",
+    },
     {
         id: "technical",
         label: "Технический анализ",

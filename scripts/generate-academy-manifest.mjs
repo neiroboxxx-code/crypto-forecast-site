@@ -8,6 +8,7 @@ const publicDir = join(root, "public");
 const SLIDE_RE = /^slide-(\d+)\.(jpe?g|png)$/i;
 
 const FOLDERS = [
+  "zone/Trading_Survival_Architecture",
   "Candlestick_Mastery.",
   "Tactical_Candlestick_Analysis",
   "Candlestick_Reversal_Anatomy",

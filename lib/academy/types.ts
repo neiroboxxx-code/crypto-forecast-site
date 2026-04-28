@@ -1,4 +1,5 @@
 export type AcademyCategoryId =
+    | "neophiles"
     | "technical"
     | "psychology"
     | "anatomy"
