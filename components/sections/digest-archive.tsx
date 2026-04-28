@@ -2,143 +2,126 @@
 
 import { useEffect, useState } from "react";
 
-type ArchiveEntry = {
+export type ArchiveEntry = {
     date: string;
     updatedAt: string;
     title: string;
     bodyMarkdown: string;
 };
 
-function renderMarkdownLite(md: string): string {
-    const escaped = md.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    return escaped
-        .split(/\n\n+/)
-        .map((block) => {
-            const t = block.trim();
-            if (t.startsWith("### ")) {
-                const rest = t.slice(4).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-                return `<h3 class="mb-2 mt-5 first:mt-0 text-base font-semibold tracking-tight text-white/90">${rest}</h3>`;
-            }
-            if (t.startsWith("## ")) {
-                const rest = t.slice(3).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-                return `<h2 class="mb-3 mt-7 first:mt-0 text-2xl font-semibold tracking-tight text-white">${rest}</h2>`;
-            }
-            if (t.startsWith("*") && t.endsWith("*") && t.length > 2) {
-                const inner = t.slice(1, -1);
-                return `<p class="mb-5 rounded-2xl border border-white/8 bg-white/[0.03] px-4 py-3 text-sm italic text-white/50">${inner}</p>`;
-            }
-            const lines = block.split("\n");
-            const ul = lines.every((l) => l.trim().startsWith("- ") || l.trim() === "");
-            if (ul) {
-                const items = lines
-                    .filter((l) => l.trim().startsWith("- "))
-                    .map((l) => `<li>${l.replace(/^-\s+/, "").replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")}</li>`)
-                    .join("");
-                return `<ul class="mb-5 list-disc space-y-2 pl-5 text-base leading-7 text-white/72">${items}</ul>`;
-            }
-            return `<p class="mb-5 last:mb-0 text-base leading-8 text-white/74">${block.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/_(.+?)_/g, "<em>$1</em>").replace(/\n/g, "<br/>")}</p>`;
-        })
-        .join("");
-}
-
-function fmtDateBtn(dateStr: string): string {
+function fmtDateBtn(dateStr: string): { day: string; month: string } {
     const d = new Date(dateStr + "T12:00:00Z");
-    return d.toLocaleDateString("ru-RU", { day: "numeric", month: "short" });
+    return {
+        day: d.toLocaleDateString("ru-RU", { day: "numeric" }),
+        month: d.toLocaleDateString("ru-RU", { month: "short" }),
+    };
 }
 
-export function DigestArchive() {
+type Props = {
+    selected: ArchiveEntry | null;
+    onSelect: (entry: ArchiveEntry | null) => void;
+};
+
+export function DigestArchiveSidebar({ selected, onSelect }: Props) {
     const [entries, setEntries] = useState<ArchiveEntry[]>([]);
-    const [selected, setSelected] = useState<ArchiveEntry | null>(null);
-    const [loaded, setLoaded] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetch("/api/digest-archive", { cache: "no-store" })
             .then((r) => (r.ok ? r.json() : []))
-            .then((data: ArchiveEntry[]) => {
-                setEntries(data);
-                if (data.length > 0) setSelected(data[0]);
-                setLoaded(true);
-            })
-            .catch(() => setLoaded(true));
+            .then((data: ArchiveEntry[]) => { setEntries(data); setLoading(false); })
+            .catch(() => setLoading(false));
     }, []);
 
-    if (!loaded) {
-        return (
-            <div className="mt-4 rounded-3xl border border-white/8 bg-[#0E1117]/90 p-6 shadow-[0_24px_90px_rgba(0,0,0,0.32)]">
-                <div className="h-6 w-40 animate-pulse rounded-lg bg-white/8" />
-                <div className="mt-3 flex gap-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                        <div key={i} className="h-7 w-16 animate-pulse rounded-full bg-white/6" />
-                    ))}
-                </div>
-                <div className="mt-5 space-y-3">
-                    {Array.from({ length: 4 }).map((_, i) => (
-                        <div key={i} className="h-4 animate-pulse rounded bg-white/5" />
-                    ))}
-                </div>
-            </div>
-        );
-    }
-
-    if (entries.length === 0) return null;
-
-    const html = selected ? renderMarkdownLite(selected.bodyMarkdown) : "";
-    const updatedLabel = selected
-        ? new Date(selected.updatedAt).toLocaleString("ru-RU", {
-              day: "2-digit",
-              month: "short",
-              hour: "2-digit",
-              minute: "2-digit",
-          })
-        : "";
-
     return (
-        <div className="mt-4 rounded-3xl border border-white/8 bg-[#0E1117]/90 shadow-[0_24px_90px_rgba(0,0,0,0.32)]">
-            <header className="border-b border-white/8 px-6 py-5 md:px-8 md:py-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div>
-                        <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/35">
-                            Archive
-                        </div>
-                        <h2 className="mt-1.5 text-xl font-semibold tracking-tight text-white/80">
-                            {selected?.title ?? "Архив дайджестов"}
-                        </h2>
+        <section className="relative overflow-hidden rounded-3xl border border-white/8 bg-[#0E1117]/80 p-4 shadow-[0_24px_80px_rgba(0,0,0,0.28)]">
+            <div className="absolute -right-12 top-8 h-32 w-32 rounded-full bg-fuchsia-400/8 blur-3xl pointer-events-none" />
+
+            <div className="relative space-y-3">
+                {/* Header */}
+                <div>
+                    <div className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/35">
+                        Archive
                     </div>
-                    {updatedLabel && (
-                        <time className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/40 tabular-nums">
-                            {updatedLabel}
-                        </time>
-                    )}
+                    <h2 className="mt-1 text-base font-semibold tracking-tight text-white">
+                        Архив дайджестов
+                    </h2>
                 </div>
 
-                {/* Date pills */}
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                    {entries.map((e) => {
-                        const isActive = selected?.date === e.date;
+                {/* Current button */}
+                <button
+                    type="button"
+                    onClick={() => onSelect(null)}
+                    className={`w-full rounded-xl border px-3 py-2.5 text-left transition ${
+                        selected === null
+                            ? "border-cyan-400/35 bg-cyan-400/[0.07] text-cyan-200"
+                            : "border-white/8 bg-white/[0.02] text-white/50 hover:border-white/15 hover:text-white/75"
+                    }`}
+                >
+                    <div className="flex items-center justify-between gap-2">
+                        <span className="text-[11px] font-semibold uppercase tracking-[0.1em]">
+                            Текущий
+                        </span>
+                        {selected === null && (
+                            <span className="h-1.5 w-1.5 animate-ping rounded-full bg-cyan-300" />
+                        )}
+                    </div>
+                    <p className="mt-0.5 text-[10px] text-white/35">свежий выпуск</p>
+                </button>
+
+                {/* Divider */}
+                {entries.length > 0 && (
+                    <div className="flex items-center gap-2">
+                        <div className="h-px flex-1 bg-white/8" />
+                        <span className="text-[9px] uppercase tracking-[0.14em] text-white/25">выпуски</span>
+                        <div className="h-px flex-1 bg-white/8" />
+                    </div>
+                )}
+
+                {/* Archive date buttons */}
+                {loading && (
+                    <div className="space-y-1.5">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="h-12 animate-pulse rounded-xl bg-white/5" />
+                        ))}
+                    </div>
+                )}
+
+                {!loading && entries.length === 0 && (
+                    <p className="text-[11px] text-white/30">
+                        Архив пуст — появится после следующего выпуска
+                    </p>
+                )}
+
+                <div className="space-y-1.5">
+                    {entries.map((entry) => {
+                        const isActive = selected?.date === entry.date;
+                        const { day, month } = fmtDateBtn(entry.date);
                         return (
                             <button
-                                key={e.date}
+                                key={entry.date}
                                 type="button"
-                                onClick={() => setSelected(e)}
-                                className={`rounded-full border px-3 py-1 text-[11px] font-medium tabular-nums transition ${
+                                onClick={() => onSelect(entry)}
+                                className={`w-full rounded-xl border px-3 py-2.5 text-left transition ${
                                     isActive
-                                        ? "border-cyan-400/40 bg-cyan-400/10 text-cyan-200"
-                                        : "border-white/10 bg-white/[0.03] text-white/45 hover:border-white/20 hover:text-white/70"
+                                        ? "border-white/20 bg-white/[0.06] text-white/85"
+                                        : "border-white/8 bg-white/[0.02] text-white/45 hover:border-white/15 hover:text-white/70"
                                 }`}
                             >
-                                {fmtDateBtn(e.date)}
+                                <div className="flex items-baseline gap-1.5">
+                                    <span className="text-[15px] font-semibold tabular-nums leading-none">
+                                        {day}
+                                    </span>
+                                    <span className="text-[11px]">{month}</span>
+                                </div>
+                                <p className="mt-0.5 truncate text-[10px] text-white/30">
+                                    {entry.title}
+                                </p>
                             </button>
                         );
                     })}
                 </div>
-            </header>
-
-            {selected && (
-                <div
-                    className="px-6 py-6 md:px-8 md:py-8 [&_em]:text-white/55 [&_strong]:font-semibold [&_strong]:text-white"
-                    dangerouslySetInnerHTML={{ __html: html }}
-                />
-            )}
-        </div>
+            </div>
+        </section>
     );
 }

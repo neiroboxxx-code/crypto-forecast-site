@@ -4,6 +4,7 @@ import type { MarketDigestData } from "@/lib/api";
 import { Card } from "@/components/ui/card";
 import { ErrorState } from "@/components/ui/error-state";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { ArchiveEntry } from "@/components/sections/digest-archive";
 
 function renderMarkdownLite(md: string): string {
     const escaped = md
@@ -48,9 +49,41 @@ function statusLabel(v: string): string {
     return v;
 }
 
-type Props = { data: MarketDigestData | null; error: string | null };
+type Props = { data: MarketDigestData | null; error: string | null; archiveEntry?: ArchiveEntry | null };
 
-export function MarketDigest({ data, error }: Props) {
+export function MarketDigest({ data, error, archiveEntry }: Props) {
+    // Archive mode — show selected past digest
+    if (archiveEntry) {
+        const html = renderMarkdownLite(archiveEntry.bodyMarkdown);
+        const updatedLabel = new Date(archiveEntry.updatedAt).toLocaleString("ru-RU", {
+            day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit",
+        });
+        return (
+            <Card className="border-white/8 bg-[#0E1117]/90 shadow-[0_24px_90px_rgba(0,0,0,0.32)]" padded={false}>
+                <header className="border-b border-white/8 px-6 py-5 md:px-8 md:py-6">
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                        <div>
+                            <div className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/30">
+                                Archive · {archiveEntry.date}
+                            </div>
+                            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white md:text-4xl">
+                                {archiveEntry.title}
+                            </h1>
+                            <p className="mt-2 text-sm leading-6 text-white/40">Архивный выпуск</p>
+                        </div>
+                        <time className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs text-white/45 tabular-nums">
+                            {updatedLabel}
+                        </time>
+                    </div>
+                </header>
+                <div
+                    className="px-6 py-6 md:px-8 md:py-8 [&_em]:text-white/55 [&_strong]:font-semibold [&_strong]:text-white"
+                    dangerouslySetInnerHTML={{ __html: html }}
+                />
+            </Card>
+        );
+    }
+
     if (error) {
         return (
             <Card title="Маркет-дайджест" className="border-white/8 p-6">
