@@ -27,9 +27,15 @@ export function DigestArchiveSidebar({ selected, onSelect }: Props) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const todayUTC = new Date().toISOString().slice(0, 10);
         fetch("/api/digest-archive", { cache: "no-store" })
             .then((r) => (r.ok ? r.json() : []))
-            .then((data: ArchiveEntry[]) => { setEntries(data); setLoading(false); })
+            .then((data: ArchiveEntry[]) => {
+                // Сегодняшняя дата не показывается в архиве —
+                // актуальный выпуск живёт в центральном блоке.
+                setEntries(data.filter((e) => e.date < todayUTC));
+                setLoading(false);
+            })
             .catch(() => setLoading(false));
     }, []);
 
