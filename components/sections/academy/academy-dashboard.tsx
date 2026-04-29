@@ -359,10 +359,6 @@ export function AcademyDashboard({ categories }: Props) {
                             >
                                 <ChevronRight className="h-6 w-6" />
                             </button>
-
-                            <div className="pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 rounded-full border border-white/12 bg-black/70 px-3 py-1 text-[11px] font-semibold tabular-nums text-white/90 backdrop-blur">
-                                {viewer.index + 1} / {viewer.slides.length}
-                            </div>
                         </div>
 
                         {/* Footer: слайды + масштаб */}
