@@ -195,3 +195,8 @@ a {
   text-underline-offset: 2px;
 }
 .thesis-prose a:hover { color: #67e8f9; }
+
+/* Снимки исторических событий: обёртка из thesis-event-chart-frame.tsx */
+.thesis-prose .thesis-event-chart-frame {
+  max-width: min(920px, 100%);
+}

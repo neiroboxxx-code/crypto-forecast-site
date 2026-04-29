@@ -8,6 +8,12 @@ import { fmtTime } from "@/lib/format";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import {
+    sanitizeThesisImgUrl,
+    thesisEventFigureHtmlForMarkdown,
+    ThesisEventChartFrame,
+    ThesisEventChartImg,
+} from "@/components/ui/thesis-event-chart-frame";
 
 function escapeHtml(s: string): string {
     return s
@@ -18,13 +24,11 @@ function escapeHtml(s: string): string {
         .replace(/'/g, "&#39;");
 }
 
-// Minimal Markdown → HTML renderer. Input is escaped first so any HTML the LLM
-// emits becomes text; we then recognize a small, safe subset of Markdown and
-// rebuild allowed tags ourselves. Supports headings (#, ##, ###), bold/italic,
-// inline code, links, unordered/ordered lists, blockquotes, and paragraphs.
-function renderMarkdown(raw: string): string {
-    const src = escapeHtml(raw.replace(/\r\n/g, "\n").trim());
-    const lines = src.split("\n");
+// Minimal Markdown → HTML renderer. Сначала выделяются `![](url)` (снимки событий
+// с тем же HUD, что карточка «уровень 3» во ВВЕДЕНИИ). Оставшийся текст экранируется,
+// затем разбирается в безопасный подмножество Markdown — без сырого HTML от LLM.
+function renderEscapedMarkdownBody(srcEscaped: string): string {
+    const lines = srcEscaped.split("\n");
 
     const out: string[] = [];
     let i = 0;
@@ -115,6 +119,37 @@ function renderMarkdown(raw: string): string {
     }
 
     return out.join("\n");
+}
+
+/** Разбивает текст на блоки: обычный markdown и готовые HTML-figures для PNG графика. */
+function splitMarkdownEmbeddedImages(normalizedPlain: string): Array<{ kind: "md" | "fig"; body: string }> {
+    const re = /!\[([^\]]*)\]\(([^)]+)\)/g;
+    const parts: Array<{ kind: "md" | "fig"; body: string }> = [];
+    let last = 0;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(normalizedPlain)) !== null) {
+        const full = m[0];
+        const idx = m.index;
+        const altRaw = m[1] ?? "";
+        const urlRaw = m[2] ?? "";
+        if (idx > last) parts.push({ kind: "md", body: normalizedPlain.slice(last, idx) });
+        const safe = sanitizeThesisImgUrl(urlRaw.trim());
+        const fig = safe ? thesisEventFigureHtmlForMarkdown(safe, altRaw.trim()) : "";
+        parts.push({ kind: "fig", body: fig || escapeHtml(full) });
+        last = idx + full.length;
+    }
+    if (last < normalizedPlain.length) parts.push({ kind: "md", body: normalizedPlain.slice(last) });
+    if (parts.length === 0) parts.push({ kind: "md", body: normalizedPlain });
+    return parts;
+}
+
+function renderMarkdown(raw: string): string {
+    const normalized = raw.replace(/\r\n/g, "\n").trim();
+    return splitMarkdownEmbeddedImages(normalized)
+        .map((segment) =>
+            segment.kind === "fig" ? segment.body : renderEscapedMarkdownBody(escapeHtml(segment.body)),
+        )
+        .join("\n");
 }
 
 function taskLabel(task: string): string {
@@ -217,12 +252,21 @@ function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () 
                         <X className="h-4 w-4" />
                     </button>
                 </header>
-                <div className="min-h-0 flex-1 overflow-auto bg-black p-2">
-                    <img
-                        src={event.snapshot_url}
-                        alt={`Снимок события ${event.ordinal}`}
-                        className="mx-auto max-h-[82vh] max-w-full rounded-lg object-contain"
-                    />
+                <div className="min-h-0 flex-1 overflow-auto bg-[#07090f] p-2 sm:p-3">
+                    <ThesisEventChartFrame
+                        hudTitle={`Событие ${event.ordinal} · BTCUSDT · 4H · ${
+                            event.bias === "long" ? "LONG" : event.bias === "short" ? "SHORT" : "WAIT"
+                        }`}
+                        hudAside={event.snapshot_status ? String(event.snapshot_status) : "HIST MODE · LIVE DATA"}
+                        className="max-w-none"
+                    >
+                        <ThesisEventChartImg
+                            src={event.snapshot_url ?? ""}
+                            alt={`Снимок события ${event.ordinal}`}
+                            loading="eager"
+                            className="!max-h-[min(74vh,860px)]"
+                        />
+                    </ThesisEventChartFrame>
                 </div>
             </div>
         </div>,
