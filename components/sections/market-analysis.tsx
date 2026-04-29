@@ -24,6 +24,18 @@ function escapeHtml(s: string): string {
         .replace(/'/g, "&#39;");
 }
 
+function escapeRegExp(s: string): string {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/** Убирает `![](url)` из markdown, если тот же снимок уже выведен кадром из `snapshot_url`. */
+function stripMarkdownImageForSnapshotUrl(markdownPlain: string, snapshotUrl: string): string {
+    const safe = sanitizeThesisImgUrl(snapshotUrl.trim());
+    if (!safe) return markdownPlain;
+    const re = new RegExp(`!\\[[^\\]]*\\]\\(${escapeRegExp(safe)}\\)\\s*`, "g");
+    return markdownPlain.replace(re, "").replace(/\n{3,}/g, "\n\n").trim();
+}
+
 // Minimal Markdown → HTML renderer. Сначала выделяются `![](url)` (снимки событий
 // с тем же HUD, что карточка «уровень 3» во ВВЕДЕНИИ). Оставшийся текст экранируется,
 // затем разбирается в безопасный подмножество Markdown — без сырого HTML от LLM.
@@ -424,9 +436,39 @@ export function MarketThesisContent() {
                     return (
                         <section key={`event-${block.ordinal}-${idx}`}>
                             <EventHeading block={block} onOpen={setActiveEvent} />
-                            <div
-                                dangerouslySetInnerHTML={{ __html: renderMarkdown(block.content) }}
-                            />
+                            {(() => {
+                                const url = block.event?.snapshot_url;
+                                const safeUrl = url ? sanitizeThesisImgUrl(url) : null;
+                                const bias = block.event?.bias ?? "wait";
+                                const biasLabel =
+                                    bias === "long" ? "LONG" : bias === "short" ? "SHORT" : "WAIT";
+                                const md = safeUrl
+                                    ? stripMarkdownImageForSnapshotUrl(block.content, safeUrl)
+                                    : block.content;
+                                return (
+                                    <>
+                                        {safeUrl && (
+                                            <ThesisEventChartFrame
+                                                className="mb-3"
+                                                hudTitle={`Событие ${block.ordinal} · BTCUSDT · 4H · ${biasLabel}`}
+                                                hudAside={
+                                                    block.event?.snapshot_status
+                                                        ? String(block.event.snapshot_status)
+                                                        : "HIST MODE · LIVE DATA"
+                                                }
+                                            >
+                                                <ThesisEventChartImg
+                                                    src={safeUrl}
+                                                    alt={`Снимок события ${block.ordinal}`}
+                                                />
+                                            </ThesisEventChartFrame>
+                                        )}
+                                        <div
+                                            dangerouslySetInnerHTML={{ __html: renderMarkdown(md) }}
+                                        />
+                                    </>
+                                );
+                            })()}
                         </section>
                     );
                 })}
