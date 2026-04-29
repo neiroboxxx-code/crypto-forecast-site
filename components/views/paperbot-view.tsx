@@ -9,7 +9,6 @@ import { PaperbotClosedTrades } from "@/components/sections/paperbot/paperbot-cl
 import { PaperbotActivityLog } from "@/components/sections/paperbot/paperbot-activity-log";
 import { PaperbotSignalBox } from "@/components/sections/paperbot/paperbot-signal-box";
 import { PaperbotMascot } from "@/components/sections/paperbot/paperbot-mascot";
-import { PaperbotMonitorWidget } from "@/components/sections/paperbot/paperbot-monitor-widget";
 import { Card } from "@/components/ui/card";
 import type { PaperSettings, PaperSignalState } from "@/components/sections/paperbot/types";
 import type { PaperBotSettings } from "@/lib/api";
@@ -234,9 +233,6 @@ export function PaperbotView() {
 
                 {/* Summary */}
                 <PaperbotSummary summary={summary} />
-
-                {/* Monitor heartbeat */}
-                <PaperbotMonitorWidget monitor={data?.monitor ?? null} />
 
                 {/* Active positions */}
                 <PaperbotPositionsTable positions={positions} />
