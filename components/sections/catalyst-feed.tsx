@@ -11,6 +11,7 @@ import { fmtTime } from "@/lib/format";
 
 // ─── Конфиг ────────────────────────────────────────────────────────────────
 const STORAGE_KEY = "catalyst-feed:v1:locked-day";
+const STALE_THRESHOLD_H = 28; // плановый цикл 24h + 4h буфер
 const REFRESH_MS = 60 * 60 * 1000; // суточный пайплайн → раз в час хватает с запасом
 const RELEVANCE_MIN = 0.5; // отрезает валютные пары без BTC-релевантности
 const QUOTAS = { crypto: 2, geo: 2, macro: 1 } as const;
@@ -134,6 +135,31 @@ function regimeBadge(v: string | null | undefined): { label: string; cls: string
     return null;
 }
 
+// ─── Индикатор состояния ────────────────────────────────────────────────────
+type FeedStatus = "ok" | "stale" | "unknown";
+
+function getFeedStatus(updatedAt: string | undefined): { status: FeedStatus; label: string } {
+    if (!updatedAt) return { status: "unknown", label: "Нет данных об обновлении" };
+    const ageH = (Date.now() - Date.parse(updatedAt)) / 3_600_000;
+    if (ageH <= STALE_THRESHOLD_H)
+        return { status: "ok", label: `Обновлено ${fmtTime(updatedAt)}` };
+    return { status: "stale", label: `Просрочено · последнее ${fmtTime(updatedAt)}` };
+}
+
+function StatusDot({ updatedAt }: { updatedAt: string | undefined }) {
+    const { status, label } = getFeedStatus(updatedAt);
+    const color =
+        status === "ok" ? "bg-emerald-400" : status === "stale" ? "bg-rose-500" : "bg-white/25";
+    return (
+        <span className="relative flex h-2 w-2 shrink-0" title={label}>
+            {status === "ok" && (
+                <span className={`absolute inline-flex h-full w-full animate-ping rounded-full ${color} opacity-60`} />
+            )}
+            <span className={`relative inline-flex h-2 w-2 rounded-full ${color}`} />
+        </span>
+    );
+}
+
 // ─── Компонент ──────────────────────────────────────────────────────────────
 type CatalystFeedProps = { maxItems?: number };
 
@@ -176,16 +202,21 @@ export function CatalystFeed({ maxItems = 5 }: CatalystFeedProps) {
     const showSkeleton = loading && itemsToShow.length === 0;
     const showError = !!error && itemsToShow.length === 0;
 
+    const feedUpdatedAt = data?.updated_at ?? stored?.updated_at;
+
     return (
         <>
             <Card
                 title="Catalyst Feed"
                 subtitle="Macro headlines"
                 right={
-                    <InfoIconButton
-                        onClick={() => setInfoOpen(true)}
-                        label="Показать пояснение к Catalyst Feed"
-                    />
+                    <div className="flex items-center gap-2">
+                        <StatusDot updatedAt={feedUpdatedAt} />
+                        <InfoIconButton
+                            onClick={() => setInfoOpen(true)}
+                            label="Показать пояснение к Catalyst Feed"
+                        />
+                    </div>
                 }
             >
                 {showSkeleton && (
