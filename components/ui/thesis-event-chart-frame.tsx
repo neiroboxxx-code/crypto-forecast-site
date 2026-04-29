@@ -5,8 +5,11 @@ import type { ImgHTMLAttributes, ReactNode } from "react";
  * тонкая бирюза, tech-бары — без изменения содержимого PNG.
  */
 
-const shellCn =
+const shellDefault =
     "relative overflow-hidden rounded-[10px] border border-cyan-400/[0.32] bg-gradient-to-b from-[#0C101A]/98 via-[#0A0D13]/97 to-[#080B10]/98 shadow-[inset_0_1px_0_rgba(34,211,238,0.07),0_14px_48px_-20px_rgba(0,0,0,0.85)]";
+
+const shellModal =
+    "relative overflow-hidden rounded-[12px] border border-cyan-400/50 bg-gradient-to-b from-[#0D121C]/98 via-[#0A0E16]/98 to-[#070a10]/98 shadow-[inset_0_1px_0_rgba(34,211,238,0.12),0_0_0_1px_rgba(34,211,238,0.08),0_20px_56px_-16px_rgba(0,0,0,0.9),0_0_40px_-12px_rgba(34,211,238,0.12)]";
 const hudBarCn =
     "flex items-center justify-between gap-2 border-b border-cyan-400/14 bg-black/45 px-2.5 py-1 backdrop-blur-[2px]";
 const hudMuted = "text-[8.5px] font-medium uppercase tracking-[0.22em] text-cyan-200/45";
@@ -16,39 +19,55 @@ type Props = {
     hudTitle?: string;
     /** Альтернативная строка справа в шапке */
     hudAside?: string;
+    /** В модалке — более заметная рамка и свечение (как карточка «уровень 3»). */
+    variant?: "default" | "modal";
     children: ReactNode;
     className?: string;
 };
 
-function CornerHudTicks() {
+function CornerHudTicks({ strong }: { strong?: boolean }) {
+    const c = strong ? "border-cyan-400/[0.65]" : "border-cyan-400/[0.45]";
+    const c2 = strong ? "border-cyan-400/50" : "border-cyan-400/[0.35]";
     return (
         <>
             <span
-                className="pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-tl-[2px] border-l border-t border-cyan-400/[0.45]"
+                className={`pointer-events-none absolute left-1 top-1 h-4 w-4 rounded-tl-[2px] border-l border-t ${c}`}
                 aria-hidden
             />
             <span
-                className="pointer-events-none absolute right-1 top-1 h-4 w-4 rounded-tr-[2px] border-r border-t border-cyan-400/[0.45]"
+                className={`pointer-events-none absolute right-1 top-1 h-4 w-4 rounded-tr-[2px] border-r border-t ${c}`}
                 aria-hidden
             />
             <span
-                className="pointer-events-none absolute bottom-1 left-1 h-4 w-4 rounded-bl-[2px] border-b border-l border-cyan-400/[0.35]"
+                className={`pointer-events-none absolute bottom-1 left-1 h-4 w-4 rounded-bl-[2px] border-b border-l ${c2}`}
                 aria-hidden
             />
             <span
-                className="pointer-events-none absolute bottom-1 right-1 h-4 w-4 rounded-br-[2px] border-b border-r border-cyan-400/[0.35]"
+                className={`pointer-events-none absolute bottom-1 right-1 h-4 w-4 rounded-br-[2px] border-b border-r ${c2}`}
                 aria-hidden
             />
         </>
     );
 }
 
-export function ThesisEventChartFrame({ hudTitle, hudAside, children, className = "" }: Props) {
+export function ThesisEventChartFrame({
+    hudTitle,
+    hudAside,
+    variant = "default",
+    children,
+    className = "",
+}: Props) {
+    const shell = variant === "modal" ? shellModal : shellDefault;
     return (
         <figure className={`thesis-event-chart-frame group/thesis-chart mx-auto w-full max-w-full ${className}`.trim()}>
-            <div className={shellCn}>
-                <CornerHudTicks />
-                <div className="pointer-events-none absolute inset-[1px] rounded-[9px] ring-1 ring-inset ring-white/[0.04]" aria-hidden />
+            <div className={shell}>
+                <CornerHudTicks strong={variant === "modal"} />
+                <div
+                    className={`pointer-events-none absolute inset-[1px] rounded-[inherit] ring-1 ring-inset ${
+                        variant === "modal" ? "ring-cyan-400/12" : "ring-white/[0.04]"
+                    }`}
+                    aria-hidden
+                />
                 <header className={hudBarCn}>
                     <span className={`${hudMuted} min-w-0 truncate font-mono`}>
                         {hudTitle ?? "REVERSAL · SNAPSHOT · ENGINE"}

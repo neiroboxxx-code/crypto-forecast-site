@@ -24,18 +24,6 @@ function escapeHtml(s: string): string {
         .replace(/'/g, "&#39;");
 }
 
-function escapeRegExp(s: string): string {
-    return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-/** Убирает `![](url)` из markdown, если тот же снимок уже выведен кадром из `snapshot_url`. */
-function stripMarkdownImageForSnapshotUrl(markdownPlain: string, snapshotUrl: string): string {
-    const safe = sanitizeThesisImgUrl(snapshotUrl.trim());
-    if (!safe) return markdownPlain;
-    const re = new RegExp(`!\\[[^\\]]*\\]\\(${escapeRegExp(safe)}\\)\\s*`, "g");
-    return markdownPlain.replace(re, "").replace(/\n{3,}/g, "\n\n").trim();
-}
-
 // Minimal Markdown → HTML renderer. Сначала выделяются `![](url)` (снимки событий
 // с тем же HUD, что карточка «уровень 3» во ВВЕДЕНИИ). Оставшийся текст экранируется,
 // затем разбирается в безопасный подмножество Markdown — без сырого HTML от LLM.
@@ -238,48 +226,37 @@ function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () 
     if (!mounted || !event.snapshot_url) return null;
 
     return createPortal(
-        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/88 p-3 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 p-3 backdrop-blur-sm">
             <button
                 type="button"
                 aria-label="Закрыть снимок"
                 onClick={onClose}
                 className="absolute inset-0 cursor-default"
             />
-            <div className="relative z-10 flex max-h-[94vh] w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0E1117] shadow-2xl">
-                <header className="flex items-center justify-between gap-3 border-b border-white/8 px-4 py-3">
-                    <div className="min-w-0">
-                        <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-cyan-200/65">
-                            Историческое событие {event.ordinal}
-                        </div>
-                        <div className="mt-0.5 truncate text-sm font-semibold text-white">
-                            BTCUSDT · 4H · {event.bias === "long" ? "long" : event.bias === "short" ? "short" : "wait"}
-                        </div>
-                    </div>
-                    <button
-                        type="button"
-                        onClick={onClose}
-                        aria-label="Закрыть"
-                        className="rounded-lg border border-white/10 bg-white/5 p-2 text-white/70 transition hover:border-white/25 hover:text-white"
-                    >
-                        <X className="h-4 w-4" />
-                    </button>
-                </header>
-                <div className="min-h-0 flex-1 overflow-auto bg-[#07090f] p-2 sm:p-3">
-                    <ThesisEventChartFrame
-                        hudTitle={`Событие ${event.ordinal} · BTCUSDT · 4H · ${
-                            event.bias === "long" ? "LONG" : event.bias === "short" ? "SHORT" : "WAIT"
-                        }`}
-                        hudAside={event.snapshot_status ? String(event.snapshot_status) : "HIST MODE · LIVE DATA"}
-                        className="max-w-none"
-                    >
-                        <ThesisEventChartImg
-                            src={event.snapshot_url ?? ""}
-                            alt={`Снимок события ${event.ordinal}`}
-                            loading="eager"
-                            className="!max-h-[min(74vh,860px)]"
-                        />
-                    </ThesisEventChartFrame>
-                </div>
+            <div className="relative z-10 max-h-[92vh] w-full max-w-[min(1120px,96vw)] overflow-y-auto overflow-x-hidden px-2 pb-3 pt-3">
+                <button
+                    type="button"
+                    onClick={onClose}
+                    aria-label="Закрыть"
+                    className="absolute right-2 top-2 z-30 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-400/40 bg-[#0B0F18]/95 text-white/90 shadow-[0_8px_28px_-8px_rgba(0,0,0,0.85)] transition hover:border-cyan-300/60 hover:bg-[#0E141F] hover:text-white"
+                >
+                    <X className="h-4 w-4" />
+                </button>
+                <ThesisEventChartFrame
+                    variant="modal"
+                    hudTitle={`Событие ${event.ordinal} · BTCUSDT · 4H · ${
+                        event.bias === "long" ? "LONG" : event.bias === "short" ? "SHORT" : "WAIT"
+                    }`}
+                    hudAside={event.snapshot_status ? String(event.snapshot_status) : "HIST MODE · LIVE DATA"}
+                    className="max-w-none"
+                >
+                    <ThesisEventChartImg
+                        src={event.snapshot_url ?? ""}
+                        alt={`Снимок события ${event.ordinal}`}
+                        loading="eager"
+                        className="!max-h-[min(78vh,920px)]"
+                    />
+                </ThesisEventChartFrame>
             </div>
         </div>,
         document.body,
@@ -436,39 +413,9 @@ export function MarketThesisContent() {
                     return (
                         <section key={`event-${block.ordinal}-${idx}`}>
                             <EventHeading block={block} onOpen={setActiveEvent} />
-                            {(() => {
-                                const url = block.event?.snapshot_url;
-                                const safeUrl = url ? sanitizeThesisImgUrl(url) : null;
-                                const bias = block.event?.bias ?? "wait";
-                                const biasLabel =
-                                    bias === "long" ? "LONG" : bias === "short" ? "SHORT" : "WAIT";
-                                const md = safeUrl
-                                    ? stripMarkdownImageForSnapshotUrl(block.content, safeUrl)
-                                    : block.content;
-                                return (
-                                    <>
-                                        {safeUrl && (
-                                            <ThesisEventChartFrame
-                                                className="mb-3"
-                                                hudTitle={`Событие ${block.ordinal} · BTCUSDT · 4H · ${biasLabel}`}
-                                                hudAside={
-                                                    block.event?.snapshot_status
-                                                        ? String(block.event.snapshot_status)
-                                                        : "HIST MODE · LIVE DATA"
-                                                }
-                                            >
-                                                <ThesisEventChartImg
-                                                    src={safeUrl}
-                                                    alt={`Снимок события ${block.ordinal}`}
-                                                />
-                                            </ThesisEventChartFrame>
-                                        )}
-                                        <div
-                                            dangerouslySetInnerHTML={{ __html: renderMarkdown(md) }}
-                                        />
-                                    </>
-                                );
-                            })()}
+                            <div
+                                dangerouslySetInnerHTML={{ __html: renderMarkdown(block.content) }}
+                            />
                         </section>
                     );
                 })}
