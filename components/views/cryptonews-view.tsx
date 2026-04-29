@@ -1,12 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+// Digest content is static — fetched once on mount, frozen until next VPS deploy.
 import type { MarketDigestData } from "@/lib/api";
 import { DigestPipelineVisual } from "@/components/sections/digest-pipeline-visual";
 import { MarketDigest } from "@/components/sections/market-digest";
 import { DigestArchiveSidebar, type ArchiveEntry } from "@/components/sections/digest-archive";
-
-const REFRESH_MS = 10 * 60 * 1000;
 
 export function CryptoNewsView() {
     const [data, setData] = useState<MarketDigestData | null>(null);
@@ -27,13 +26,6 @@ export function CryptoNewsView() {
 
     useEffect(() => {
         fetchData();
-        const timer = setInterval(fetchData, REFRESH_MS);
-        const onVisibility = () => { if (!document.hidden) fetchData(); };
-        document.addEventListener("visibilitychange", onVisibility);
-        return () => {
-            clearInterval(timer);
-            document.removeEventListener("visibilitychange", onVisibility);
-        };
     }, [fetchData]);
 
     return (
