@@ -9,6 +9,7 @@ import { PaperbotClosedTrades } from "@/components/sections/paperbot/paperbot-cl
 import { PaperbotActivityLog } from "@/components/sections/paperbot/paperbot-activity-log";
 import { PaperbotSignalBox } from "@/components/sections/paperbot/paperbot-signal-box";
 import { PaperbotMascot } from "@/components/sections/paperbot/paperbot-mascot";
+import { PaperbotMonitorWidget } from "@/components/sections/paperbot/paperbot-monitor-widget";
 import { Card } from "@/components/ui/card";
 import type { PaperSettings, PaperSignalState } from "@/components/sections/paperbot/types";
 import type { PaperBotSettings } from "@/lib/api";
@@ -26,11 +27,13 @@ function toSettings(s: PaperBotSettings): PaperSettings {
         depositUsd: s.depositUsd,
         riskPct: s.riskPct,
         leverage: s.leverage,
+        leverageEnabled: s.leverageEnabled ?? true,
         minConfidence: s.minConfidence as PaperSettings["minConfidence"],
         minProbabilityPct: s.minProbabilityPct,
         allowLong: s.allowLong,
         allowShort: s.allowShort,
         maxPositions: s.maxPositions,
+        positionTimeoutHours: s.positionTimeoutHours ?? 48,
     };
 }
 
@@ -60,9 +63,9 @@ export function PaperbotView() {
 
     const isActive = data?.settings.isActive ?? false;
     const effectiveSettings: PaperSettings = data ? toSettings(data.settings) : {
-        depositUsd: 1000, riskPct: 2, leverage: 10,
+        depositUsd: 1000, riskPct: 2, leverage: 10, leverageEnabled: true,
         minConfidence: "medium", minProbabilityPct: 60,
-        allowLong: true, allowShort: true, maxPositions: 1,
+        allowLong: true, allowShort: true, maxPositions: 1, positionTimeoutHours: 48,
     };
 
     const summary = data ? {
@@ -174,7 +177,12 @@ export function PaperbotView() {
                             <div className="mt-3 flex flex-wrap gap-2">
                                 {[
                                     { label: "Риск", value: `${effectiveSettings.riskPct}%` },
-                                    { label: "Плечо", value: `${effectiveSettings.leverage}x` },
+                                    {
+                                        label: "Плечо",
+                                        value: effectiveSettings.leverageEnabled
+                                            ? `${effectiveSettings.leverage}x`
+                                            : "без плеча",
+                                    },
                                     { label: "Сигнал", value: `≥ ${effectiveSettings.minConfidence.toUpperCase()}` },
                                     { label: "Вероятность", value: `≥ ${effectiveSettings.minProbabilityPct}%` },
                                 ].map(({ label, value }) => (
@@ -226,6 +234,9 @@ export function PaperbotView() {
 
                 {/* Summary */}
                 <PaperbotSummary summary={summary} />
+
+                {/* Monitor heartbeat */}
+                <PaperbotMonitorWidget monitor={data?.monitor ?? null} />
 
                 {/* Active positions */}
                 <PaperbotPositionsTable positions={positions} />

@@ -325,12 +325,20 @@ export type PaperBotSettings = {
     depositUsd: number;
     riskPct: number;
     leverage: number;
+    leverageEnabled: boolean;
     minConfidence: "low" | "medium" | "high" | string;
     minProbabilityPct: number;
     allowLong: boolean;
     allowShort: boolean;
     maxPositions: number;
+    positionTimeoutHours: number;
     isActive: boolean;
+};
+
+export type PaperBotMonitor = {
+    lastAt: string | null;
+    lastPrice: number | null;
+    lastPositions: number;
 };
 
 export type PaperBotPosition = {
@@ -399,6 +407,7 @@ export type PaperBotState = {
     log: PaperBotLogEntry[];
     summary: PaperBotSummary;
     signal: PaperBotSignal | null;
+    monitor: PaperBotMonitor | null;
 };
 
 export async function getPaperbotState(): Promise<PaperBotState> {
@@ -421,11 +430,13 @@ export async function updatePaperbotSettings(s: Omit<PaperBotSettings, "isActive
             deposit_usd: s.depositUsd,
             risk_pct: s.riskPct,
             leverage: s.leverage,
+            leverage_enabled: s.leverageEnabled,
             min_confidence: s.minConfidence,
             min_probability_pct: s.minProbabilityPct,
             allow_long: s.allowLong,
             allow_short: s.allowShort,
             max_positions: s.maxPositions,
+            position_timeout_hours: s.positionTimeoutHours,
         }),
     });
 }

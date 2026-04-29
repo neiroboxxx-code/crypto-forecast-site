@@ -112,13 +112,34 @@ export function PaperbotSettings({ settings, onChange, disabled }: Props) {
                 {/* Leverage */}
                 <div>
                     <RowLabel>Плечо</RowLabel>
-                    <SelectPill
-                        options={LEVERAGE_OPTIONS}
-                        value={settings.leverage}
-                        onChange={(v) => onChange({ ...settings, leverage: v })}
-                        fmt={(v) => `${v}x`}
-                        disabled={disabled}
-                    />
+                    <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                        <button
+                            disabled={disabled}
+                            onClick={() => onChange({ ...settings, leverageEnabled: !settings.leverageEnabled })}
+                            className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+                                !settings.leverageEnabled
+                                    ? "border-amber-400/40 bg-amber-400/15 text-amber-200"
+                                    : "border-white/10 bg-white/[0.04] text-white/35"
+                            } ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+                        >
+                            <span className={`h-2 w-2 rounded-full ${!settings.leverageEnabled ? "bg-amber-400" : "bg-white/20"}`} />
+                            Без плеча
+                        </button>
+                        {settings.leverageEnabled && (
+                            <SelectPill
+                                options={LEVERAGE_OPTIONS}
+                                value={settings.leverage}
+                                onChange={(v) => onChange({ ...settings, leverage: v })}
+                                fmt={(v) => `${v}x`}
+                                disabled={disabled}
+                            />
+                        )}
+                    </div>
+                    {!settings.leverageEnabled && (
+                        <div className="mt-1 text-[10px] text-white/35">
+                            Спот-режим · leverage = 1x · PnL считается от полной суммы
+                        </div>
+                    )}
                 </div>
 
                 {/* Min confidence */}

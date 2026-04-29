@@ -26,11 +26,13 @@ function toSettings(s: PaperBotSettings): PaperSettings {
         depositUsd: s.depositUsd,
         riskPct: s.riskPct,
         leverage: s.leverage,
+        leverageEnabled: s.leverageEnabled ?? true,
         minConfidence: s.minConfidence as PaperSettings["minConfidence"],
         minProbabilityPct: s.minProbabilityPct,
         allowLong: s.allowLong,
         allowShort: s.allowShort,
         maxPositions: s.maxPositions,
+        positionTimeoutHours: s.positionTimeoutHours ?? 48,
     };
 }
 
@@ -127,9 +129,9 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
     const [localSettings, setLocalSettings] = useState<PaperSettings | null>(null);
     const effectiveSettings: PaperSettings = localSettings ??
         (data ? toSettings(data.settings) : {
-            depositUsd: 1000, riskPct: 2, leverage: 10,
+            depositUsd: 1000, riskPct: 2, leverage: 10, leverageEnabled: true,
             minConfidence: "medium", minProbabilityPct: 60,
-            allowLong: true, allowShort: true, maxPositions: 1,
+            allowLong: true, allowShort: true, maxPositions: 1, positionTimeoutHours: 48,
         });
 
     async function handleToggle() {

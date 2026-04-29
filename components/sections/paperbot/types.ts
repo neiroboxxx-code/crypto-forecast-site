@@ -57,11 +57,13 @@ export type PaperSettings = {
     depositUsd: number;
     riskPct: number;
     leverage: number;
+    leverageEnabled: boolean;
     minConfidence: "low" | "medium" | "high";
     minProbabilityPct: number;
     allowLong: boolean;
     allowShort: boolean;
     maxPositions: number;
+    positionTimeoutHours: number;
 };
 
 export type PaperSignalState = {
