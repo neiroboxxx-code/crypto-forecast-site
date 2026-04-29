@@ -18,6 +18,7 @@ import { PaperbotClosedTrades } from "@/components/sections/paperbot/paperbot-cl
 import { PaperbotActivityLog } from "@/components/sections/paperbot/paperbot-activity-log";
 import { PaperbotSignalBox } from "@/components/sections/paperbot/paperbot-signal-box";
 import { PaperbotSettings } from "@/components/sections/paperbot/paperbot-settings";
+import { PaperbotMonitorWidget } from "@/components/sections/paperbot/paperbot-monitor-widget";
 import { Card } from "@/components/ui/card";
 import type { PaperSettings, PaperSignalState } from "@/components/sections/paperbot/types";
 
@@ -302,6 +303,7 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
                 </div>
 
                 <PaperbotSummary summary={summary} />
+                <PaperbotMonitorWidget monitor={data?.monitor ?? null} />
                 <PaperbotPositionsTable positions={positions} />
 
                 <div className="grid gap-4 lg:grid-cols-[1fr_380px] lg:items-start">
