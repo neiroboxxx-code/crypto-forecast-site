@@ -13,7 +13,7 @@ export function DashboardShell({ children, ornament }: DashboardShellProps) {
         <PageShell>
             <div className={`relative ${ornament ? "min-h-[100dvh]" : ""}`}>
                 {ornament}
-                <div className="relative z-[1] flex flex-col gap-3">
+                <div className="relative z-[2] flex flex-col gap-3">
                     <DashboardNav />
                     {children}
                 </div>
