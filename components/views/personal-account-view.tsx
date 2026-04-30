@@ -1,6 +1,7 @@
 "use client";
 
 import { CabinetUserCard } from "@/components/sections/personal-account/cabinet-user-card";
+import { AssistantChat } from "@/components/sections/personal-account/assistant-chat";
 import { TradingJournal } from "@/components/sections/personal-account/trading-journal";
 
 /**
@@ -13,6 +14,7 @@ export function PersonalAccountView() {
             <div className="flex justify-end">
                 <CabinetUserCard />
             </div>
+            <AssistantChat />
             <TradingJournal />
         </div>
     );

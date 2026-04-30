@@ -1,10 +1,5 @@
-import { DashboardShell } from "@/components/layout/dashboard-shell";
-import { PersonalAccountView } from "@/components/views/personal-account-view";
+import { redirect } from "next/navigation";
 
 export default function TradeCalendarPage() {
-    return (
-        <DashboardShell>
-            <PersonalAccountView />
-        </DashboardShell>
-    );
+    redirect("/account");
 }

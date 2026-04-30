@@ -10,7 +10,7 @@ const items = [
     { href: "/cryptonews", label: "CryptoNews", labelEn: "CryptoNews", icon: Newspaper },
     { href: "/paperbot", label: "Пейпербот", labelEn: "Paperbot", icon: Bot },
     { href: "/under-the-hood", label: "Under the Hood", labelEn: "Inside", icon: Cpu },
-    { href: "/trade-calendar", label: "Личный кабинет", labelEn: "Account", icon: UserRound },
+    { href: "/account", label: "Личный кабинет", labelEn: "Account", icon: UserRound },
 ] as const;
 
 export function DashboardNav() {
