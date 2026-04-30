@@ -13,6 +13,17 @@ type ChatMessage = {
     status?: "pending" | "final";
 };
 
+function TypingDots() {
+    // Три неоновые точки, по очереди «загораются»
+    return (
+        <span className="inline-flex items-center gap-2 px-1 py-1">
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/70 shadow-[0_0_14px_rgba(52,211,153,0.55)] animate-[assistantDot_900ms_ease-in-out_infinite]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-rose-400/70 shadow-[0_0_14px_rgba(251,113,133,0.55)] animate-[assistantDot_900ms_ease-in-out_infinite_150ms]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-fuchsia-400/70 shadow-[0_0_14px_rgba(232,121,249,0.6)] animate-[assistantDot_900ms_ease-in-out_infinite_300ms]" />
+        </span>
+    );
+}
+
 function nowIso(): string {
     return new Date().toISOString();
 }
@@ -63,7 +74,7 @@ export function AssistantChat() {
             id: pendingId,
             role: "assistant",
             createdAt: nowIso(),
-            content: "Печатает…",
+            content: "",
             status: "pending",
         };
         setMessages((prev) => [...prev, userMsg, pendingMsg]);
@@ -140,15 +151,11 @@ export function AssistantChat() {
                         return (
                             <div key={m.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
                                 <div
-                                    className={`max-w-[92%] whitespace-pre-wrap rounded-2xl px-3 py-2 text-[13px] leading-relaxed ${
-                                        isUser
-                                            ? "bg-white/[0.06] text-white/90"
-                                            : m.status === "pending"
-                                              ? "bg-black/20 text-white/55"
-                                              : "bg-black/20 text-white/80"
+                                    className={`max-w-[92%] whitespace-pre-wrap px-1 py-1 text-[13px] leading-relaxed ${
+                                        isUser ? "text-white/90" : m.status === "pending" ? "text-white/55" : "text-white/80"
                                     }`}
                                 >
-                                    {m.content}
+                                    {m.status === "pending" ? <TypingDots /> : m.content}
                                 </div>
                             </div>
                         );
@@ -171,6 +178,12 @@ export function AssistantChat() {
                                 aria-label="Сообщение ассистенту"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && !e.shiftKey) {
+                                        e.preventDefault();
+                                        void send(input);
+                                    }
+                                }}
                                 rows={1}
                                 placeholder={sessionId ? "Напиши сообщение…" : "Инициализация…"}
                                 className="max-h-[160px] min-h-[28px] w-full resize-none bg-transparent px-0 py-1 text-[14px] text-white/85 outline-none placeholder:text-white/35"
@@ -205,6 +218,23 @@ export function AssistantChat() {
                     </div>
                 </div>
             </form>
+
+            {/* Локальная анимация, чтобы не трогать глобальный CSS */}
+            <style jsx global>{`
+                @keyframes assistantDot {
+                    0%,
+                    100% {
+                        opacity: 0.35;
+                        transform: translateY(0);
+                        filter: saturate(0.9);
+                    }
+                    50% {
+                        opacity: 1;
+                        transform: translateY(-1px);
+                        filter: saturate(1.2);
+                    }
+                }
+            `}</style>
         </section>
     );
 }
