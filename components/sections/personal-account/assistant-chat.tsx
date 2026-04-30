@@ -28,8 +28,7 @@ export function AssistantChat() {
             id: crypto.randomUUID(),
             role: "assistant",
             createdAt: nowIso(),
-            content:
-                "Привет. Выбери режим снизу: **GPTplatform** — справка по платформе, **DeepSeek PRO** — свободный умный чат (research-формат, без персональных торговых рекомендаций).",
+            content: "Привет.",
         },
     ]);
     const [input, setInput] = useState("");
@@ -133,7 +132,7 @@ export function AssistantChat() {
     };
 
     return (
-        <section className="rounded-2xl border border-fuchsia-400/18 bg-[linear-gradient(165deg,rgba(14,17,23,0.92),rgba(10,12,18,0.88))] p-3 shadow-[0_0_0_1px_rgba(232,121,249,0.05),0_18px_48px_rgba(0,0,0,0.35)] md:p-4">
+        <section className="mr-auto w-full max-w-[720px] rounded-2xl border border-fuchsia-400/18 bg-[linear-gradient(165deg,rgba(14,17,23,0.92),rgba(10,12,18,0.88))] p-3 shadow-[0_0_0_1px_rgba(232,121,249,0.05),0_18px_48px_rgba(0,0,0,0.35)] md:w-1/2 md:max-w-none md:p-4">
             <header className="mb-3 flex items-center justify-between gap-3 border-b border-white/8 pb-3">
                 <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-fuchsia-200/90">
                     <Bot className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
@@ -167,9 +166,6 @@ export function AssistantChat() {
                                         }`}
                                     >
                                         <div className="whitespace-pre-wrap">{m.content}</div>
-                                        <div className="mt-1 text-[10px] tabular-nums text-white/35">
-                                            {new Date(m.createdAt).toLocaleString()}
-                                        </div>
                                     </div>
                                 </div>
                             );
@@ -210,20 +206,20 @@ export function AssistantChat() {
                             id="assistant-model"
                             value={chatMode}
                             onChange={(e) => setChatMode(e.target.value as AssistantChatMode)}
-                            className="h-[38px] rounded-xl border border-white/10 bg-black/35 px-2.5 text-[11px] font-semibold text-white/75 outline-none transition focus:border-cyan-400/30 focus:ring-2 focus:ring-cyan-400/15"
+                            className="h-[38px] cursor-pointer rounded-xl border border-white/10 bg-black/25 px-2 text-[11px] font-semibold text-white/75 outline-none transition hover:border-white/15 hover:bg-black/30 focus:border-cyan-400/30 focus:ring-2 focus:ring-cyan-400/15"
                             disabled={!sessionId || isSending}
                         >
                             <option value="platform">GPTplatform</option>
-                            <option value="pro">DeepSeek PRO</option>
+                            <option value="pro">Pro</option>
                         </select>
 
                         <button
                             type="submit"
                             disabled={isSending || !sessionId || !input.trim()}
-                            className="inline-flex h-[38px] items-center justify-center gap-2 rounded-xl border border-fuchsia-400/30 bg-fuchsia-400/12 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-fuchsia-50 shadow-[0_0_0_1px_rgba(232,121,249,0.12)] transition hover:bg-fuchsia-400/18 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/35"
+                            className="inline-flex h-[38px] w-[42px] items-center justify-center rounded-xl border border-fuchsia-400/30 bg-fuchsia-400/12 text-fuchsia-50 shadow-[0_0_0_1px_rgba(232,121,249,0.12)] transition hover:bg-fuchsia-400/18 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/35"
+                            aria-label="Отправить"
                         >
                             <Send className="h-3.5 w-3.5" aria-hidden />
-                            {isSending ? "…" : "Отправить"}
                         </button>
                     </div>
                 </form>
