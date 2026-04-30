@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Bot, Send, Sparkles } from "lucide-react";
+import { Bot, Send } from "lucide-react";
 
-type AssistantScenario = "free_chat" | "signal_now_4h" | "paperbot_last_trade" | "radar_top_candidate" | "ui_faq";
 type AssistantChatMode = "platform" | "pro";
 
 type ChatMessage = {
@@ -18,27 +17,11 @@ function nowIso(): string {
     return new Date().toISOString();
 }
 
-function titleForScenario(s: AssistantScenario): string {
-    switch (s) {
-        case "free_chat":
-            return "Свободный чат";
-        case "signal_now_4h":
-            return "Сигнал сейчас (4H)";
-        case "paperbot_last_trade":
-            return "Почему PaperBot открыл/закрыл";
-        case "radar_top_candidate":
-            return "Сводка Radar (топ-кандидат)";
-        case "ui_faq":
-            return "FAQ по интерфейсу";
-    }
-}
-
 function apiBase(): string {
     return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 }
 
 export function AssistantChat() {
-    const [scenario, setScenario] = useState<AssistantScenario>("free_chat");
     const [chatMode, setChatMode] = useState<AssistantChatMode>("platform");
     const [messages, setMessages] = useState<ChatMessage[]>(() => [
         {
@@ -46,9 +29,7 @@ export function AssistantChat() {
             role: "assistant",
             createdAt: nowIso(),
             content:
-                "Привет. Режим по умолчанию — GPTplatform: могу подсказать по платформе и навигации. " +
-                "Для точных цифр по сигналу 4H, Radar или PaperBot нажми соответствующую кнопку сверху или напиши явно, что нужно (например «какой сигнал сейчас»). " +
-                "Это не инвестсовет — только объяснение данных системы.",
+                "Привет. Выбери режим снизу: **GPTplatform** — справка по платформе, **DeepSeek PRO** — свободный умный чат (research-формат, без персональных торговых рекомендаций).",
         },
     ]);
     const [input, setInput] = useState("");
@@ -104,7 +85,7 @@ export function AssistantChat() {
                 cache: "no-store",
                 body: JSON.stringify({
                     session_id: sessionId,
-                    scenario,
+                    scenario: "free_chat",
                     chat_mode: chatMode,
                     message: trimmed,
                 }),
@@ -151,159 +132,101 @@ export function AssistantChat() {
         }
     };
 
-    const chipBase =
-        "rounded-xl border px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] transition focus-visible:outline-none focus-visible:ring-2";
-
-    const scenarioChip = (s: AssistantScenario) => {
-        const active = s === scenario;
-        return (
-            <button
-                key={s}
-                type="button"
-                onClick={() => setScenario(s)}
-                className={`${chipBase} ${
-                    active
-                        ? "border-fuchsia-400/35 bg-fuchsia-400/12 text-fuchsia-50 shadow-[0_0_0_1px_rgba(232,121,249,0.12)] focus-visible:ring-fuchsia-400/35"
-                        : "border-white/12 bg-white/[0.04] text-white/75 hover:border-white/20 hover:bg-white/[0.07] focus-visible:ring-cyan-400/25"
-                }`}
-            >
-                {titleForScenario(s)}
-            </button>
-        );
-    };
-
     return (
-        <section className="rounded-2xl border border-fuchsia-400/18 bg-[linear-gradient(165deg,rgba(14,17,23,0.92),rgba(10,12,18,0.88))] p-4 shadow-[0_0_0_1px_rgba(232,121,249,0.05),0_18px_48px_rgba(0,0,0,0.35)] md:p-5">
-            <header className="mb-4 flex flex-wrap items-start justify-between gap-3 border-b border-white/8 pb-4">
-                <div>
-                    <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-fuchsia-200/90">
-                        <Bot className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
-                        LLM-ассистент
-                    </div>
-                    <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-white/50">
-                        По умолчанию — режим <span className="text-white/70">GPTplatform</span>: справка по сайту и блокам.{" "}
-                        <span className="text-white/60">DeepSeek PRO</span> — для разговоров про рынок (без персональных торговых рекомендаций).
-                        Сценарные кнопки подключают факты из кэша движка и бота.
-                    </p>
+        <section className="rounded-2xl border border-fuchsia-400/18 bg-[linear-gradient(165deg,rgba(14,17,23,0.92),rgba(10,12,18,0.88))] p-3 shadow-[0_0_0_1px_rgba(232,121,249,0.05),0_18px_48px_rgba(0,0,0,0.35)] md:p-4">
+            <header className="mb-3 flex items-center justify-between gap-3 border-b border-white/8 pb-3">
+                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-fuchsia-200/90">
+                    <Bot className="h-4 w-4 shrink-0 opacity-90" aria-hidden />
+                    Ассистент
                 </div>
-                <div className="flex flex-wrap items-center gap-2">
-                    <div className="rounded-xl border border-white/12 bg-white/[0.04] px-2 py-1.5">
-                        <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/35">Режим</div>
-                        <div className="mt-1 flex gap-1">
-                            {(
-                                [
-                                    { id: "platform" as const, label: "GPTplatform" },
-                                    { id: "pro" as const, label: "DeepSeek PRO" },
-                                ] as const
-                            ).map((opt) => {
-                                const active = opt.id === chatMode;
-                                return (
-                                    <button
-                                        key={opt.id}
-                                        type="button"
-                                        onClick={() => setChatMode(opt.id)}
-                                        className={`rounded-lg border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] transition ${
-                                            active
-                                                ? "border-cyan-400/35 bg-cyan-400/10 text-cyan-50"
-                                                : "border-white/10 bg-black/20 text-white/55 hover:border-white/18 hover:bg-white/[0.06] hover:text-white/80"
-                                        }`}
-                                    >
-                                        {opt.label}
-                                    </button>
-                                );
-                            })}
-                        </div>
+                {error ? (
+                    <div className="rounded-lg border border-rose-400/25 bg-rose-400/10 px-2 py-1 text-[11px] text-rose-50">
+                        Ошибка API
                     </div>
-                    {scenarioChip("free_chat")}
-                    {scenarioChip("signal_now_4h")}
-                    {scenarioChip("paperbot_last_trade")}
-                    {scenarioChip("radar_top_candidate")}
-                    {scenarioChip("ui_faq")}
-                </div>
+                ) : null}
             </header>
 
-            <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start">
-                <div className="min-h-[320px] rounded-xl border border-white/10 bg-black/28">
-                    <div
-                        ref={listRef}
-                        className="max-h-[360px] overflow-y-auto p-3"
-                        aria-label="История сообщений ассистента"
-                    >
-                        <div className="flex flex-col gap-2">
-                            {messages.map((m) => {
-                                const isUser = m.role === "user";
-                                return (
-                                    <div key={m.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-                                        <div
-                                            className={`max-w-[88%] rounded-2xl border px-3 py-2 text-[12px] leading-relaxed ${
-                                                isUser
-                                                    ? "border-cyan-400/25 bg-cyan-400/[0.06] text-white/90"
-                                                    : m.status === "pending"
-                                                      ? "border-white/10 bg-white/[0.03] text-white/65"
-                                                      : "border-white/10 bg-white/[0.03] text-white/80"
-                                            }`}
-                                        >
-                                            <div className="whitespace-pre-wrap">{m.content}</div>
-                                            <div className="mt-1 text-[10px] tabular-nums text-white/35">
-                                                {new Date(m.createdAt).toLocaleString()}
-                                            </div>
+            <div className="min-h-[320px] rounded-xl border border-white/10 bg-black/28">
+                <div
+                    ref={listRef}
+                    className="max-h-[380px] overflow-y-auto p-3"
+                    aria-label="История сообщений ассистента"
+                >
+                    <div className="flex flex-col gap-2">
+                        {messages.map((m) => {
+                            const isUser = m.role === "user";
+                            return (
+                                <div key={m.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
+                                    <div
+                                        className={`max-w-[88%] rounded-2xl border px-3 py-2 text-[12px] leading-relaxed ${
+                                            isUser
+                                                ? "border-cyan-400/25 bg-cyan-400/[0.06] text-white/90"
+                                                : m.status === "pending"
+                                                  ? "border-white/10 bg-white/[0.03] text-white/65"
+                                                  : "border-white/10 bg-white/[0.03] text-white/80"
+                                        }`}
+                                    >
+                                        <div className="whitespace-pre-wrap">{m.content}</div>
+                                        <div className="mt-1 text-[10px] tabular-nums text-white/35">
+                                            {new Date(m.createdAt).toLocaleString()}
                                         </div>
                                     </div>
-                                );
-                            })}
-                        </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                <form
+                    className="flex items-end gap-2 border-t border-white/10 p-2.5"
+                    onSubmit={(e) => {
+                        e.preventDefault();
+                        void send(input);
+                    }}
+                >
+                    <div className="flex-1">
+                        <textarea
+                            aria-label="Сообщение ассистенту"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            rows={2}
+                            placeholder={
+                                sessionId
+                                    ? chatMode === "platform"
+                                        ? "Спроси про платформу: «где находится…», «что значит метрика…»"
+                                        : "Свободный чат: «объясни…», «сгенерируй гипотезы…», «найди источники…»"
+                                    : "Инициализация…"
+                            }
+                            className="min-h-[44px] w-full resize-none rounded-xl border border-white/10 bg-black/35 px-3 py-2 text-[12px] text-white/85 outline-none transition placeholder:text-white/25 focus:border-fuchsia-400/30 focus:ring-1 focus:ring-fuchsia-400/15"
+                            disabled={!sessionId}
+                        />
                     </div>
 
-                    <form
-                        className="flex items-end gap-2 border-t border-white/10 p-3"
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            void send(input);
-                        }}
-                    >
-                        <div className="flex-1">
-                            <textarea
-                                aria-label="Сообщение ассистенту"
-                                value={input}
-                                onChange={(e) => setInput(e.target.value)}
-                                rows={2}
-                                placeholder={sessionId ? "Например: «Привет» или «Какой сигнал сейчас?»" : "Инициализация…"}
-                                className="min-h-[44px] w-full resize-none rounded-xl border border-white/10 bg-black/35 px-3 py-2 text-[12px] text-white/85 outline-none transition placeholder:text-white/25 focus:border-fuchsia-400/30 focus:ring-1 focus:ring-fuchsia-400/15"
-                                disabled={!sessionId}
-                            />
-                        </div>
+                    <div className="flex items-center gap-2">
+                        <label className="sr-only" htmlFor="assistant-model">
+                            Режим
+                        </label>
+                        <select
+                            id="assistant-model"
+                            value={chatMode}
+                            onChange={(e) => setChatMode(e.target.value as AssistantChatMode)}
+                            className="h-[38px] rounded-xl border border-white/10 bg-black/35 px-2.5 text-[11px] font-semibold text-white/75 outline-none transition focus:border-cyan-400/30 focus:ring-2 focus:ring-cyan-400/15"
+                            disabled={!sessionId || isSending}
+                        >
+                            <option value="platform">GPTplatform</option>
+                            <option value="pro">DeepSeek PRO</option>
+                        </select>
+
                         <button
                             type="submit"
                             disabled={isSending || !sessionId || !input.trim()}
-                            className="inline-flex items-center gap-2 rounded-xl border border-fuchsia-400/30 bg-fuchsia-400/12 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-fuchsia-50 shadow-[0_0_0_1px_rgba(232,121,249,0.12)] transition hover:bg-fuchsia-400/18 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/35"
+                            className="inline-flex h-[38px] items-center justify-center gap-2 rounded-xl border border-fuchsia-400/30 bg-fuchsia-400/12 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-fuchsia-50 shadow-[0_0_0_1px_rgba(232,121,249,0.12)] transition hover:bg-fuchsia-400/18 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/35"
                         >
                             <Send className="h-3.5 w-3.5" aria-hidden />
-                            {isSending ? "Отправка…" : "Отправить"}
+                            {isSending ? "…" : "Отправить"}
                         </button>
-                    </form>
-                </div>
-
-                <aside className="rounded-xl border border-white/10 bg-black/28 p-3">
-                    <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-fuchsia-200/85">
-                        <Sparkles className="h-4 w-4 opacity-90" aria-hidden />
-                        Контроль качества (v1)
                     </div>
-                    <ul className="mt-2 space-y-1.5 text-[12px] leading-relaxed text-white/55">
-                        <li>— Никаких ключей/секретов на клиенте.</li>
-                        <li>— Один запрос к модели на сообщение.</li>
-                        <li>— Если данных нет в фактах — ответ “нет в данных”.</li>
-                        <li>— Без инвестсоветов: только интерпретация состояния системы.</li>
-                    </ul>
-                    {error ? (
-                        <div className="mt-3 rounded-lg border border-rose-400/25 bg-rose-400/10 px-3 py-2 text-[12px] text-rose-50">
-                            Ошибка: <span className="tabular-nums">{error}</span>
-                        </div>
-                    ) : (
-                        <div className="mt-3 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2 text-[12px] text-white/45">
-                            Endpoint: <span className="tabular-nums">{apiBase()}/api/assistant/chat</span>
-                        </div>
-                    )}
-                </aside>
+                </form>
             </div>
         </section>
     );
