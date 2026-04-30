@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BookOpen, Camera, ImagePlus, Plus, Save } from "lucide-react";
+import { BookOpen, Camera, ChevronDown, ImagePlus, Plus, Save } from "lucide-react";
 
 export type JournalTrade = {
     id: string;
@@ -35,6 +35,65 @@ function tradeSummaryLine(t: JournalTrade): string {
     const entry = t.entry.trim() || "—";
     const target = t.target.trim() || "—";
     return `${formatListDate(t.date)} · ${t.instrument.trim() || "—"} · ${t.timeframe.trim() || "—"} · ${entry} → ${target}`;
+}
+
+const INSTRUMENTS = [
+    "BTC/USD",
+    "ETH/USD",
+    "SOL/USD",
+    "BNB/USD",
+    "XRP/USD",
+    "ADA/USD",
+    "LINK/USD",
+    "DOT/USD",
+    "AVAX/USD",
+    "ONDO/USD",
+] as const;
+
+const TIMEFRAMES = ["M15", "M30", "H1", "H2", "H4", "H6", "H12", "D1", "W1"] as const;
+
+function isoFromDate(d: Date): string {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+}
+
+function buildDateSelectOptions(includeIso: string): { value: string; label: string }[] {
+    const out: { value: string; label: string }[] = [];
+    const now = new Date();
+    for (let i = 0; i <= 400; i++) {
+        const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+        const iso = isoFromDate(d);
+        let label = formatListDate(iso);
+        if (i === 0) label += " · сегодня";
+        else if (i === 1) label += " · вчера";
+        out.push({ value: iso, label });
+    }
+    const vals = new Set(out.map((o) => o.value));
+    if (/^\d{4}-\d{2}-\d{2}$/.test(includeIso) && !vals.has(includeIso)) {
+        out.unshift({
+            value: includeIso,
+            label: `${formatListDate(includeIso)} · из записи`,
+        });
+    }
+    return out;
+}
+
+function mergedInstrumentOptions(current: string): { value: string; label: string }[] {
+    const trimmed = current.trim();
+    const base = INSTRUMENTS.map((p) => ({ value: p, label: p }));
+    if (!trimmed) return [...base];
+    if (INSTRUMENTS.includes(trimmed as (typeof INSTRUMENTS)[number])) return [...base];
+    return [{ value: trimmed, label: `${trimmed} · из записи` }, ...base];
+}
+
+function mergedTimeframeOptions(current: string): { value: string; label: string }[] {
+    const trimmed = current.trim();
+    const base = TIMEFRAMES.map((p) => ({ value: p, label: p }));
+    if (!trimmed) return [...base];
+    if (TIMEFRAMES.includes(trimmed as (typeof TIMEFRAMES)[number])) return [...base];
+    return [{ value: trimmed, label: `${trimmed} · из записи` }, ...base];
 }
 
 const emptyForm = (): Omit<JournalTrade, "id"> => ({
@@ -91,6 +150,39 @@ export function TradingJournal() {
         }
         return s;
     }, [trades]);
+
+    const dateSelectOptions = useMemo(() => buildDateSelectOptions(form.date), [form.date]);
+    const instrumentSelectOptions = useMemo(() => mergedInstrumentOptions(form.instrument), [form.instrument]);
+    const timeframeSelectOptions = useMemo(() => mergedTimeframeOptions(form.timeframe), [form.timeframe]);
+
+    const resolvedDate =
+        dateSelectOptions.find((o) => o.value === form.date)?.value
+        ?? dateSelectOptions[0]?.value
+        ?? isoDateLocal();
+    const resolvedInstrument =
+        instrumentSelectOptions.find((o) => o.value === form.instrument.trim())?.value ?? INSTRUMENTS[0];
+    const resolvedTimeframe =
+        timeframeSelectOptions.find((o) => o.value === form.timeframe.trim())?.value ?? "H1";
+
+    useEffect(() => {
+        if (dateSelectOptions.length === 0) return;
+        if (!dateSelectOptions.some((o) => o.value === form.date)) {
+            const next = dateSelectOptions[0]?.value ?? isoDateLocal();
+            setForm((f) => (f.date === next ? f : { ...f, date: next }));
+        }
+    }, [form.date, dateSelectOptions]);
+
+    useEffect(() => {
+        if (!form.instrument.trim()) {
+            setForm((f) => (f.instrument === INSTRUMENTS[0] ? f : { ...f, instrument: INSTRUMENTS[0] }));
+        }
+    }, [form.instrument]);
+
+    useEffect(() => {
+        if (!form.timeframe.trim()) {
+            setForm((f) => (f.timeframe === "H1" ? f : { ...f, timeframe: "H1" }));
+        }
+    }, [form.timeframe]);
 
     const revokeOrphanSlots = () => {
         if (form.beforeUrl && !urlsReferencedByTrades.has(form.beforeUrl)) revokeIfTracked(form.beforeUrl);
@@ -181,6 +273,11 @@ export function TradingJournal() {
     const inputClass =
         "w-full rounded-lg border border-white/10 bg-black/35 px-3 py-2 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyan-400/35 focus:ring-1 focus:ring-cyan-400/15";
 
+    const selectClass = `${inputClass} cursor-pointer appearance-none pr-10 tabular-nums`;
+
+    const SelectChevron = () => (
+        <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" aria-hidden />
+    );
     const shotSlot = (slot: "before" | "after", label: string) => {
         const url = slot === "before" ? form.beforeUrl : form.afterUrl;
         const inputRef = slot === "before" ? beforeInputRef : afterInputRef;
@@ -264,28 +361,52 @@ export function TradingJournal() {
                     <div className="flex flex-col gap-4">
                         <div className="grid gap-3 sm:grid-cols-3">
                             <Field label="Дата">
-                                <input
-                                    type="date"
-                                    value={form.date}
-                                    onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
-                                    className={`${inputClass} tabular-nums`}
-                                />
+                                <div className="relative">
+                                    <select
+                                        value={resolvedDate}
+                                        onChange={(e) => setForm((f) => ({ ...f, date: e.target.value }))}
+                                        className={selectClass}
+                                    >
+                                        {dateSelectOptions.map((o) => (
+                                            <option key={o.value} value={o.value}>
+                                                {o.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <SelectChevron />
+                                </div>
                             </Field>
                             <Field label="Инструмент">
-                                <input
-                                    value={form.instrument}
-                                    onChange={(e) => setForm((f) => ({ ...f, instrument: e.target.value }))}
-                                    className={inputClass}
-                                    placeholder="BTC/USD"
-                                />
+                                <div className="relative">
+                                    <select
+                                        value={resolvedInstrument}
+                                        onChange={(e) => setForm((f) => ({ ...f, instrument: e.target.value }))}
+                                        className={selectClass}
+                                    >
+                                        {instrumentSelectOptions.map((o) => (
+                                            <option key={o.value} value={o.value}>
+                                                {o.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <SelectChevron />
+                                </div>
                             </Field>
                             <Field label="Таймфрейм">
-                                <input
-                                    value={form.timeframe}
-                                    onChange={(e) => setForm((f) => ({ ...f, timeframe: e.target.value }))}
-                                    className={inputClass}
-                                    placeholder="H1"
-                                />
+                                <div className="relative">
+                                    <select
+                                        value={resolvedTimeframe}
+                                        onChange={(e) => setForm((f) => ({ ...f, timeframe: e.target.value }))}
+                                        className={selectClass}
+                                    >
+                                        {timeframeSelectOptions.map((o) => (
+                                            <option key={o.value} value={o.value}>
+                                                {o.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <SelectChevron />
+                                </div>
                             </Field>
                         </div>
 
