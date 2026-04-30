@@ -10,6 +10,7 @@ type ChatMessage = {
     role: "user" | "assistant";
     content: string;
     createdAt: string;
+    status?: "pending" | "final";
 };
 
 function nowIso(): string {
@@ -82,7 +83,15 @@ export function AssistantChat() {
         setIsSending(true);
 
         const userMsg: ChatMessage = { id: crypto.randomUUID(), role: "user", createdAt: nowIso(), content: trimmed };
-        setMessages((prev) => [...prev, userMsg]);
+        const pendingId = crypto.randomUUID();
+        const pendingMsg: ChatMessage = {
+            id: pendingId,
+            role: "assistant",
+            createdAt: nowIso(),
+            content: "Печатает…",
+            status: "pending",
+        };
+        setMessages((prev) => [...prev, userMsg, pendingMsg]);
         setInput("");
         scrollToBottomSoon();
 
@@ -115,22 +124,24 @@ export function AssistantChat() {
                 ?? (typeof dataReply === "string" ? dataReply : undefined)
                 ?? "Ответ не распознан (проверь контракт /api/assistant/chat).";
 
-            const botMsg: ChatMessage = { id: crypto.randomUUID(), role: "assistant", createdAt: nowIso(), content: reply };
-            setMessages((prev) => [...prev, botMsg]);
+            setMessages((prev) =>
+                prev.map((m) => (m.id === pendingId ? { ...m, content: reply, status: "final" } : m)),
+            );
             scrollToBottomSoon();
         } catch (e) {
             const msg = e instanceof Error ? e.message : "Неизвестная ошибка";
             setError(msg);
-            setMessages((prev) => [
-                ...prev,
-                {
-                    id: crypto.randomUUID(),
-                    role: "assistant",
-                    createdAt: nowIso(),
-                    content:
-                        "Сейчас ассистент недоступен (ошибка вызова API). Это ожидаемо до подключения бэкенд-роута. Детали: " + msg,
-                },
-            ]);
+            setMessages((prev) =>
+                prev.map((m) =>
+                    m.id === pendingId
+                        ? {
+                              ...m,
+                              content: "Сейчас ассистент недоступен (ошибка вызова API). Детали: " + msg,
+                              status: "final",
+                          }
+                        : m,
+                ),
+            );
             scrollToBottomSoon();
         } finally {
             setIsSending(false);
@@ -196,7 +207,9 @@ export function AssistantChat() {
                                             className={`max-w-[88%] rounded-2xl border px-3 py-2 text-[12px] leading-relaxed ${
                                                 isUser
                                                     ? "border-cyan-400/25 bg-cyan-400/[0.06] text-white/90"
-                                                    : "border-white/10 bg-white/[0.03] text-white/80"
+                                                    : m.status === "pending"
+                                                      ? "border-white/10 bg-white/[0.03] text-white/65"
+                                                      : "border-white/10 bg-white/[0.03] text-white/80"
                                             }`}
                                         >
                                             <div className="whitespace-pre-wrap">{m.content}</div>
