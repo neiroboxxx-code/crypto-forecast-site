@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-29T23:54:00Z",
+  "updated_at": "2026-04-30T06:58:42Z",
   "features": {
     "confirmed_events_count": 0,
     "risk_off_pressure": 0.0,
@@ -26,6 +26,21 @@
       "market_regime_effect": "macro_uncertainty"
     },
     {
+      "published_at": "2026-04-30T00:28:43+00:00",
+      "source": "fxstreet",
+      "title": "Australian Dollar edges higher ahead of Chinese PMI releases",
+      "url": "https://www.fxstreet.com/news/australian-dollar-edges-higher-ahead-of-chinese-pmi-releases-202604300028",
+      "summary": "The AUD/USD pair gathers strength to near 0.7130 during the early Asian session on Thursday. The Australian Dollar (AUD) edges higher against the US Dollar (USD) on hotter domestic inflation data.",
+      "sentiment": 0.4,
+      "impact_score": 0.65,
+      "requires_confirmation": true,
+      "is_confirmed": false,
+      "source_layer": "global_primary",
+      "btc_relevance_score": 0.85,
+      "event_key": "macro_china_usd",
+      "market_regime_effect": "macro_uncertainty"
+    },
+    {
       "published_at": "2026-04-28T14:49:06+00:00",
       "source": "fxstreet",
       "title": "BOJ: Gradual tightening with higher inflation risks – UOB",
@@ -41,11 +56,11 @@
       "market_regime_effect": "macro_uncertainty"
     },
     {
-      "published_at": "2026-04-29T03:02:41+00:00",
+      "published_at": "2026-04-30T02:39:48+00:00",
       "source": "fxstreet",
-      "title": "US Dollar Index steadies near 98.50, all eyes on Fed rate decision",
-      "url": "https://www.fxstreet.com/news/us-dollar-index-steadies-near-9850-all-eyes-on-fed-rate-decision-202604290302",
-      "summary": "The US Dollar Index (DXY), an index of the value of the US Dollar (USD) measured against a basket of six world currencies, currently trades near 98.65 during the Asian trading hours on Wednesday.",
+      "title": "US Dollar Index holds steady after Fed hold, traders await US GDP and PCE data",
+      "url": "https://www.fxstreet.com/news/us-dollar-index-holds-steady-after-fed-hold-traders-await-us-gdp-and-pce-data-202604300239",
+      "summary": "The US Dollar Index (DXY), an index of the value of the US Dollar (USD) measured against a basket of six world currencies, currently trades near 98.95 during the Asian trading hours on Thursday. The DXY steadies following a hawkish hold from the US Federal Reserve (Fed).",
       "sentiment": 0.2,
       "impact_score": 0.6,
       "requires_confirmation": true,
@@ -56,26 +71,11 @@
       "market_regime_effect": "macro_uncertainty"
     },
     {
-      "published_at": "2026-04-29T02:34:17+00:00",
+      "published_at": "2026-04-29T03:02:41+00:00",
       "source": "fxstreet",
-      "title": "Canadian Dollar consolidates vs USD as traders keenly await BoC/FOMC rate decisions",
-      "url": "https://www.fxstreet.com/news/canadian-dollar-consolidates-vs-usd-as-traders-keenly-await-boc-fomc-rate-decisions-202604290234",
-      "summary": "The USD/CAD pair seesaws between tepid gains/minor losses, below the 1.3700 mark, during the Asian session on Wednesday amid a combination of diverging forces. The lack of progress in US-Iran peace talks continues to benefit the US Dollar's (USD) reserve currency status and supports spot prices.",
-      "sentiment": 0.2,
-      "impact_score": 0.6,
-      "requires_confirmation": true,
-      "is_confirmed": false,
-      "source_layer": "global_primary",
-      "btc_relevance_score": 0.85,
-      "event_key": "macro_iran_usd",
-      "market_regime_effect": "macro_uncertainty"
-    },
-    {
-      "published_at": "2026-04-29T01:55:30+00:00",
-      "source": "fxstreet",
-      "title": "Australian Dollar drifts lower after CPI report; focus shifts to Fed decision",
-      "url": "https://www.fxstreet.com/news/australian-dollar-drifts-lower-after-cpi-report-focus-shifts-to-fed-decision-202604290155",
-      "summary": "The AUD/USD pair continues with its struggle to conquer the 0.7200 mark and drifts lower following the release of Australian consumer inflation figures during the Asian session on Wednesday.",
+      "title": "US Dollar Index steadies near 98.50, all eyes on Fed rate decision",
+      "url": "https://www.fxstreet.com/news/us-dollar-index-steadies-near-9850-all-eyes-on-fed-rate-decision-202604290302",
+      "summary": "The US Dollar Index (DXY), an index of the value of the US Dollar (USD) measured against a basket of six world currencies, currently trades near 98.65 during the Asian trading hours on Wednesday.",
       "sentiment": 0.2,
       "impact_score": 0.6,
       "requires_confirmation": true,
