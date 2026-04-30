@@ -63,41 +63,47 @@ export function CabinetUserCard() {
     };
 
     return (
-        <div
-            className="ml-auto flex max-w-[min(100%,16rem)] shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-[#0E1117]/90 px-2 py-1.5 shadow-sm sm:max-w-none"
-            aria-label="Профиль в этом браузере"
-        >
+        <div className="inline-flex max-w-[min(100%,18rem)] flex-row-reverse items-center gap-2 sm:max-w-none" aria-label="Профиль в этом браузере">
             <div
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-cyan-400/20 bg-cyan-400/10 text-[10px] font-bold leading-none text-cyan-100"
+                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/[0.06] text-[10px] font-semibold leading-none text-cyan-100/95"
                 aria-hidden
             >
                 {initials}
             </div>
-            <div className="min-w-0 flex-1">
+            <div className="min-w-0 text-right">
                 {!editing ? (
-                    <div className="flex items-center gap-1.5">
-                        <span className="truncate text-[13px] font-medium text-white/95">{displayName}</span>
+                    <div className="flex items-center justify-end gap-1">
                         <button
                             type="button"
                             onClick={() => {
                                 setDraft(displayName);
                                 setEditing(true);
                             }}
-                            className="shrink-0 rounded-md border border-white/10 p-1 text-white/50 transition hover:border-white/18 hover:bg-white/[0.05] hover:text-white/75"
+                            className="shrink-0 rounded p-1 text-white/40 transition hover:bg-white/[0.06] hover:text-white/70"
                             title="Изменить имя"
                             aria-label="Изменить имя"
                         >
                             <Pencil className="h-3 w-3" aria-hidden />
                         </button>
+                        <span className="truncate text-[13px] font-medium text-white/90">{displayName}</span>
                     </div>
                 ) : (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-end gap-1">
+                        <button
+                            type="button"
+                            onClick={commitName}
+                            className="shrink-0 rounded p-1 text-emerald-400/90 transition hover:bg-emerald-400/10"
+                            title="Сохранить"
+                            aria-label="Сохранить имя"
+                        >
+                            <Check className="h-3 w-3" aria-hidden />
+                        </button>
                         <input
                             value={draft}
                             onChange={(e) => setDraft(e.target.value)}
                             maxLength={64}
                             placeholder="Имя"
-                            className="min-w-0 flex-1 rounded-md border border-white/12 bg-black/40 px-1.5 py-1 text-[12px] text-white outline-none placeholder:text-white/35 focus:border-cyan-400/35"
+                            className="w-[7.5rem] rounded border border-white/12 bg-black/30 px-1.5 py-0.5 text-right text-[12px] text-white outline-none placeholder:text-white/35 focus:border-cyan-400/35 sm:w-40"
                             autoFocus
                             onKeyDown={(e) => {
                                 if (e.key === "Enter") commitName();
@@ -107,18 +113,9 @@ export function CabinetUserCard() {
                                 }
                             }}
                         />
-                        <button
-                            type="button"
-                            onClick={commitName}
-                            className="shrink-0 rounded-md border border-emerald-400/30 bg-emerald-400/10 p-1 text-emerald-200/95"
-                            title="Сохранить"
-                            aria-label="Сохранить имя"
-                        >
-                            <Check className="h-3 w-3" aria-hidden />
-                        </button>
                     </div>
                 )}
-                <div className="mt-0.5 truncate text-[9px] tabular-nums tracking-wide text-white/32">· {sessionTag}</div>
+                <div className="mt-0.5 truncate text-[9px] tabular-nums text-white/28">{sessionTag}</div>
             </div>
         </div>
     );
