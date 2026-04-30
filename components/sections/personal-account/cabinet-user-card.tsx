@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Check, Pencil, Shield } from "lucide-react";
+import { Check, Pencil } from "lucide-react";
 
 const STORAGE_DISPLAY = "cfd-cabinet-display-name";
 const STORAGE_SESSION = "cfd-cabinet-session-id";
@@ -63,71 +63,62 @@ export function CabinetUserCard() {
     };
 
     return (
-        <div className="flex w-full shrink-0 flex-col gap-3 rounded-xl border border-cyan-400/18 bg-black/35 p-4 shadow-[inset_0_0_0_1px_rgba(34,211,238,0.06)] sm:max-w-sm md:w-auto md:max-w-none">
-            <div className="flex items-start gap-3">
-                <div
-                    className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-cyan-400/25 bg-gradient-to-br from-cyan-400/25 to-transparent text-[13px] font-bold tracking-tight text-cyan-50"
-                    aria-hidden
-                >
-                    {initials}
-                </div>
-                <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-cyan-200/85">
-                        <Shield className="h-3.5 w-3.5 shrink-0 opacity-90" aria-hidden />
-                        Ваш кабинет
+        <div
+            className="ml-auto flex max-w-[min(100%,16rem)] shrink-0 items-center gap-2 rounded-lg border border-white/10 bg-[#0E1117]/90 px-2 py-1.5 shadow-sm sm:max-w-none"
+            aria-label="Профиль в этом браузере"
+        >
+            <div
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-cyan-400/20 bg-cyan-400/10 text-[10px] font-bold leading-none text-cyan-100"
+                aria-hidden
+            >
+                {initials}
+            </div>
+            <div className="min-w-0 flex-1">
+                {!editing ? (
+                    <div className="flex items-center gap-1.5">
+                        <span className="truncate text-[13px] font-medium text-white/95">{displayName}</span>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setDraft(displayName);
+                                setEditing(true);
+                            }}
+                            className="shrink-0 rounded-md border border-white/10 p-1 text-white/50 transition hover:border-white/18 hover:bg-white/[0.05] hover:text-white/75"
+                            title="Изменить имя"
+                            aria-label="Изменить имя"
+                        >
+                            <Pencil className="h-3 w-3" aria-hidden />
+                        </button>
                     </div>
-                    {!editing ? (
-                        <div className="mt-1 flex flex-wrap items-center gap-2">
-                            <p className="truncate text-[15px] font-semibold text-white">{displayName}</p>
-                            <button
-                                type="button"
-                                onClick={() => {
+                ) : (
+                    <div className="flex items-center gap-1">
+                        <input
+                            value={draft}
+                            onChange={(e) => setDraft(e.target.value)}
+                            maxLength={64}
+                            placeholder="Имя"
+                            className="min-w-0 flex-1 rounded-md border border-white/12 bg-black/40 px-1.5 py-1 text-[12px] text-white outline-none placeholder:text-white/35 focus:border-cyan-400/35"
+                            autoFocus
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") commitName();
+                                if (e.key === "Escape") {
                                     setDraft(displayName);
-                                    setEditing(true);
-                                }}
-                                className="inline-flex items-center gap-1 rounded-lg border border-white/12 bg-white/[0.04] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white/65 transition hover:border-white/20 hover:bg-white/[0.07]"
-                            >
-                                <Pencil className="h-3 w-3" aria-hidden />
-                                Имя
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="mt-1 flex flex-wrap items-center gap-2">
-                            <input
-                                value={draft}
-                                onChange={(e) => setDraft(e.target.value)}
-                                maxLength={64}
-                                placeholder="Как к вам обращаться"
-                                className="min-w-[10rem] flex-1 rounded-lg border border-white/12 bg-black/40 px-2.5 py-1.5 text-sm text-white outline-none placeholder:text-white/35 focus:border-cyan-400/35"
-                                autoFocus
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter") commitName();
-                                    if (e.key === "Escape") {
-                                        setDraft(displayName);
-                                        setEditing(false);
-                                    }
-                                }}
-                            />
-                            <button
-                                type="button"
-                                onClick={commitName}
-                                className="inline-flex items-center gap-1 rounded-lg border border-emerald-400/35 bg-emerald-400/12 px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-emerald-50"
-                                title="Сохранить имя локально на этом устройстве"
-                            >
-                                <Check className="h-3 w-3" aria-hidden />
-                                Ок
-                            </button>
-                        </div>
-                    )}
-                    <p className="mt-2 text-[11px] leading-relaxed text-white/45">
-                        Вы внутри закрытой зоны кабинета. Позже здесь будет вход по аккаунту; сейчас имя и черновики хранятся только в этом
-                        браузере.
-                    </p>
-                    <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] tabular-nums text-white/35">
-                        <span className="rounded-md border border-white/10 bg-black/35 px-1.5 py-0.5 text-white/48">Локально</span>
-                        <span>SID&nbsp;·&nbsp;{sessionTag}</span>
+                                    setEditing(false);
+                                }
+                            }}
+                        />
+                        <button
+                            type="button"
+                            onClick={commitName}
+                            className="shrink-0 rounded-md border border-emerald-400/30 bg-emerald-400/10 p-1 text-emerald-200/95"
+                            title="Сохранить"
+                            aria-label="Сохранить имя"
+                        >
+                            <Check className="h-3 w-3" aria-hidden />
+                        </button>
                     </div>
-                </div>
+                )}
+                <div className="mt-0.5 truncate text-[9px] tabular-nums tracking-wide text-white/32">· {sessionTag}</div>
             </div>
         </div>
     );
