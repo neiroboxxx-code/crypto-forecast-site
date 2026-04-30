@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Bot, Send, Sparkles } from "lucide-react";
 
-type AssistantScenario = "signal_now_4h" | "paperbot_last_trade" | "radar_top_candidate" | "ui_faq";
+type AssistantScenario = "free_chat" | "signal_now_4h" | "paperbot_last_trade" | "radar_top_candidate" | "ui_faq";
 
 type ChatMessage = {
     id: string;
@@ -18,6 +18,8 @@ function nowIso(): string {
 
 function titleForScenario(s: AssistantScenario): string {
     switch (s) {
+        case "free_chat":
+            return "Свободный чат";
         case "signal_now_4h":
             return "Сигнал сейчас (4H)";
         case "paperbot_last_trade":
@@ -34,14 +36,16 @@ function apiBase(): string {
 }
 
 export function AssistantChat() {
-    const [scenario, setScenario] = useState<AssistantScenario>("signal_now_4h");
+    const [scenario, setScenario] = useState<AssistantScenario>("free_chat");
     const [messages, setMessages] = useState<ChatMessage[]>(() => [
         {
             id: crypto.randomUUID(),
             role: "assistant",
             createdAt: nowIso(),
             content:
-                "Я ассистент внутри платформы. Нажмите сценарий сверху или задайте вопрос — я отвечаю строго по фактам из системы (без инвестсоветов).",
+                "Привет. Режим по умолчанию — обычный чат: могу подсказать по платформе и навигации. " +
+                "Для точных цифр по сигналу 4H, Radar или PaperBot нажми соответствующую кнопку сверху или напиши явно, что нужно (например «какой сигнал сейчас»). " +
+                "Это не инвестсовет — только объяснение данных системы.",
         },
     ]);
     const [input, setInput] = useState("");
@@ -163,10 +167,12 @@ export function AssistantChat() {
                         LLM-ассистент
                     </div>
                     <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-white/50">
-                        Ответы строятся строго по фактам из системы. Если в фактах нет поля — ассистент должен это сказать.
+                        Свободный чат по умолчанию; сценарные кнопки подключают факты из кэша движка и бота. Если поля нет в
+                        данных — ассистент обязан сказать об этом.
                     </p>
                 </div>
                 <div className="flex flex-wrap gap-2">
+                    {scenarioChip("free_chat")}
                     {scenarioChip("signal_now_4h")}
                     {scenarioChip("paperbot_last_trade")}
                     {scenarioChip("radar_top_candidate")}
@@ -217,7 +223,7 @@ export function AssistantChat() {
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 rows={2}
-                                placeholder={sessionId ? "Например: «Объясни текущий сигнал»" : "Инициализация…"}
+                                placeholder={sessionId ? "Например: «Привет» или «Какой сигнал сейчас?»" : "Инициализация…"}
                                 className="min-h-[44px] w-full resize-none rounded-xl border border-white/10 bg-black/35 px-3 py-2 text-[12px] text-white/85 outline-none transition placeholder:text-white/25 focus:border-fuchsia-400/30 focus:ring-1 focus:ring-fuchsia-400/15"
                                 disabled={!sessionId}
                             />
