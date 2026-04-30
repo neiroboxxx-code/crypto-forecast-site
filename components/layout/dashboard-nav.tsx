@@ -2,15 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bot, CalendarDays, Cpu, GraduationCap, LayoutDashboard, Newspaper } from "lucide-react";
+import { Bot, Cpu, GraduationCap, LayoutDashboard, Newspaper, UserRound } from "lucide-react";
 
 const items = [
     { href: "/", label: "Дашборд", labelEn: "Dashboard", icon: LayoutDashboard },
     { href: "/academy", label: "Академия", labelEn: "Academy", icon: GraduationCap },
     { href: "/cryptonews", label: "CryptoNews", labelEn: "CryptoNews", icon: Newspaper },
     { href: "/paperbot", label: "Пейпербот", labelEn: "Paperbot", icon: Bot },
-    { href: "/trade-calendar", label: "Trade Calendar", labelEn: "Calendar", icon: CalendarDays },
     { href: "/under-the-hood", label: "Under the Hood", labelEn: "Inside", icon: Cpu },
+    { href: "/trade-calendar", label: "Личный кабинет", labelEn: "Account", icon: UserRound },
 ] as const;
 
 export function DashboardNav() {

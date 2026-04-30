@@ -1,11 +1,10 @@
 import { DashboardShell } from "@/components/layout/dashboard-shell";
-import { TradeCalendarView } from "@/components/views/trade-calendar-view";
+import { PersonalAccountView } from "@/components/views/personal-account-view";
 
 export default function TradeCalendarPage() {
     return (
         <DashboardShell>
-            <TradeCalendarView />
+            <PersonalAccountView />
         </DashboardShell>
     );
 }
-
