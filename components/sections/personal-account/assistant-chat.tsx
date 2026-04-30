@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Bot, Send, Sparkles } from "lucide-react";
 
 type AssistantScenario = "signal_now_4h" | "paperbot_last_trade" | "radar_top_candidate" | "ui_faq";
@@ -47,14 +47,19 @@ export function AssistantChat() {
     const [input, setInput] = useState("");
     const [isSending, setIsSending] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [sessionId, setSessionId] = useState<string | null>(null);
 
-    const sessionId = useMemo(() => {
+    useEffect(() => {
+        if (typeof window === "undefined") return;
         const k = "assistant:v1:session_id";
-        const existing = localStorage.getItem(k);
-        if (existing) return existing;
+        const existing = window.localStorage.getItem(k);
+        if (existing) {
+            setSessionId(existing);
+            return;
+        }
         const next = crypto.randomUUID();
-        localStorage.setItem(k, next);
-        return next;
+        window.localStorage.setItem(k, next);
+        setSessionId(next);
     }, []);
 
     const listRef = useRef<HTMLDivElement>(null);
@@ -67,7 +72,7 @@ export function AssistantChat() {
 
     const send = async (text: string) => {
         const trimmed = text.trim();
-        if (!trimmed || isSending) return;
+        if (!trimmed || isSending || !sessionId) return;
 
         setError(null);
         setIsSending(true);
