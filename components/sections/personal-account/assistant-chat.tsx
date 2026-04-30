@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Bot, Send, Sparkles } from "lucide-react";
 
 type AssistantScenario = "free_chat" | "signal_now_4h" | "paperbot_last_trade" | "radar_top_candidate" | "ui_faq";
+type AssistantChatMode = "platform" | "pro";
 
 type ChatMessage = {
     id: string;
@@ -38,13 +39,14 @@ function apiBase(): string {
 
 export function AssistantChat() {
     const [scenario, setScenario] = useState<AssistantScenario>("free_chat");
+    const [chatMode, setChatMode] = useState<AssistantChatMode>("platform");
     const [messages, setMessages] = useState<ChatMessage[]>(() => [
         {
             id: crypto.randomUUID(),
             role: "assistant",
             createdAt: nowIso(),
             content:
-                "Привет. Режим по умолчанию — обычный чат: могу подсказать по платформе и навигации. " +
+                "Привет. Режим по умолчанию — GPTplatform: могу подсказать по платформе и навигации. " +
                 "Для точных цифр по сигналу 4H, Radar или PaperBot нажми соответствующую кнопку сверху или напиши явно, что нужно (например «какой сигнал сейчас»). " +
                 "Это не инвестсовет — только объяснение данных системы.",
         },
@@ -103,6 +105,7 @@ export function AssistantChat() {
                 body: JSON.stringify({
                     session_id: sessionId,
                     scenario,
+                    chat_mode: chatMode,
                     message: trimmed,
                 }),
             });
@@ -178,11 +181,39 @@ export function AssistantChat() {
                         LLM-ассистент
                     </div>
                     <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-white/50">
-                        Свободный чат по умолчанию; сценарные кнопки подключают факты из кэша движка и бота. Если поля нет в
-                        данных — ассистент обязан сказать об этом.
+                        По умолчанию — режим <span className="text-white/70">GPTplatform</span>: справка по сайту и блокам.{" "}
+                        <span className="text-white/60">DeepSeek PRO</span> — для разговоров про рынок (без персональных торговых рекомендаций).
+                        Сценарные кнопки подключают факты из кэша движка и бота.
                     </p>
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                    <div className="rounded-xl border border-white/12 bg-white/[0.04] px-2 py-1.5">
+                        <div className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/35">Режим</div>
+                        <div className="mt-1 flex gap-1">
+                            {(
+                                [
+                                    { id: "platform" as const, label: "GPTplatform" },
+                                    { id: "pro" as const, label: "DeepSeek PRO" },
+                                ] as const
+                            ).map((opt) => {
+                                const active = opt.id === chatMode;
+                                return (
+                                    <button
+                                        key={opt.id}
+                                        type="button"
+                                        onClick={() => setChatMode(opt.id)}
+                                        className={`rounded-lg border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] transition ${
+                                            active
+                                                ? "border-cyan-400/35 bg-cyan-400/10 text-cyan-50"
+                                                : "border-white/10 bg-black/20 text-white/55 hover:border-white/18 hover:bg-white/[0.06] hover:text-white/80"
+                                        }`}
+                                    >
+                                        {opt.label}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
                     {scenarioChip("free_chat")}
                     {scenarioChip("signal_now_4h")}
                     {scenarioChip("paperbot_last_trade")}
