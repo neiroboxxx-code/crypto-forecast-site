@@ -211,19 +211,20 @@ export function AssistantChat() {
                             void send(input);
                         }}
                     >
-                        <label className="flex-1">
-                            <span className="sr-only">Сообщение</span>
+                        <div className="flex-1">
                             <textarea
+                                aria-label="Сообщение ассистенту"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 rows={2}
-                                placeholder="Например: «Объясни текущий сигнал»"
+                                placeholder={sessionId ? "Например: «Объясни текущий сигнал»" : "Инициализация…"}
                                 className="min-h-[44px] w-full resize-none rounded-xl border border-white/10 bg-black/35 px-3 py-2 text-[12px] text-white/85 outline-none transition placeholder:text-white/25 focus:border-fuchsia-400/30 focus:ring-1 focus:ring-fuchsia-400/15"
+                                disabled={!sessionId}
                             />
-                        </label>
+                        </div>
                         <button
                             type="submit"
-                            disabled={isSending || !input.trim()}
+                            disabled={isSending || !sessionId || !input.trim()}
                             className="inline-flex items-center gap-2 rounded-xl border border-fuchsia-400/30 bg-fuchsia-400/12 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-fuchsia-50 shadow-[0_0_0_1px_rgba(232,121,249,0.12)] transition hover:bg-fuchsia-400/18 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-400/35"
                         >
                             <Send className="h-3.5 w-3.5" aria-hidden />
