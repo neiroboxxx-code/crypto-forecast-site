@@ -303,7 +303,11 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
                 </div>
 
                 <PaperbotSummary summary={summary} />
-                <PaperbotMonitorWidget monitor={data?.monitor ?? null} />
+                <PaperbotMonitorWidget
+                    monitor={data?.monitor ?? null}
+                    botActive={isActive}
+                    openPositionsCount={positions.length}
+                />
                 <PaperbotPositionsTable positions={positions} />
 
                 <div className="grid gap-4 lg:grid-cols-[1fr_380px] lg:items-start">
