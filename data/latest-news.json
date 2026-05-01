@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-30T06:58:42Z",
+  "updated_at": "2026-05-01T04:15:02Z",
   "features": {
     "confirmed_events_count": 0,
     "risk_off_pressure": 0.0,
@@ -7,24 +7,9 @@
     "oil_shock_count": 0
   },
   "signal_context": {
-    "summary": "Значимых новостей за 48ч: 5. Режим: macro_uncertainty."
+    "summary": "Значимых новостей за 48ч: 4. Режим: macro_uncertainty."
   },
   "items": [
-    {
-      "published_at": "2026-04-29T02:11:24+00:00",
-      "source": "fxstreet",
-      "title": "AUD/JPY holds losses near 114.50 after Australian CPI inflation data",
-      "url": "https://www.fxstreet.com/news/aud-jpy-holds-losses-near-11450-after-australian-cpi-inflation-data-202604290211",
-      "summary": "The AUD/JPY cross declines to around 114.50 during the early Asian trading hours on Wednesday. The Australian Dollar (AUD) softens against the Japanese Yen (JPY) following the release of the Australian inflation report.",
-      "sentiment": 0.4,
-      "impact_score": 0.7,
-      "requires_confirmation": true,
-      "is_confirmed": false,
-      "source_layer": "global_primary",
-      "btc_relevance_score": 0.75,
-      "event_key": "macro_none_usd",
-      "market_regime_effect": "macro_uncertainty"
-    },
     {
       "published_at": "2026-04-30T00:28:43+00:00",
       "source": "fxstreet",
@@ -41,26 +26,11 @@
       "market_regime_effect": "macro_uncertainty"
     },
     {
-      "published_at": "2026-04-28T14:49:06+00:00",
+      "published_at": "2026-05-01T02:30:32+00:00",
       "source": "fxstreet",
-      "title": "BOJ: Gradual tightening with higher inflation risks – UOB",
-      "url": "https://www.fxstreet.com/news/boj-gradual-tightening-with-higher-inflation-risks-uob-202604281449",
-      "summary": "United Overseas Bank’s Alvin Liew reports the Bank of Japan (BoJ) left its policy rate at 0.75% but signalled that the next move will be a hike as underlying inflation nears target and real rates stay very low.",
-      "sentiment": -0.4,
-      "impact_score": 0.65,
-      "requires_confirmation": true,
-      "is_confirmed": false,
-      "source_layer": "global_primary",
-      "btc_relevance_score": 0.75,
-      "event_key": "macro_none_rates",
-      "market_regime_effect": "macro_uncertainty"
-    },
-    {
-      "published_at": "2026-04-30T02:39:48+00:00",
-      "source": "fxstreet",
-      "title": "US Dollar Index holds steady after Fed hold, traders await US GDP and PCE data",
-      "url": "https://www.fxstreet.com/news/us-dollar-index-holds-steady-after-fed-hold-traders-await-us-gdp-and-pce-data-202604300239",
-      "summary": "The US Dollar Index (DXY), an index of the value of the US Dollar (USD) measured against a basket of six world currencies, currently trades near 98.95 during the Asian trading hours on Thursday. The DXY steadies following a hawkish hold from the US Federal Reserve (Fed).",
+      "title": "US Dollar Index posts modest gains above 98.00 on hawkish Fed pause despite weaker US GDP",
+      "url": "https://www.fxstreet.com/news/us-dollar-index-posts-modest-gains-above-9800-on-hawkish-fed-pause-despite-weaker-us-gdp-202605010230",
+      "summary": "The US Dollar Index (DXY), an index of the value of the US Dollar (USD) measured against a basket of six world currencies, currently trades near 98.15 during the Asian trading hours on Friday. The DXY posts modest gains on a hawkish hold from the US Federal Reserve (Fed).",
       "sentiment": 0.2,
       "impact_score": 0.6,
       "requires_confirmation": true,
@@ -71,11 +41,26 @@
       "market_regime_effect": "macro_uncertainty"
     },
     {
-      "published_at": "2026-04-29T03:02:41+00:00",
+      "published_at": "2026-05-01T01:15:36+00:00",
       "source": "fxstreet",
-      "title": "US Dollar Index steadies near 98.50, all eyes on Fed rate decision",
-      "url": "https://www.fxstreet.com/news/us-dollar-index-steadies-near-9850-all-eyes-on-fed-rate-decision-202604290302",
-      "summary": "The US Dollar Index (DXY), an index of the value of the US Dollar (USD) measured against a basket of six world currencies, currently trades near 98.65 during the Asian trading hours on Wednesday.",
+      "title": "PBOC sets USD/CNY reference rate at 6.8628 vs. 6.8608 previous",
+      "url": "https://www.fxstreet.com/news/pboc-sets-usd-cny-reference-rate-at-68628-vs-68608-previous-202605010115",
+      "summary": "The People’s Bank of China (PBOC) sets the USD/CNY central rate for the trading session ahead on Friday at 6.8628 compared to the previous day's fix of 6.8608.",
+      "sentiment": -0.2,
+      "impact_score": 0.6,
+      "requires_confirmation": true,
+      "is_confirmed": false,
+      "source_layer": "global_primary",
+      "btc_relevance_score": 0.85,
+      "event_key": "macro_china_usd",
+      "market_regime_effect": "macro_uncertainty"
+    },
+    {
+      "published_at": "2026-04-30T02:39:48+00:00",
+      "source": "fxstreet",
+      "title": "US Dollar Index holds steady after Fed hold, traders await US GDP and PCE data",
+      "url": "https://www.fxstreet.com/news/us-dollar-index-holds-steady-after-fed-hold-traders-await-us-gdp-and-pce-data-202604300239",
+      "summary": "The US Dollar Index (DXY), an index of the value of the US Dollar (USD) measured against a basket of six world currencies, currently trades near 98.95 during the Asian trading hours on Thursday. The DXY steadies following a hawkish hold from the US Federal Reserve (Fed).",
       "sentiment": 0.2,
       "impact_score": 0.6,
       "requires_confirmation": true,
