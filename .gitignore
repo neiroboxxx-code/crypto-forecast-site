@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Auto-generated news/digest data — served via FastAPI /api/news and /api/digest
+data/latest-news.json
+data/news-archive.json
