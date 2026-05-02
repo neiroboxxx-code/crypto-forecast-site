@@ -1,18 +1,19 @@
 import { NextResponse } from "next/server";
-import { readFile } from "fs/promises";
-import { join } from "path";
-import type { MarketDigestData } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
     try {
-        const filePath = join(process.cwd(), "data", "latest-digest.json");
-        const raw = await readFile(filePath, "utf-8");
-        const data = JSON.parse(raw) as MarketDigestData;
+        const res = await fetch(`${apiUrl}/api/digest`, {
+            cache: "no-store",
+            signal: AbortSignal.timeout(15_000),
+        });
+        if (!res.ok) throw new Error(`upstream ${res.status}`);
+        const data = await res.json();
         return NextResponse.json(data, {
             status: 200,
-            headers: { "Content-Type": "application/json", "Cache-Control": "no-store" },
+            headers: { "Cache-Control": "no-store" },
         });
     } catch {
         return NextResponse.json({ error: "digest unavailable" }, { status: 503 });
