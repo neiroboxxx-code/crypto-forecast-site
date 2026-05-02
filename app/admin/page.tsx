@@ -19,6 +19,7 @@ import { PaperbotActivityLog } from "@/components/sections/paperbot/paperbot-act
 import { PaperbotSignalBox } from "@/components/sections/paperbot/paperbot-signal-box";
 import { PaperbotSettings } from "@/components/sections/paperbot/paperbot-settings";
 import { PaperbotMonitorWidget } from "@/components/sections/paperbot/paperbot-monitor-widget";
+import { AccuracyPanel } from "@/components/sections/accuracy-panel";
 import { Card } from "@/components/ui/card";
 import type { PaperSettings, PaperSignalState } from "@/components/sections/paperbot/types";
 
@@ -314,6 +315,8 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
                     <PaperbotClosedTrades trades={closedTrades} />
                     <PaperbotActivityLog entries={logEntries} />
                 </div>
+
+                <AccuracyPanel />
 
             </div>
         </div>
