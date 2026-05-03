@@ -7,6 +7,7 @@ import { CatalystFeed } from "@/components/sections/catalyst-feed";
 import { MarketBias } from "@/components/sections/market-bias";
 import { ReversalRadar } from "@/components/sections/reversal-radar";
 import { RsiGauges } from "@/components/sections/rsi-gauge";
+import { HtfContextPanel } from "@/components/sections/htf-context-panel";
 
 export function DashboardHome() {
     return (
@@ -27,6 +28,7 @@ export function DashboardHome() {
                 </section>
 
                 <aside className="flex flex-col gap-3">
+                    <HtfContextPanel />
                     <MarketBias />
                     <CatalystFeed />
                 </aside>

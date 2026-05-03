@@ -460,3 +460,75 @@ export async function getHealth(): Promise<HealthStatus> {
         return { ok: false, timestamp: new Date().toISOString() };
     }
 }
+
+// ---------- HTF Context ----------
+
+export type HtfKeyLevel = {
+    price: number;
+    zone_low: number;
+    zone_high: number;
+    type: "support" | "resistance" | "flip_zone" | "midpoint";
+    source: string;
+    strength: "strong" | "medium" | "weak";
+    distance_pct: number;
+    distance_atr: number;
+    is_broken: boolean;
+};
+
+export type HtfRiskWarning = {
+    code: string;
+    severity: "high" | "medium" | "low";
+    message: string;
+};
+
+export type HtfContext = {
+    status: "ok" | "insufficient_data" | "error";
+    symbol: string;
+    updated_at: string;
+    data_freshest_candle_at: string | null;
+    horizon: string;
+    macro_bias: "bullish" | "bearish" | "range" | "transition" | null;
+    long_context: "favorable" | "neutral" | "unfavorable" | null;
+    trend_regime: "strong_uptrend" | "weak_uptrend" | "neutral" | "downtrend" | "overheated" | "unknown" | null;
+    weekly_structure: {
+        state: string;
+        last_swing_high: { price: number; timestamp: string } | null;
+        last_swing_low: { price: number; timestamp: string } | null;
+        structure_break: boolean;
+        choch: boolean;
+    } | null;
+    daily_ema_context: {
+        ema_200: number | null;
+        ema_50: number | null;
+        above_200ema: boolean | null;
+        above_50ema: boolean | null;
+        ema_200_slope: "rising" | "flat" | "falling" | null;
+        ema_50_vs_200: "above" | "below" | "crossing" | null;
+        distance_from_200ema_pct: number | null;
+    } | null;
+    key_levels: HtfKeyLevel[];
+    distance_to_levels: {
+        nearest_support: number | null;
+        nearest_resistance: number | null;
+        distance_to_support_pct: number | null;
+        distance_to_resistance_pct: number | null;
+        distance_to_support_atr: number | null;
+        distance_to_resistance_atr: number | null;
+        location: "near_support" | "near_resistance" | "mid_range" | "normal";
+    } | null;
+    atr_context: {
+        weekly_atr_14: number | null;
+        monthly_atr_12: number | null;
+        current_week_range: number | null;
+        current_month_range: number | null;
+        week_range_used_pct: number | null;
+        month_range_used_pct: number | null;
+        weekly_range_status: "fresh" | "normal" | "extended" | "exhausted" | "unknown" | null;
+    } | null;
+    risk_warnings: HtfRiskWarning[];
+    cached: boolean;
+};
+
+export async function fetchHtfContext(symbol = "BTCUSDT"): Promise<HtfContext> {
+    return request<HtfContext>(`/api/htf/context?symbol=${symbol}`);
+}
