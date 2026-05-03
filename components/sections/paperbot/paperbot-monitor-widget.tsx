@@ -107,7 +107,7 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount, 
         >
             <div className={`flex min-h-0 flex-col ${compact ? "min-h-0 flex-1 gap-2" : "gap-3"}`}>
                 <div
-                    className={`flex items-center gap-2 rounded-xl border border-white/8 bg-black/20 ${compact ? "px-2 py-2" : "px-4 py-3"}`}
+                    className={`flex shrink-0 items-center gap-2 rounded-xl border border-white/8 bg-black/20 ${compact ? "px-2 py-2" : "px-4 py-3"}`}
                 >
                     <StatusDot lastAt={lastAt} mode={mode} />
                     <div className="min-w-0 flex-1">
@@ -143,39 +143,53 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount, 
                     </div>
                 </div>
 
-                <div className={`grid grid-cols-3 gap-1.5 ${compact ? "" : "gap-2"}`}>
+                <div
+                    className={`grid min-h-0 grid-cols-3 gap-2 ${compact ? "min-h-[108px] flex-1" : ""}`}
+                >
                     <div
-                        className={`rounded-lg border border-white/8 bg-white/[0.02] text-center ${compact ? "px-1 py-1.5" : "px-3 py-2.5"}`}
+                        className={`flex min-h-0 flex-col justify-center rounded-lg border border-white/8 bg-white/[0.02] text-center ${
+                            compact ? "min-h-[100px] px-2 py-3" : "px-3 py-2.5"
+                        }`}
                     >
-                        <div className={`uppercase tracking-[0.1em] text-white/35 ${compact ? "text-[8px]" : "text-[10px]"}`}>
+                        <div
+                            className={`uppercase tracking-[0.1em] text-white/35 ${compact ? "text-[10px]" : "text-[10px]"}`}
+                        >
                             Время
                         </div>
                         <div
-                            className={`font-semibold tabular-nums text-white/80 ${compact ? "mt-0.5 text-[10px]" : "mt-1 text-[12px]"}`}
+                            className={`font-semibold tabular-nums leading-tight text-white/80 ${compact ? "mt-2 text-base" : "mt-1 text-[12px]"}`}
                         >
                             {fmtAgo(lastAt)}
                         </div>
                     </div>
                     <div
-                        className={`rounded-lg border border-white/8 bg-white/[0.02] text-center ${compact ? "px-1 py-1.5" : "px-3 py-2.5"}`}
+                        className={`flex min-h-0 flex-col justify-center rounded-lg border border-white/8 bg-white/[0.02] text-center ${
+                            compact ? "min-h-[100px] px-2 py-3" : "px-3 py-2.5"
+                        }`}
                     >
-                        <div className={`uppercase tracking-[0.1em] text-white/35 ${compact ? "text-[8px]" : "text-[10px]"}`}>
+                        <div
+                            className={`uppercase tracking-[0.1em] text-white/35 ${compact ? "text-[10px]" : "text-[10px]"}`}
+                        >
                             BTC
                         </div>
                         <div
-                            className={`font-semibold tabular-nums text-white/80 ${compact ? "mt-0.5 text-[10px]" : "mt-1 text-[12px]"}`}
+                            className={`font-semibold tabular-nums leading-tight text-white/80 ${compact ? "mt-2 text-base" : "mt-1 text-[12px]"}`}
                         >
                             {fmtPrice(lastPrice)}
                         </div>
                     </div>
                     <div
-                        className={`rounded-lg border border-white/8 bg-white/[0.02] text-center ${compact ? "px-1 py-1.5" : "px-3 py-2.5"}`}
+                        className={`flex min-h-0 flex-col justify-center rounded-lg border border-white/8 bg-white/[0.02] text-center ${
+                            compact ? "min-h-[100px] px-2 py-3" : "px-3 py-2.5"
+                        }`}
                     >
-                        <div className={`uppercase tracking-[0.1em] text-white/35 ${compact ? "text-[8px]" : "text-[10px]"}`}>
+                        <div
+                            className={`uppercase tracking-[0.1em] text-white/35 ${compact ? "text-[10px]" : "text-[10px]"}`}
+                        >
                             Поз.
                         </div>
                         <div
-                            className={`mt-0.5 font-semibold tabular-nums ${compact ? "text-[10px]" : "mt-1 text-[12px]"} ${
+                            className={`mt-2 font-semibold tabular-nums leading-tight ${compact ? "text-base" : "mt-1 text-[12px]"} ${
                                 lastPositions > 0 ? "text-emerald-300" : "text-white/80"
                             }`}
                         >
@@ -186,7 +200,7 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount, 
 
                 {lastAt && mode !== "waiting" && (
                     <div
-                        className={`text-center text-white/28 ${compact ? "mt-auto text-[9px]" : "text-[10px]"}`}
+                        className={`shrink-0 text-center text-white/28 ${compact ? "text-[9px]" : "text-[10px]"}`}
                     >
                         {(() => {
                             const nextMins = 15 - ((mins ?? 0) % 15);

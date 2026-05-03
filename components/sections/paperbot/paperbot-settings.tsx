@@ -1,6 +1,7 @@
 "use client";
 
-import { Settings2 } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, Settings2 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { PaperSettings } from "@/components/sections/paperbot/types";
 
@@ -8,6 +9,8 @@ type Props = {
     settings: PaperSettings;
     onChange: (s: PaperSettings) => void;
     disabled?: boolean;
+    /** Свернуть тело блока по умолчанию (только шапка). */
+    collapsible?: boolean;
 };
 
 const RISK_OPTIONS = [0.5, 1, 1.5, 2, 3, 5];
@@ -58,22 +61,52 @@ function SelectPill<T extends string | number>({
     );
 }
 
-export function PaperbotSettings({ settings, onChange, disabled }: Props) {
+export function PaperbotSettings({ settings, onChange, disabled, collapsible }: Props) {
+    const [open, setOpen] = useState(false);
     const riskUsd = ((settings.depositUsd * settings.riskPct) / 100).toFixed(0);
+    const showBody = !collapsible || open;
+
+    const configBadge = (
+        <div className="flex items-center gap-1.5 rounded border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider text-white/45">
+            <Settings2 className="h-3.5 w-3.5" aria-hidden />
+            Config
+        </div>
+    );
 
     return (
         <Card
-            className="flex h-full min-h-0 flex-col border-emerald-500/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]"
+            className={`border-emerald-500/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)] ${
+                collapsible ? "w-full self-start" : "flex h-full min-h-0 flex-col"
+            }`}
             title="Параметры бота"
             subtitle="Фильтры входа и управление риском"
             right={
-                <div className="flex items-center gap-1.5 rounded border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider text-white/45">
-                    <Settings2 className="h-3.5 w-3.5" aria-hidden />
-                    Config
-                </div>
+                collapsible ? (
+                    <div className="flex items-center gap-2">
+                        {configBadge}
+                        <button
+                            type="button"
+                            onClick={() => setOpen((v) => !v)}
+                            className="flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-white/50 transition hover:border-white/20 hover:text-white/70"
+                            aria-expanded={open}
+                        >
+                            <ChevronDown
+                                className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+                                aria-hidden
+                            />
+                        </button>
+                    </div>
+                ) : (
+                    configBadge
+                )
             }
         >
-            <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pr-0.5">
+            {showBody && (
+            <div
+                className={`flex flex-col gap-4 pr-0.5 ${
+                    collapsible ? "max-h-[min(70vh,560px)] overflow-y-auto" : "min-h-0 flex-1 overflow-y-auto"
+                }`}
+            >
                 {/* Deposit */}
                 <div>
                     <RowLabel>Депозит ($)</RowLabel>
@@ -225,6 +258,7 @@ export function PaperbotSettings({ settings, onChange, disabled }: Props) {
                     </div>
                 )}
             </div>
+            )}
         </Card>
     );
 }

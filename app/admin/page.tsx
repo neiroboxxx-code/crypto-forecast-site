@@ -314,10 +314,11 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
                     <PaperbotPositionsTable compact positions={positions} />
                 </div>
 
-                {/* Сводка (вертикаль) + параметры */}
-                <div className="grid min-w-0 gap-4 lg:grid-cols-2 lg:items-stretch">
-                    <PaperbotSummary layout="vertical" summary={summary} />
+                {/* Сводка (вертикаль) + параметры — сворачиваемые; выравнивание по верху */}
+                <div className="grid min-w-0 gap-4 lg:grid-cols-2 lg:items-start">
+                    <PaperbotSummary collapsible layout="vertical" summary={summary} />
                     <PaperbotSettings
+                        collapsible
                         settings={effectiveSettings}
                         onChange={setLocalSettings}
                         disabled={isActive || settingsPending}
@@ -325,8 +326,12 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
                 </div>
 
                 <div className="grid min-w-0 gap-4 lg:grid-cols-2 lg:items-start">
-                    <PaperbotClosedTrades trades={closedTrades} />
-                    <PaperbotActivityLog entries={logEntries} />
+                    <div className="min-w-0 self-start">
+                        <PaperbotClosedTrades trades={closedTrades} />
+                    </div>
+                    <div className="min-w-0 self-start">
+                        <PaperbotActivityLog entries={logEntries} />
+                    </div>
                 </div>
 
                 <div className="w-full max-w-[50%] min-w-[260px]">

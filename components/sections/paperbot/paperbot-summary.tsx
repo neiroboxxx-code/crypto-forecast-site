@@ -1,4 +1,7 @@
-import { Activity, TrendingDown, TrendingUp, Wallet } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { Activity, ChevronDown, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import { Card, StatCell } from "@/components/ui/card";
 import type { PaperSummary } from "@/components/sections/paperbot/types";
 
@@ -6,35 +9,69 @@ type Props = {
     summary: PaperSummary | null;
     /** Вертикальная колонка ячеек (админка рядом с параметрами). */
     layout?: "default" | "vertical";
+    /** Свернуть тело блока по умолчанию (только шапка). */
+    collapsible?: boolean;
 };
 
 function fmtUsd(n: number) {
     return n.toLocaleString("ru-RU", { style: "currency", currency: "USD", maximumFractionDigits: 2 });
 }
 
-export function PaperbotSummary({ summary, layout = "default" }: Props) {
+export function PaperbotSummary({ summary, layout = "default", collapsible }: Props) {
+    const [open, setOpen] = useState(false);
     const dash = "—";
     const pnlSession = summary ? summary.equityUsd - summary.startingUsd : null;
     const pnlTone = pnlSession != null ? (pnlSession >= 0 ? "long" : "short") : "default";
     const vertical = layout === "vertical";
     const c = vertical;
+    const showBody = !collapsible || open;
 
     const gridSession = vertical ? "flex flex-col gap-2" : "grid gap-3 sm:grid-cols-2 lg:grid-cols-4";
     const gridLife = vertical ? "flex flex-col gap-2" : "mt-3 grid gap-3 sm:grid-cols-3";
 
+    const walletBadge = (
+        <div className="flex items-center gap-1.5 rounded border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider text-white/55">
+            <Wallet className="h-3.5 w-3.5" aria-hidden />
+            Paper
+        </div>
+    );
+
     return (
         <Card
-            className={`border-emerald-500/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)] ${vertical ? "flex h-full min-h-0 flex-col" : ""}`}
+            className={`border-emerald-500/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)] ${
+                vertical && !collapsible ? "flex h-full min-h-0 flex-col" : ""
+            } ${collapsible ? "w-full self-start" : ""}`}
             title="Сводка счёта"
             subtitle={vertical ? undefined : "Эквити, результат сессии и накопленная статистика"}
             right={
-                <div className="flex items-center gap-1.5 rounded border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider text-white/55">
-                    <Wallet className="h-3.5 w-3.5" aria-hidden />
-                    Paper
-                </div>
+                collapsible ? (
+                    <div className="flex items-center gap-2">
+                        {walletBadge}
+                        <button
+                            type="button"
+                            onClick={() => setOpen((v) => !v)}
+                            className="flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-white/50 transition hover:border-white/20 hover:text-white/70"
+                            aria-expanded={open}
+                        >
+                            <ChevronDown
+                                className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+                                aria-hidden
+                            />
+                        </button>
+                    </div>
+                ) : (
+                    walletBadge
+                )
             }
         >
-            <div className={vertical ? "flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto pr-0.5" : ""}>
+            {showBody && (
+            <div
+                className={
+                    vertical
+                        ? `flex flex-col gap-2 pr-0.5 ${collapsible ? "max-h-[min(70vh,520px)] overflow-y-auto" : "min-h-0 flex-1 overflow-y-auto"}`
+                        : ""
+                }
+            >
                 <div className={gridSession}>
                     <StatCell
                         compact={c}
@@ -135,6 +172,7 @@ export function PaperbotSummary({ summary, layout = "default" }: Props) {
                     />
                 </div>
             </div>
+            )}
         </Card>
     );
 }
