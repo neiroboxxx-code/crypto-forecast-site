@@ -38,13 +38,24 @@ function longContextColor(ctx: HtfContext["long_context"]): string {
 
 function regimeLabel(regime: HtfContext["trend_regime"]): string {
     switch (regime) {
-        case "strong_uptrend": return "Strong Uptrend ↑↑";
-        case "weak_uptrend":   return "Uptrend ↑";
-        case "neutral":        return "Neutral ↔";
-        case "downtrend":      return "Downtrend ↓";
-        case "overheated":     return "Overheated 🔥";
+        case "strong_uptrend": return "Strong Uptrend";
+        case "weak_uptrend":   return "Uptrend";
+        case "neutral":        return "Neutral";
+        case "downtrend":      return "Downtrend";
+        case "overheated":     return "Overheated";
         case "unknown":        return "Unknown";
         default:               return "—";
+    }
+}
+
+function regimeColor(regime: HtfContext["trend_regime"]): string {
+    switch (regime) {
+        case "strong_uptrend": return "#34d399";
+        case "weak_uptrend":   return "#86efac";
+        case "neutral":        return "#94a3b8";
+        case "downtrend":      return "#f87171";
+        case "overheated":     return "#fb923c";
+        default:               return "#6b7280";
     }
 }
 
@@ -119,9 +130,10 @@ function HtfPanelInner({ data }: { data: HtfContext }) {
                 </div>
                 <div className="flex flex-col gap-1">
                     <span className="text-xs text-slate-500 uppercase tracking-wide">Trend Regime</span>
-                    <span className="text-sm font-medium text-slate-200">
-                        {regimeLabel(data.trend_regime)}
-                    </span>
+                    <Badge
+                        label={regimeLabel(data.trend_regime)}
+                        color={regimeColor(data.trend_regime)}
+                    />
                 </div>
                 {dist && (
                     <div className="flex flex-col gap-1">
@@ -138,11 +150,11 @@ function HtfPanelInner({ data }: { data: HtfContext }) {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
                     <div className="bg-white/5 rounded p-2">
                         <div className="text-slate-500 mb-0.5">EMA 200</div>
-                        <div className="text-slate-200 font-mono">{ema.ema_200 ? `$${ema.ema_200.toLocaleString()}` : "—"}</div>
+                        <div className="text-slate-200 font-mono">{ema.ema_200 ? `$${Math.round(ema.ema_200).toLocaleString()}` : "—"}</div>
                     </div>
                     <div className="bg-white/5 rounded p-2">
                         <div className="text-slate-500 mb-0.5">EMA 50</div>
-                        <div className="text-slate-200 font-mono">{ema.ema_50 ? `$${ema.ema_50.toLocaleString()}` : "—"}</div>
+                        <div className="text-slate-200 font-mono">{ema.ema_50 ? `$${Math.round(ema.ema_50).toLocaleString()}` : "—"}</div>
                     </div>
                     <div className="bg-white/5 rounded p-2">
                         <div className="text-slate-500 mb-0.5">Dist from 200</div>
