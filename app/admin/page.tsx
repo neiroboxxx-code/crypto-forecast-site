@@ -325,17 +325,21 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
                     />
                 </div>
 
+                {/*
+                  История + точность в одной колонке, журнал справа (lg+).
+                  Раскрытие журнала удлиняет только правую колонку — блок «Точность»
+                  остаётся сразу под историей и не «улетает» вниз вместе с потоком страницы.
+                */}
                 <div className="grid min-w-0 gap-4 lg:grid-cols-2 lg:items-start">
-                    <div className="min-w-0 self-start">
+                    <div className="flex min-w-0 flex-col gap-4 self-start">
                         <PaperbotClosedTrades trades={closedTrades} />
+                        <div className="w-full min-w-0 max-w-full lg:max-w-[min(100%,42rem)]">
+                            <AccuracyPanel />
+                        </div>
                     </div>
                     <div className="min-w-0 self-start">
                         <PaperbotActivityLog entries={logEntries} />
                     </div>
-                </div>
-
-                <div className="w-full max-w-[50%] min-w-[260px]">
-                    <AccuracyPanel />
                 </div>
             </div>
         </div>
