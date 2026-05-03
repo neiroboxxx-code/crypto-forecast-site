@@ -63,7 +63,7 @@ export function PaperbotSettings({ settings, onChange, disabled }: Props) {
 
     return (
         <Card
-            className="border-emerald-500/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]"
+            className="flex h-full min-h-0 flex-col border-emerald-500/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]"
             title="Параметры бота"
             subtitle="Фильтры входа и управление риском"
             right={
@@ -73,7 +73,7 @@ export function PaperbotSettings({ settings, onChange, disabled }: Props) {
                 </div>
             }
         >
-            <div className="flex flex-col gap-4">
+            <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pr-0.5">
                 {/* Deposit */}
                 <div>
                     <RowLabel>Депозит ($)</RowLabel>

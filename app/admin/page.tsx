@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Bot, Play, Square, RefreshCw, LogOut, Shield } from "lucide-react";
+import { Play, Square, RefreshCw, LogOut, Shield, Save } from "lucide-react";
 import {
     getPaperbotState,
     startPaperbot,
@@ -225,7 +225,7 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
     return (
         <div className="min-h-screen bg-[#080A0F] px-4 py-6 md:px-8">
             {/* Header */}
-            <div className="mx-auto mb-6 flex max-w-5xl items-center justify-between">
+            <div className="mx-auto mb-6 flex max-w-7xl items-center justify-between">
                 <div className="flex items-center gap-3">
                     <Shield className="h-4 w-4 text-emerald-400/70" />
                     <span className="text-[11px] uppercase tracking-[0.18em] text-white/40">Admin · PaperBot Control</span>
@@ -240,62 +240,83 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
                 </button>
             </div>
 
-            <div className="mx-auto flex max-w-5xl flex-col gap-4">
+            <div className="mx-auto flex max-w-7xl min-w-0 flex-col gap-4">
+                {/* Верхний ряд: 4 равные плитки */}
+                <div className="grid min-h-[200px] min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4 xl:items-stretch">
+                    <Card
+                        title="Управление ботом"
+                        subtitle={isActive ? "Активен" : "Стоп"}
+                        padded
+                        className="flex min-h-[200px] flex-col border-emerald-500/15 bg-gradient-to-br from-emerald-500/[0.04] via-[#0E1117]/90 to-transparent"
+                    >
+                        <div className="flex flex-1 flex-col items-center justify-center gap-3">
+                            <div className="flex items-center justify-center gap-2">
+                                <button
+                                    type="button"
+                                    onClick={handleToggle}
+                                    disabled={actionPending || loading}
+                                    title={isActive ? "Остановить бота" : "Запустить бота"}
+                                    aria-label={isActive ? "Остановить бота" : "Запустить бота"}
+                                    className={`inline-flex h-11 w-11 items-center justify-center rounded-xl border transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                                        isActive
+                                            ? "border-rose-400/35 bg-rose-400/15 text-rose-200 hover:bg-rose-400/25"
+                                            : "border-emerald-400/40 bg-emerald-400/15 text-emerald-200 hover:bg-emerald-400/25"
+                                    }`}
+                                >
+                                    {isActive ? (
+                                        <Square className="h-5 w-5" fill="currentColor" aria-hidden />
+                                    ) : (
+                                        <Play className="h-5 w-5 translate-x-0.5" fill="currentColor" aria-hidden />
+                                    )}
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={handleTick}
+                                    disabled={tickPending || loading}
+                                    title="Ручной тик"
+                                    aria-label="Ручной тик"
+                                    className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-200 transition-colors hover:bg-cyan-400/20 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    <RefreshCw className={`h-5 w-5 ${tickPending ? "animate-spin" : ""}`} aria-hidden />
+                                </button>
+                            </div>
+                            {localSettings && !isActive && (
+                                <button
+                                    type="button"
+                                    onClick={handleSaveSettings}
+                                    disabled={settingsPending}
+                                    title="Сохранить настройки"
+                                    aria-label="Сохранить настройки"
+                                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-amber-400/35 bg-amber-400/10 text-amber-200 transition-colors hover:bg-amber-400/20 disabled:opacity-50"
+                                >
+                                    <Save className="h-4 w-4" aria-hidden />
+                                </button>
+                            )}
+                            {tickMsg && (
+                                <p className="max-w-full px-1 text-center text-[10px] leading-tight text-emerald-300/80">
+                                    {tickMsg}
+                                </p>
+                            )}
+                        </div>
+                    </Card>
 
-                {/* Control card */}
-                <Card
-                    title="Управление ботом"
-                    subtitle={isActive ? "Бот активен · отслеживает сигналы каждые 4H" : "Бот остановлен"}
-                    padded
-                    className="border-emerald-500/15 bg-gradient-to-br from-emerald-500/[0.04] via-[#0E1117]/90 to-transparent"
-                >
-                    <div className="flex flex-wrap items-center gap-3">
-                        {/* Start / Stop */}
-                        <button
-                            onClick={handleToggle}
-                            disabled={actionPending || loading}
-                            className={`inline-flex items-center gap-2 rounded-lg border px-5 py-2.5 text-[12px] font-semibold uppercase tracking-wider transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-                                isActive
-                                    ? "border-rose-400/30 bg-rose-400/10 text-rose-200 hover:bg-rose-400/20"
-                                    : "border-emerald-400/35 bg-emerald-400/10 text-emerald-200 hover:bg-emerald-400/20"
-                            }`}
-                        >
-                            {isActive
-                                ? <><Square className="h-3.5 w-3.5" /> Остановить</>
-                                : <><Play className="h-3.5 w-3.5" /> Запустить</>
-                            }
-                        </button>
+                    <PaperbotSignalBox
+                        compact
+                        signal={toSignal(data?.signal ?? null)}
+                        settings={effectiveSettings}
+                    />
+                    <PaperbotMonitorWidget
+                        compact
+                        monitor={data?.monitor ?? null}
+                        botActive={isActive}
+                        openPositionsCount={positions.length}
+                    />
+                    <PaperbotPositionsTable compact positions={positions} />
+                </div>
 
-                        {/* Manual tick */}
-                        <button
-                            onClick={handleTick}
-                            disabled={tickPending || loading}
-                            className="inline-flex items-center gap-2 rounded-lg border border-cyan-400/25 bg-cyan-400/8 px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-cyan-200/80 transition-colors hover:bg-cyan-400/15 disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                            <RefreshCw className={`h-3.5 w-3.5 ${tickPending ? "animate-spin" : ""}`} />
-                            Ручной тик
-                        </button>
-
-                        {/* Save settings (only when bot is stopped and settings changed) */}
-                        {localSettings && !isActive && (
-                            <button
-                                onClick={handleSaveSettings}
-                                disabled={settingsPending}
-                                className="inline-flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-400/8 px-4 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-amber-200/80 transition-colors hover:bg-amber-400/15 disabled:opacity-50"
-                            >
-                                {settingsPending ? "Сохраняем..." : "Сохранить настройки"}
-                            </button>
-                        )}
-
-                        {tickMsg && (
-                            <span className="text-[11px] text-emerald-300/70">{tickMsg}</span>
-                        )}
-                    </div>
-                </Card>
-
-                {/* Signal + Settings */}
-                <div className="grid gap-4 lg:grid-cols-2">
-                    <PaperbotSignalBox signal={toSignal(data?.signal ?? null)} settings={effectiveSettings} />
+                {/* Сводка (вертикаль) + параметры */}
+                <div className="grid min-w-0 gap-4 lg:grid-cols-2 lg:items-stretch">
+                    <PaperbotSummary layout="vertical" summary={summary} />
                     <PaperbotSettings
                         settings={effectiveSettings}
                         onChange={setLocalSettings}
@@ -303,21 +324,14 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
                     />
                 </div>
 
-                <PaperbotSummary summary={summary} />
-                <PaperbotMonitorWidget
-                    monitor={data?.monitor ?? null}
-                    botActive={isActive}
-                    openPositionsCount={positions.length}
-                />
-                <PaperbotPositionsTable positions={positions} />
-
-                <div className="grid gap-4 lg:grid-cols-[1fr_380px] lg:items-start">
+                <div className="grid min-w-0 gap-4 lg:grid-cols-2 lg:items-start">
                     <PaperbotClosedTrades trades={closedTrades} />
                     <PaperbotActivityLog entries={logEntries} />
                 </div>
 
-                <AccuracyPanel />
-
+                <div className="w-full max-w-[50%] min-w-[260px]">
+                    <AccuracyPanel />
+                </div>
             </div>
         </div>
     );

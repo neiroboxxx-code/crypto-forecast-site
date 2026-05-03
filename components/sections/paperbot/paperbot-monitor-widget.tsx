@@ -8,6 +8,8 @@ type Props = {
     monitor: PaperBotMonitor | null;
     botActive: boolean;
     openPositionsCount: number;
+    /** Компактная плитка в ряду админки (как сигнал / управление). */
+    compact?: boolean;
 };
 
 function fmtAgo(iso: string | null): string {
@@ -55,7 +57,7 @@ function StatusDot({
     );
 }
 
-export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount }: Props) {
+export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount, compact }: Props) {
     const lastAt = monitor?.lastAt ?? null;
     const lastPrice = monitor?.lastPrice ?? null;
     const lastPositions = monitor?.lastPositions ?? 0;
@@ -73,25 +75,44 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount }
                     ? "stale"
                     : "never";
 
+    const statusShort =
+        mode === "inactive"
+            ? "Стоп"
+            : mode === "waiting"
+                ? "Ждёт"
+                : mode === "alive"
+                    ? "Ок"
+                    : mode === "stale"
+                        ? "Нет данных"
+                        : "…";
+
     return (
         <Card
-            className="border-white/8"
+            className={`border-white/8 ${compact ? "flex h-full min-h-0 flex-col p-3" : ""}`}
             title="Монитор позиций"
-            subtitle="Проверка SL · TP · trailing · тайм-аут"
+            subtitle={compact ? undefined : "Проверка SL · TP · trailing · тайм-аут"}
+            padded={!compact}
             right={
-                <div className="flex items-center gap-1.5 rounded border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider text-white/45">
-                    <Activity className="h-3.5 w-3.5" aria-hidden />
-                    каждые 15 мин
-                </div>
+                compact ? (
+                    <span className="text-[9px] tabular-nums text-white/35" title="Интервал мониторинга">
+                        15м
+                    </span>
+                ) : (
+                    <div className="flex items-center gap-1.5 rounded border border-white/10 bg-white/5 px-2 py-1 text-[10px] uppercase tracking-wider text-white/45">
+                        <Activity className="h-3.5 w-3.5" aria-hidden />
+                        каждые 15 мин
+                    </div>
+                )
             }
         >
-            <div className="flex flex-col gap-3">
-                {/* Status row */}
-                <div className="flex items-center gap-3 rounded-xl border border-white/8 bg-black/20 px-4 py-3">
+            <div className={`flex min-h-0 flex-col ${compact ? "min-h-0 flex-1 gap-2" : "gap-3"}`}>
+                <div
+                    className={`flex items-center gap-2 rounded-xl border border-white/8 bg-black/20 ${compact ? "px-2 py-2" : "px-4 py-3"}`}
+                >
                     <StatusDot lastAt={lastAt} mode={mode} />
-                    <div className="flex-1 min-w-0">
-                        <div className="text-[12px] font-semibold text-white/85">
-                            {mode === "inactive"
+                    <div className="min-w-0 flex-1">
+                        <div className={`font-semibold text-white/85 ${compact ? "text-[11px]" : "text-[12px]"}`}>
+                            {compact ? statusShort : mode === "inactive"
                                 ? "Остановлен"
                                 : mode === "waiting"
                                     ? "Ждёт открытия сделок"
@@ -101,48 +122,77 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount }
                                             ? "Нет данных"
                                             : "Ожидает первого тика"}
                         </div>
-                        <div className="mt-0.5 text-[10px] text-white/40">
-                            {mode === "waiting"
-                                ? "Запустится автоматически при открытой позиции"
-                                : lastAt
-                                    ? `Последняя проверка: ${fmtAgo(lastAt)}`
-                                    : "Монитор запустится по расписанию cron"}
-                        </div>
+                        {!compact && (
+                            <div className="mt-0.5 text-[10px] text-white/40">
+                                {mode === "waiting"
+                                    ? "Запустится автоматически при открытой позиции"
+                                    : lastAt
+                                        ? `Последняя проверка: ${fmtAgo(lastAt)}`
+                                        : "Монитор запустится по расписанию cron"}
+                            </div>
+                        )}
+                        {compact && (
+                            <div className="mt-0.5 text-[9px] leading-tight text-white/35">
+                                {mode === "waiting"
+                                    ? "При открытии поз."
+                                    : lastAt
+                                        ? fmtAgo(lastAt)
+                                        : "cron"}
+                            </div>
+                        )}
                     </div>
                 </div>
 
-                {/* Stat row */}
-                <div className="grid grid-cols-3 gap-2">
-                    <div className="rounded-lg border border-white/8 bg-white/[0.02] px-3 py-2.5 text-center">
-                        <div className="text-[10px] uppercase tracking-[0.1em] text-white/35">Время</div>
-                        <div className="mt-1 text-[12px] font-semibold tabular-nums text-white/80">
+                <div className={`grid grid-cols-3 gap-1.5 ${compact ? "" : "gap-2"}`}>
+                    <div
+                        className={`rounded-lg border border-white/8 bg-white/[0.02] text-center ${compact ? "px-1 py-1.5" : "px-3 py-2.5"}`}
+                    >
+                        <div className={`uppercase tracking-[0.1em] text-white/35 ${compact ? "text-[8px]" : "text-[10px]"}`}>
+                            Время
+                        </div>
+                        <div
+                            className={`font-semibold tabular-nums text-white/80 ${compact ? "mt-0.5 text-[10px]" : "mt-1 text-[12px]"}`}
+                        >
                             {fmtAgo(lastAt)}
                         </div>
                     </div>
-                    <div className="rounded-lg border border-white/8 bg-white/[0.02] px-3 py-2.5 text-center">
-                        <div className="text-[10px] uppercase tracking-[0.1em] text-white/35">BTC цена</div>
-                        <div className="mt-1 text-[12px] font-semibold tabular-nums text-white/80">
+                    <div
+                        className={`rounded-lg border border-white/8 bg-white/[0.02] text-center ${compact ? "px-1 py-1.5" : "px-3 py-2.5"}`}
+                    >
+                        <div className={`uppercase tracking-[0.1em] text-white/35 ${compact ? "text-[8px]" : "text-[10px]"}`}>
+                            BTC
+                        </div>
+                        <div
+                            className={`font-semibold tabular-nums text-white/80 ${compact ? "mt-0.5 text-[10px]" : "mt-1 text-[12px]"}`}
+                        >
                             {fmtPrice(lastPrice)}
                         </div>
                     </div>
-                    <div className="rounded-lg border border-white/8 bg-white/[0.02] px-3 py-2.5 text-center">
-                        <div className="text-[10px] uppercase tracking-[0.1em] text-white/35">Позиций</div>
-                        <div className={`mt-1 text-[12px] font-semibold tabular-nums ${
-                            lastPositions > 0 ? "text-emerald-300" : "text-white/80"
-                        }`}>
+                    <div
+                        className={`rounded-lg border border-white/8 bg-white/[0.02] text-center ${compact ? "px-1 py-1.5" : "px-3 py-2.5"}`}
+                    >
+                        <div className={`uppercase tracking-[0.1em] text-white/35 ${compact ? "text-[8px]" : "text-[10px]"}`}>
+                            Поз.
+                        </div>
+                        <div
+                            className={`mt-0.5 font-semibold tabular-nums ${compact ? "text-[10px]" : "mt-1 text-[12px]"} ${
+                                lastPositions > 0 ? "text-emerald-300" : "text-white/80"
+                            }`}
+                        >
                             {botActive ? openPositionsCount : "—"}
                         </div>
                     </div>
                 </div>
 
-                {/* Next check estimate */}
                 {lastAt && mode !== "waiting" && (
-                    <div className="text-[10px] text-white/28 text-center">
+                    <div
+                        className={`text-center text-white/28 ${compact ? "mt-auto text-[9px]" : "text-[10px]"}`}
+                    >
                         {(() => {
                             const nextMins = 15 - ((mins ?? 0) % 15);
                             return nextMins <= 1
-                                ? "Следующий тик · менее минуты"
-                                : `Следующий тик · примерно через ${nextMins} мин`;
+                                ? "След. тик <1м"
+                                : `След. ~${nextMins}м`;
                         })()}
                     </div>
                 )}

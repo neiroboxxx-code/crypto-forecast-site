@@ -4,6 +4,8 @@ import type { PaperPosition } from "@/components/sections/paperbot/types";
 
 type Props = {
     positions: PaperPosition[];
+    /** Узкая плитка в ряду админки: без широкой таблицы. */
+    compact?: boolean;
 };
 
 function fmtUsd(n: number) {
@@ -25,7 +27,72 @@ function DistancePill({ pct, danger }: { pct: number; danger: boolean }) {
     );
 }
 
-export function PaperbotPositionsTable({ positions }: Props) {
+export function PaperbotPositionsTable({ positions, compact }: Props) {
+    if (compact) {
+        return (
+            <Card
+                className="flex h-full min-h-0 flex-col border-emerald-500/10 p-3 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]"
+                title="Активные позиции"
+                subtitle={positions.length ? `${positions.length} откр.` : undefined}
+                padded={false}
+            >
+                {positions.length === 0 ? (
+                    <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed border-emerald-500/15 bg-black/25 py-6 text-center">
+                        <p className="text-[10px] font-medium text-white/45">Нет позиций</p>
+                    </div>
+                ) : (
+                    <div className="flex max-h-[220px] min-h-0 flex-col gap-1.5 overflow-y-auto pr-0.5">
+                        {positions.map((p) => {
+                            const long = p.side === "long";
+                            const pnlPositive = p.pnlUsd >= 0;
+                            const slClose = p.distanceToSlPct < 1.5;
+                            return (
+                                <div
+                                    key={p.id}
+                                    className="rounded-lg border border-white/8 bg-black/25 p-2 text-[10px] text-white/75"
+                                >
+                                    <div className="flex items-center justify-between gap-1">
+                                        <span className="truncate font-semibold text-white">{p.symbol}</span>
+                                        <span
+                                            className={`shrink-0 rounded border px-1 py-0.5 text-[9px] font-bold uppercase ${
+                                                long
+                                                    ? "border-emerald-400/30 text-emerald-200"
+                                                    : "border-rose-400/30 text-rose-200"
+                                            }`}
+                                        >
+                                            {long ? "L" : "S"}
+                                        </span>
+                                    </div>
+                                    <div
+                                        className={`mt-1 font-semibold tabular-nums ${pnlPositive ? "text-emerald-300" : "text-rose-300"}`}
+                                    >
+                                        {pnlPositive ? "+" : ""}
+                                        {fmtUsd(p.pnlUsd)}{" "}
+                                        <span className="font-normal text-white/40">
+                                            ({pnlPositive ? "+" : ""}
+                                            {p.pnlPct.toFixed(1)}%)
+                                        </span>
+                                    </div>
+                                    <div className="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5 tabular-nums text-[9px] text-white/45">
+                                        <span>Вх {fmtPrice(p.entry)}</span>
+                                        <span>Mk {fmtPrice(p.mark)}</span>
+                                        <span className="text-rose-300/80">SL {fmtPrice(p.sl)}</span>
+                                        <span className="text-emerald-300/80">TP {fmtPrice(p.tp)}</span>
+                                    </div>
+                                    <div className="mt-1 flex flex-wrap gap-1 text-[9px] text-white/35">
+                                        <DistancePill pct={p.distanceToSlPct} danger={slClose} />
+                                        <DistancePill pct={p.distanceToTpPct} danger={false} />
+                                        <span>{p.leverage}x</span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </Card>
+        );
+    }
+
     return (
         <Card
             className="border-emerald-500/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]"

@@ -39,11 +39,13 @@ export function StatCell({
     value,
     sub,
     tone = "default",
+    compact,
 }: {
     label: string;
     value: ReactNode;
     sub?: ReactNode;
     tone?: "default" | "long" | "short" | "info" | "warn";
+    compact?: boolean;
 }) {
     const toneClass =
         tone === "long"
@@ -57,12 +59,22 @@ export function StatCell({
             : "text-white";
 
     return (
-        <div className="rounded-lg border border-white/8 bg-black/30 p-3">
-            <div className="text-[10px] uppercase tracking-[0.16em] text-white/40">{label}</div>
-            <div className={`mt-1.5 text-lg font-semibold tabular-nums tracking-tight ${toneClass}`}>
+        <div className={`rounded-lg border border-white/8 bg-black/30 ${compact ? "p-2" : "p-3"}`}>
+            <div className={`uppercase tracking-[0.16em] text-white/40 ${compact ? "text-[9px]" : "text-[10px]"}`}>
+                {label}
+            </div>
+            <div
+                className={`font-semibold tabular-nums tracking-tight ${toneClass} ${
+                    compact ? "mt-1 text-sm" : "mt-1.5 text-lg"
+                }`}
+            >
                 {value}
             </div>
-            {sub && <div className="mt-0.5 text-[11px] text-white/45">{sub}</div>}
+            {sub && (
+                <div className={`text-white/45 ${compact ? "mt-0.5 text-[10px] leading-snug" : "mt-0.5 text-[11px]"}`}>
+                    {sub}
+                </div>
+            )}
         </div>
     );
 }

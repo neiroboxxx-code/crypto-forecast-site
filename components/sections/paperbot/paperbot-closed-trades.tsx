@@ -1,4 +1,7 @@
-import { ArrowDownRight, ArrowUpRight, X, Target, RefreshCw, Hand } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { ArrowDownRight, ArrowUpRight, X, Target, RefreshCw, Hand, ChevronDown } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { PaperClosedTrade } from "@/components/sections/paperbot/types";
 
@@ -53,11 +56,29 @@ function ReasonBadge({ reason }: { reason: PaperClosedTrade["closeReason"] }) {
 }
 
 export function PaperbotClosedTrades({ trades }: Props) {
+    const [open, setOpen] = useState(false);
+
     return (
         <Card
             className="border-emerald-500/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.03)]"
             title="История сделок"
             subtitle="Закрытые позиции бота"
+            right={
+                trades.length > 0 ? (
+                    <button
+                        type="button"
+                        onClick={() => setOpen((v) => !v)}
+                        className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-white/50 transition hover:border-white/20 hover:text-white/70"
+                        aria-expanded={open}
+                    >
+                        <span className="tabular-nums">{trades.length}</span>
+                        <ChevronDown
+                            className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+                            aria-hidden
+                        />
+                    </button>
+                ) : undefined
+            }
         >
             {trades.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-emerald-500/15 bg-black/25 px-4 py-8 text-center">
@@ -68,8 +89,9 @@ export function PaperbotClosedTrades({ trades }: Props) {
                     </p>
                 </div>
             ) : (
-                <div className="overflow-x-auto">
-                    <table className="w-full min-w-[720px] border-separate border-spacing-0 text-[12px]">
+                open && (
+                    <div className="max-h-[440px] overflow-x-auto overflow-y-auto pr-1">
+                        <table className="w-full min-w-[720px] border-separate border-spacing-0 text-[12px]">
                         <thead>
                             <tr className="text-left text-[10px] uppercase tracking-[0.16em] text-white/40">
                                 <th className="border-b border-white/8 pb-2 pr-3 font-medium">Сторона</th>
@@ -127,7 +149,8 @@ export function PaperbotClosedTrades({ trades }: Props) {
                             })}
                         </tbody>
                     </table>
-                </div>
+                    </div>
+                )
             )}
         </Card>
     );
