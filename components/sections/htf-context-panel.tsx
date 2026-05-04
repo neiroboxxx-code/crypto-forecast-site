@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { fetchHtfContext, type HtfContext, type HtfRiskWarning } from "@/lib/api";
 import { useApi } from "@/hooks/use-api";
+import { InfoDialog, InfoIconButton } from "@/components/ui/info-dialog";
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -253,36 +254,127 @@ function HtfPanelInner({ data }: { data: HtfContext }) {
 
 export function HtfContextPanel({ symbol = "BTCUSDT" }: { symbol?: string }) {
     const { data, loading, error } = useApi(() => fetchHtfContext(symbol), [symbol], {
-        intervalMs: 6 * 60 * 60 * 1000,  // refresh every 6H (matches cache TTL)
+        intervalMs: 6 * 60 * 60 * 1000,
     });
+    const [infoOpen, setInfoOpen] = useState(false);
 
     return (
-        <section className="rounded-xl border border-white/10 bg-[#0d1117] p-4">
-            <div className="flex items-center justify-between mb-3">
-                <h2 className="text-sm font-semibold text-slate-200 tracking-wide">
-                    HTF Context
-                    <span className="ml-2 text-xs text-slate-500 font-normal">1W / 1M</span>
-                </h2>
-                {data && !loading && (
-                    <span className="text-xs text-slate-500">{symbol}</span>
+        <>
+            <section className="rounded-xl border border-white/10 bg-[#0d1117] p-4">
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-sm font-semibold text-slate-200 tracking-wide">
+                        HTF Context
+                        <span className="ml-2 text-xs text-slate-500 font-normal">1W / 1M</span>
+                    </h2>
+                    <div className="flex items-center gap-2">
+                        {data && !loading && (
+                            <span className="text-xs text-slate-500">{symbol}</span>
+                        )}
+                        <InfoIconButton
+                            onClick={() => setInfoOpen(true)}
+                            label="Показать пояснение к HTF Context"
+                        />
+                    </div>
+                </div>
+
+                {loading && (
+                    <div className="space-y-2">
+                        {[1, 2, 3].map(i => (
+                            <div key={i} className="h-4 rounded bg-white/5 animate-pulse" />
+                        ))}
+                    </div>
                 )}
-            </div>
 
-            {loading && (
-                <div className="space-y-2">
-                    {[1, 2, 3].map(i => (
-                        <div key={i} className="h-4 rounded bg-white/5 animate-pulse" />
-                    ))}
-                </div>
-            )}
+                {error && !loading && (
+                    <div className="text-xs text-rose-400 py-2">
+                        HTF данные недоступны
+                    </div>
+                )}
 
-            {error && !loading && (
-                <div className="text-xs text-rose-400 py-2">
-                    HTF данные недоступны
-                </div>
-            )}
+                {data && !loading && <HtfPanelInner data={data} />}
+            </section>
 
-            {data && !loading && <HtfPanelInner data={data} />}
-        </section>
+            <InfoDialog
+                open={infoOpen}
+                onClose={() => setInfoOpen(false)}
+                title="HTF Context"
+                subtitle="Позиционирование на старших таймфреймах (1W / 1M)"
+            >
+                <p>
+                    Панель показывает «контекст старшего таймфрейма» — где биткоин находится
+                    относительно недельных и месячных уровней, насколько исчерпан диапазон
+                    текущей недели/месяца, и есть ли структурные риски для открытия лонга.
+                    Данные обновляются раз в 6 часов.
+                </p>
+
+                <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-white/55">
+                    Macro Bias
+                </h4>
+                <ul className="mt-2 space-y-1.5">
+                    <li><span className="font-semibold text-emerald-400">Bullish</span> — цена выше EMA 200, недельная структура в аптренде, уклон дневной EMA 200 растущий.</li>
+                    <li><span className="font-semibold text-rose-400">Bearish</span> — цена ниже EMA 200 и/или структура сломана вниз.</li>
+                    <li><span className="font-semibold text-amber-400">Transition</span> — сигналы смешанные: одни факторы бычьи, другие медвежьи.</li>
+                    <li><span className="font-semibold text-violet-400">Range</span> — рынок в диапазоне без выраженного направления.</li>
+                </ul>
+
+                <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-white/55">
+                    Long Context
+                </h4>
+                <ul className="mt-2 space-y-1.5">
+                    <li><span className="font-semibold text-emerald-400">Favorable</span> — старший таймфрейм поддерживает лонг: цена над EMA 200, диапазон свежий, близко к поддержке.</li>
+                    <li><span className="font-semibold text-slate-400">Neutral</span> — нет явного противопоказания, но и особой поддержки нет.</li>
+                    <li><span className="font-semibold text-rose-400">Unfavorable</span> — старший таймфрейм против лонга: перегрев, контртренд, исчерпанный диапазон.</li>
+                </ul>
+
+                <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-white/55">
+                    Trend Regime
+                </h4>
+                <ul className="mt-2 space-y-1.5">
+                    <li><span className="font-semibold text-emerald-400">Strong Uptrend</span> — цена сильно выше EMA 200, уклон EMA крутой вверх.</li>
+                    <li><span className="font-semibold" style={{ color: "#86efac" }}>Uptrend</span> — цена выше EMA 200, но рост более умеренный.</li>
+                    <li><span className="font-semibold text-slate-400">Neutral</span> — EMA 200 плоская, цена рядом.</li>
+                    <li><span className="font-semibold text-rose-400">Downtrend</span> — цена ниже EMA 200, уклон вниз.</li>
+                    <li><span className="font-semibold text-orange-400">Overheated</span> — цена значительно выше EMA 200 (&gt;25%), высокий риск коррекции.</li>
+                </ul>
+
+                <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-white/55">
+                    EMA 200 / EMA 50
+                </h4>
+                <p className="mt-2">
+                    Ключевые скользящие средние на дневном графике. «Dist from 200» — насколько
+                    текущая цена выше или ниже EMA 200 в процентах. Отрицательное значение
+                    означает, что цена под EMA 200 (медвежий контекст).
+                </p>
+
+                <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-white/55">
+                    Weekly / Monthly range
+                </h4>
+                <ul className="mt-2 space-y-1.5">
+                    <li><span className="font-semibold text-emerald-400">Fresh (&lt;35%)</span> — неделя/месяц только начались, диапазон практически не использован.</li>
+                    <li><span className="font-semibold text-cyan-400">Normal (35–65%)</span> — стандартная середина диапазона.</li>
+                    <li><span className="font-semibold text-amber-400">Extended (65–80%)</span> — движение зашло далеко, потенциал сужается.</li>
+                    <li><span className="font-semibold text-rose-400">Exhausted (&gt;80%)</span> — диапазон практически исчерпан, высокий риск разворота или консолидации.</li>
+                </ul>
+
+                <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-white/55">
+                    Key Levels
+                </h4>
+                <p className="mt-2">
+                    Ключевые уровни недели: хай/лой прошлой недели, yearly open, а также
+                    свинг-хаи и лои. Колонка «ATR» показывает расстояние до уровня в единицах
+                    недельного ATR — значение меньше 0.5 означает «цена почти на уровне».
+                </p>
+
+                <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-white/55">
+                    Risk Warnings
+                </h4>
+                <p className="mt-2">
+                    Автоматические предупреждения, которые движок выдаёт при наличии структурных
+                    рисков: поздний вход у сопротивления, исчерпанный диапазон, контртрендовый
+                    сетап, перегрев и другие. Красная точка — высокий риск, жёлтая — средний,
+                    серая — низкий.
+                </p>
+            </InfoDialog>
+        </>
     );
 }
