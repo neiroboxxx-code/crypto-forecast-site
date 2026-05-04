@@ -17,7 +17,7 @@ const RISK_OPTIONS = [0.5, 1, 1.5, 2, 3, 5];
 const LEVERAGE_OPTIONS = [5, 10, 20];
 const CONFIDENCE_OPTIONS: Array<PaperSettings["minConfidence"]> = ["low", "medium", "high"];
 const PROB_OPTIONS = [52, 55, 60, 65, 70, 75];
-const MAX_POS_OPTIONS = [1, 2, 3];
+const MAX_POS_OPTIONS = [1, 2, 3, 4, 5];
 
 function RowLabel({ children }: { children: React.ReactNode }) {
     return (
