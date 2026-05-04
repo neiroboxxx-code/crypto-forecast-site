@@ -532,3 +532,27 @@ export type HtfContext = {
 export async function fetchHtfContext(symbol = "BTCUSDT"): Promise<HtfContext> {
     return request<HtfContext>(`/api/htf/context?symbol=${symbol}`);
 }
+
+// ---------- HTF History ----------
+
+export type HtfSnapshot = {
+    id: number;
+    symbol: string;
+    created_at: string;
+    macro_bias: string | null;
+    long_context: string | null;
+    trend_regime: string | null;
+    nearest_support: number | null;
+    nearest_resistance: number | null;
+    week_range_used_pct: number | null;
+};
+
+export type HtfHistoryData = {
+    symbol: string;
+    count: number;
+    snapshots: HtfSnapshot[];
+};
+
+export async function getHtfHistory(symbol = "BTCUSDT", limit = 60): Promise<HtfHistoryData> {
+    return request<HtfHistoryData>(`/api/htf/history?symbol=${symbol}&limit=${limit}`);
+}
