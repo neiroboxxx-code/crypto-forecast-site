@@ -1,6 +1,10 @@
+"use client";
+
 import { ArrowUpRight, ArrowDownRight, Minus, Clock } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { PaperSignalState, PaperSettings } from "@/components/sections/paperbot/types";
+import { useApi } from "@/hooks/use-api";
+import { getReversal, type ReversalCandidate } from "@/lib/api";
 
 type Props = {
     signal: PaperSignalState | null;
@@ -39,6 +43,68 @@ function DirIcon({ d }: { d: PaperSignalState["direction"] }) {
 
 function confShort(c: PaperSignalState["confidence"]) {
     return c === "high" ? "HIGH" : c === "medium" ? "MED" : "LOW";
+}
+
+function gradeLabel(cls: string): string {
+    if (cls === "high")   return "STRONG";
+    if (cls === "medium") return "MED";
+    return "WEAK";
+}
+
+function gradeCls(cls: string): string {
+    if (cls === "high")   return "border-emerald-400/30 text-emerald-300/80";
+    if (cls === "medium") return "border-amber-400/30 text-amber-300/80";
+    return "border-white/15 text-white/40";
+}
+
+function CandidatesSection({ compact }: { compact?: boolean }) {
+    const { data, loading } = useApi(getReversal, [], { intervalMs: 4 * 60 * 60 * 1000 });
+    const candidates: ReversalCandidate[] = data?.candidates ?? [];
+
+    return (
+        <div className="border-t border-white/6 pt-2">
+            <div className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-white/30">
+                Reversal Candidates
+            </div>
+
+            {loading && !data && (
+                <div className="h-3 w-24 animate-pulse rounded bg-white/8" />
+            )}
+
+            {!loading && candidates.length === 0 && (
+                <div className="text-[10px] text-white/30">Нет кандидатов</div>
+            )}
+
+            {candidates.length > 0 && (
+                <div className="space-y-1">
+                    {candidates.map((c) => {
+                        const isLong = c.direction === "bullish";
+                        const dirColor = isLong ? "text-emerald-400" : "text-rose-400";
+                        const score = c.scores?.total_score ?? null;
+                        return (
+                            <div
+                                key={c.candidate_id}
+                                className="flex items-center gap-1.5 text-[10px]"
+                            >
+                                <span className={`font-bold ${dirColor}`}>
+                                    {isLong ? "LONG" : "SHORT"}
+                                </span>
+                                <span className="text-white/35">{c.timeframe_main}</span>
+                                <span className={`rounded border px-1 py-px text-[9px] uppercase ${gradeCls(c.classification)}`}>
+                                    {gradeLabel(c.classification)}
+                                </span>
+                                {score !== null && (
+                                    <span className="ml-auto tabular-nums text-white/40">
+                                        {score.toFixed(1)}/10
+                                    </span>
+                                )}
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+        </div>
+    );
 }
 
 function ConfBadge({ c }: { c: PaperSignalState["confidence"] }) {
@@ -188,6 +254,8 @@ export function PaperbotSignalBox({ signal, settings, compact }: Props) {
                             minute: "2-digit",
                         })}
                     </div>
+
+                    <CandidatesSection compact={compact} />
                 </div>
             )}
         </Card>
