@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://kirill-crypto.duckdns.org";
 const STORAGE_KEY = "trade-companion-plans-v1";
@@ -63,7 +63,6 @@ function saveTgId(id: string): void {
 
 function parseNumber(raw: string): number | null {
     if (!raw.trim()) return null;
-    // Strip thousands separators (spaces, commas when followed by 3 digits)
     const cleaned = raw.trim().replace(/\s/g, "").replace(/,(\d{3})/g, "$1").replace(",", ".");
     const n = Number(cleaned);
     return Number.isFinite(n) ? n : null;
@@ -84,12 +83,15 @@ function riskReward(plan: TradePlan): number | null {
     return reward / risk;
 }
 
+type WidgetState = "tab" | "strip" | "open";
+
 export function TradeCompanion() {
-    const [open, setOpen] = useState(false);
+    const [state, setState] = useState<WidgetState>("tab");
     const [form, setForm] = useState<FormState>(EMPTY_FORM);
     const [plans, setPlans] = useState<TradePlan[]>([]);
     const [formError, setFormError] = useState<string | null>(null);
     const [saving, setSaving] = useState(false);
+    const stripRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const local = loadLocalPlans();
@@ -97,6 +99,18 @@ export function TradeCompanion() {
         const tgId = loadSavedTgId();
         if (tgId) setForm((prev) => ({ ...prev, telegramId: tgId }));
     }, []);
+
+    // Close strip when clicking outside
+    useEffect(() => {
+        if (state !== "strip") return;
+        function onClick(e: MouseEvent) {
+            if (stripRef.current && !stripRef.current.contains(e.target as Node)) {
+                setState("tab");
+            }
+        }
+        document.addEventListener("mousedown", onClick);
+        return () => document.removeEventListener("mousedown", onClick);
+    }, [state]);
 
     function handleChange<K extends keyof FormState>(key: K, value: FormState[K]) {
         setForm((prev) => ({ ...prev, [key]: value }));
@@ -182,54 +196,105 @@ export function TradeCompanion() {
     }
 
     const activePlans = plans.filter((p) => p.active);
+    const hasActive = activePlans.length > 0;
+    const firstPlan = activePlans[0];
 
-    if (!open) {
+    // ── Tab (collapsed, always visible on right edge) ──────────────────────
+    if (state === "tab") {
         return (
             <button
                 type="button"
-                onClick={() => setOpen(true)}
+                onClick={() => setState("strip")}
                 aria-label="Open Trade Companion"
-                className="fixed bottom-5 right-5 z-40 flex h-12 items-center gap-2 rounded-[16px] border border-cyan-400/30 bg-[#0E1117]/95 px-4 text-[11px] font-semibold uppercase tracking-[0.16em] text-cyan-200 shadow-[0_12px_30px_-10px_rgba(34,211,238,0.45)] backdrop-blur-md transition hover:border-cyan-400/60 hover:text-white"
+                className="fixed bottom-24 right-0 z-40 flex flex-col items-center gap-1.5 rounded-l-xl border border-r-0 border-white/10 bg-[#0E1117]/95 px-2.5 py-3 backdrop-blur-md transition hover:border-white/20 hover:bg-[#0E1117]"
             >
                 <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
+                    <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 ${hasActive ? "bg-emerald-400" : "bg-white/30"}`} />
+                    <span className={`relative inline-flex h-2 w-2 rounded-full ${hasActive ? "bg-emerald-400" : "bg-white/25"}`} />
                 </span>
-                Trade Companion
-                {activePlans.length > 0 && (
-                    <span className="ml-1 rounded-md border border-cyan-400/40 bg-cyan-400/10 px-1.5 py-0.5 text-[10px] tabular-nums text-cyan-200">
-                        {activePlans.length}
-                    </span>
-                )}
+                <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/40 [writing-mode:vertical-rl]">TC</span>
             </button>
         );
     }
 
+    // ── Strip (hover/click preview) ─────────────────────────────────────────
+    if (state === "strip") {
+        return (
+            <div
+                ref={stripRef}
+                className="fixed bottom-24 right-0 z-40 flex items-center gap-3 rounded-l-xl border border-r-0 border-white/12 bg-[#0E1117]/97 px-3 py-2.5 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)] backdrop-blur-xl"
+            >
+                <span className="relative flex h-2 w-2 shrink-0">
+                    <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 ${hasActive ? "bg-emerald-400" : "bg-cyan-400"}`} />
+                    <span className={`relative inline-flex h-2 w-2 rounded-full ${hasActive ? "bg-emerald-400" : "bg-cyan-400"}`} />
+                </span>
+
+                <div className="flex flex-col">
+                    <span className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/35">Trade Companion</span>
+                    {firstPlan ? (
+                        <span className="text-[11px] font-medium text-white/70">
+                            {firstPlan.symbol} · {sideOf(firstPlan)} · {activePlans.length} план{activePlans.length > 1 ? "а" : ""}
+                        </span>
+                    ) : (
+                        <span className="text-[11px] text-white/40">Нет активных планов</span>
+                    )}
+                </div>
+
+                <button
+                    type="button"
+                    onClick={() => setState("open")}
+                    className="ml-1 shrink-0 rounded-md border border-cyan-400/30 bg-cyan-400/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-cyan-300 transition hover:border-cyan-400/60 hover:text-cyan-200"
+                >
+                    Открыть
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => setState("tab")}
+                    aria-label="Collapse"
+                    className="shrink-0 text-white/25 transition hover:text-white/60"
+                >
+                    <svg viewBox="0 0 10 10" className="h-3 w-3"><path d="M2 2 L8 8 M8 2 L2 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+                </button>
+            </div>
+        );
+    }
+
+    // ── Full panel ──────────────────────────────────────────────────────────
     return (
-        <div className="fixed bottom-5 right-5 z-40 flex w-[340px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-[16px] border border-white/10 bg-[#0A0C12]/95 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)] backdrop-blur-xl">
+        <div className="fixed bottom-5 right-5 z-40 flex w-[340px] max-w-[calc(100vw-2.5rem)] flex-col overflow-hidden rounded-[16px] border border-cyan-400/25 bg-[#0A0C12]/97 shadow-[0_0_0_1px_rgba(34,211,238,0.08),0_24px_60px_-20px_rgba(0,0,0,0.8),0_0_40px_-10px_rgba(34,211,238,0.15)] backdrop-blur-xl">
             <header className="flex items-center justify-between border-b border-white/8 bg-[#0E1117]/90 px-4 py-3">
                 <div className="flex items-center gap-2">
                     <span className="relative flex h-2 w-2">
-                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-60" />
-                        <span className="relative inline-flex h-2 w-2 rounded-full bg-cyan-400" />
+                        <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 ${hasActive ? "bg-emerald-400" : "bg-cyan-400"}`} />
+                        <span className={`relative inline-flex h-2 w-2 rounded-full ${hasActive ? "bg-emerald-400" : "bg-cyan-400"}`} />
                     </span>
                     <div>
-                        <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/45">
-                            Trade Companion
+                        <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/45">Trade Companion</div>
+                        <div className="text-[11px] text-white/60">
+                            {hasActive ? `${activePlans.length} активных план${activePlans.length > 1 ? "а" : ""}` : "Entry & Monitoring"}
                         </div>
-                        <div className="text-[11px] text-white/60">Entry &amp; Monitoring</div>
                     </div>
                 </div>
-                <button
-                    type="button"
-                    onClick={() => setOpen(false)}
-                    aria-label="Close Trade Companion"
-                    className="flex h-7 w-7 items-center justify-center rounded-md border border-white/8 bg-white/[0.03] text-white/60 transition hover:border-white/20 hover:text-white"
-                >
-                    <svg viewBox="0 0 12 12" className="h-3 w-3">
-                        <path d="M2 2 L10 10 M10 2 L2 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                </button>
+                <div className="flex items-center gap-1.5">
+                    <button
+                        type="button"
+                        onClick={() => setState("strip")}
+                        aria-label="Minimize"
+                        className="flex h-7 w-7 items-center justify-center rounded-md border border-white/8 bg-white/[0.03] text-white/40 transition hover:border-white/20 hover:text-white/70"
+                        title="Свернуть"
+                    >
+                        <svg viewBox="0 0 12 3" className="h-2.5 w-3"><path d="M1 1.5 H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setState("tab")}
+                        aria-label="Close"
+                        className="flex h-7 w-7 items-center justify-center rounded-md border border-white/8 bg-white/[0.03] text-white/60 transition hover:border-white/20 hover:text-white"
+                    >
+                        <svg viewBox="0 0 12 12" className="h-3 w-3"><path d="M2 2 L10 10 M10 2 L2 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" /></svg>
+                    </button>
+                </div>
             </header>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-2.5 px-4 py-3">
@@ -244,10 +309,10 @@ export function TradeCompanion() {
                     />
                 </label>
 
-                <NumberField label="Entry Price" value={form.entryPrice} onChange={(v) => handleChange("entryPrice", v)} placeholder="e.g. 67450" tone="neutral" />
+                <NumberField label="Entry Price" value={form.entryPrice} onChange={(v) => handleChange("entryPrice", v)} placeholder="e.g. 81500" tone="neutral" />
                 <div className="grid grid-cols-2 gap-2.5">
-                    <NumberField label="Stop Loss" value={form.stopLoss} onChange={(v) => handleChange("stopLoss", v)} placeholder="66800" tone="short" />
-                    <NumberField label="Take Profit" value={form.takeProfit} onChange={(v) => handleChange("takeProfit", v)} placeholder="68900" tone="long" />
+                    <NumberField label="Stop Loss" value={form.stopLoss} onChange={(v) => handleChange("stopLoss", v)} placeholder="81300" tone="short" />
+                    <NumberField label="Take Profit" value={form.takeProfit} onChange={(v) => handleChange("takeProfit", v)} placeholder="81800" tone="long" />
                 </div>
 
                 <label className="flex flex-col gap-1.5">
@@ -299,19 +364,19 @@ export function TradeCompanion() {
             <div className="border-t border-white/8 bg-[#0E1117]/60">
                 <div className="flex items-center justify-between px-4 py-2">
                     <div className="text-[10px] uppercase tracking-[0.16em] text-white/45">
-                        Saved plans
+                        Активные планы
                         <span className="ml-2 tabular-nums text-white/35">{activePlans.length}</span>
                     </div>
                     {activePlans.length > 0 && (
                         <button type="button" onClick={clearAll} className="text-[10px] uppercase tracking-[0.16em] text-white/40 transition hover:text-rose-300">
-                            Clear all
+                            Удалить все
                         </button>
                     )}
                 </div>
-                <div className="max-h-[220px] overflow-y-auto px-4 pb-3">
+                <div className="max-h-[200px] overflow-y-auto px-4 pb-3">
                     {activePlans.length === 0 ? (
                         <div className="rounded-md border border-dashed border-white/10 bg-black/20 py-4 text-center text-[11px] text-white/35">
-                            No plans stored yet
+                            Нет активных планов
                         </div>
                     ) : (
                         <ul className="space-y-2">
@@ -356,13 +421,9 @@ function PlanRow({ plan, onRemove }: { plan: TradePlan; onRemove: () => void }) 
         <li className="rounded-lg border border-white/8 bg-black/30 px-3 py-2">
             <div className="flex items-center justify-between text-[11px]">
                 <div className="flex items-center gap-1.5">
-                    <span className={`rounded border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${sideTone}`}>
-                        {side}
-                    </span>
+                    <span className={`rounded border px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${sideTone}`}>{side}</span>
                     <span className="text-[10px] font-medium text-white/50">{plan.symbol}</span>
-                    {plan.telegramId && (
-                        <span className="text-[9px] text-cyan-400/60" title="Telegram alerts active">✈</span>
-                    )}
+                    {plan.telegramId && <span className="text-[9px] text-emerald-400/70" title="Telegram алерты активны">●</span>}
                 </div>
                 <div className="flex items-center gap-2 tabular-nums text-white/45">
                     {rr !== null && <span title="Reward / Risk">R:R {rr.toFixed(2)}</span>}
