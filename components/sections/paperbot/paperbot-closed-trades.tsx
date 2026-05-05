@@ -97,6 +97,7 @@ export function PaperbotClosedTrades({ trades }: Props) {
                                 <th className="border-b border-white/8 pb-2 pr-3 font-medium">Сторона</th>
                                 <th className="border-b border-white/8 pb-2 pr-3 font-medium">Вход</th>
                                 <th className="border-b border-white/8 pb-2 pr-3 font-medium">Выход</th>
+                                <th className="border-b border-white/8 pb-2 pr-3 font-medium">Объём</th>
                                 <th className="border-b border-white/8 pb-2 pr-3 font-medium">Плечо</th>
                                 <th className="border-b border-white/8 pb-2 pr-3 font-medium">Длит.</th>
                                 <th className="border-b border-white/8 pb-2 pr-3 font-medium">Причина</th>
@@ -127,6 +128,10 @@ export function PaperbotClosedTrades({ trades }: Props) {
                                         </td>
                                         <td className="border-b border-white/6 py-2.5 pr-3 tabular-nums">${fmtPrice(t.entry)}</td>
                                         <td className="border-b border-white/6 py-2.5 pr-3 tabular-nums">${fmtPrice(t.exit)}</td>
+                                        <td className="border-b border-white/6 py-2.5 pr-3 tabular-nums">
+                                            <div>{t.size}</div>
+                                            <div className="text-[10px] text-white/35">${fmtPrice(t.size * t.entry)}</div>
+                                        </td>
                                         <td className="border-b border-white/6 py-2.5 pr-3 tabular-nums text-white/55">{t.leverage}x</td>
                                         <td className="border-b border-white/6 py-2.5 pr-3 tabular-nums text-white/55">
                                             {fmtDuration(t.openedAt, t.closedAt)}
