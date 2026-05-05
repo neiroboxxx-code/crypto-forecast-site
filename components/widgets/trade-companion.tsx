@@ -63,7 +63,9 @@ function saveTgId(id: string): void {
 
 function parseNumber(raw: string): number | null {
     if (!raw.trim()) return null;
-    const n = Number(raw.replace(",", "."));
+    // Strip thousands separators (spaces, commas when followed by 3 digits)
+    const cleaned = raw.trim().replace(/\s/g, "").replace(/,(\d{3})/g, "$1").replace(",", ".");
+    const n = Number(cleaned);
     return Number.isFinite(n) ? n : null;
 }
 
