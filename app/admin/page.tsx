@@ -132,7 +132,7 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
     const effectiveSettings: PaperSettings = localSettings ??
         (data ? toSettings(data.settings) : {
             depositUsd: 1000, riskPct: 2, leverage: 10, leverageEnabled: true,
-            minConfidence: "medium", minProbabilityPct: 60,
+            minConfidence: "medium", minProbabilityPct: 65,
             allowLong: true, allowShort: true, maxPositions: 1, positionTimeoutHours: 48,
         });
 
