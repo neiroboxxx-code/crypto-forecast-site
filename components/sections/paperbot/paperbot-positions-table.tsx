@@ -79,10 +79,13 @@ export function PaperbotPositionsTable({ positions, compact }: Props) {
                                         <span className="text-rose-300/80">SL {fmtPrice(p.sl)}</span>
                                         <span className="text-emerald-300/80">TP {fmtPrice(p.tp)}</span>
                                     </div>
-                                    <div className="mt-1 flex flex-wrap gap-1 text-[9px] text-white/35">
+                                    <div className="mt-1 flex flex-wrap items-center gap-1 text-[9px] text-white/35">
                                         <DistancePill pct={p.distanceToSlPct} danger={slClose} />
                                         <DistancePill pct={p.distanceToTpPct} danger={false} />
                                         <span>{p.leverage}x</span>
+                                        <span className="ml-auto tabular-nums text-white/28">
+                                            ${fmtPrice(p.size * p.entry)}
+                                        </span>
                                     </div>
                                 </div>
                             );
@@ -150,7 +153,10 @@ export function PaperbotPositionsTable({ positions, compact }: Props) {
                                                 {long ? "Long" : "Short"}
                                             </span>
                                         </td>
-                                        <td className="border-b border-white/6 py-2.5 pr-3 tabular-nums">{p.size}</td>
+                                        <td className="border-b border-white/6 py-2.5 pr-3 tabular-nums">
+                                            <div>{p.size}</div>
+                                            <div className="text-[10px] text-white/35">${fmtPrice(p.size * p.entry)}</div>
+                                        </td>
                                         <td className="border-b border-white/6 py-2.5 pr-3 tabular-nums">${fmtPrice(p.entry)}</td>
                                         <td className="border-b border-white/6 py-2.5 pr-3 tabular-nums">${fmtPrice(p.mark)}</td>
                                         <td className="border-b border-white/6 py-2.5 pr-3">
