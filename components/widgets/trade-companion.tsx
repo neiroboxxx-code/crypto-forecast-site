@@ -206,13 +206,13 @@ export function TradeCompanion() {
                 type="button"
                 onClick={() => setState("strip")}
                 aria-label="Open Trade Companion"
-                className="fixed bottom-24 right-0 z-40 flex flex-col items-center gap-1.5 rounded-l-xl border border-r-0 border-white/10 bg-[#0E1117]/95 px-2.5 py-3 backdrop-blur-md transition hover:border-white/20 hover:bg-[#0E1117]"
+                className="animate-tc-glow fixed bottom-24 right-0 z-40 flex items-center gap-2 rounded-l-xl border border-r-0 border-cyan-400/20 bg-[#0E1117]/95 px-3 py-2 backdrop-blur-md transition hover:bg-[#0E1117]"
             >
-                <span className="relative flex h-2 w-2">
-                    <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 ${hasActive ? "bg-emerald-400" : "bg-white/30"}`} />
-                    <span className={`relative inline-flex h-2 w-2 rounded-full ${hasActive ? "bg-emerald-400" : "bg-white/25"}`} />
+                <span className="relative flex h-1.5 w-1.5 shrink-0">
+                    <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-50 ${hasActive ? "bg-emerald-400" : "bg-cyan-400"}`} />
+                    <span className={`relative inline-flex h-1.5 w-1.5 rounded-full ${hasActive ? "bg-emerald-400" : "bg-cyan-400/60"}`} />
                 </span>
-                <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/40 [writing-mode:vertical-rl]">TC</span>
+                <span className="text-[9px] font-bold uppercase tracking-[0.14em] text-white/35">TC</span>
             </button>
         );
     }
@@ -222,7 +222,7 @@ export function TradeCompanion() {
         return (
             <div
                 ref={stripRef}
-                className="fixed bottom-24 right-0 z-40 flex items-center gap-3 rounded-l-xl border border-r-0 border-white/12 bg-[#0E1117]/97 px-3 py-2.5 shadow-[0_8px_32px_-8px_rgba(0,0,0,0.6)] backdrop-blur-xl"
+                className="fixed bottom-24 right-0 z-40 flex items-center gap-3 rounded-l-xl border border-r-0 border-cyan-400/20 bg-[#0E1117]/97 px-3 py-2.5 shadow-[0_0_20px_-4px_rgba(34,211,238,0.15),0_8px_32px_-8px_rgba(0,0,0,0.6)] backdrop-blur-xl"
             >
                 <span className="relative flex h-2 w-2 shrink-0">
                     <span className={`absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 ${hasActive ? "bg-emerald-400" : "bg-cyan-400"}`} />
