@@ -248,14 +248,16 @@ export function TradeCompanion() {
                     <NumberField label="Take Profit" value={form.takeProfit} onChange={(v) => handleChange("takeProfit", v)} placeholder="68900" tone="long" />
                 </div>
 
-                <label className="flex flex-col gap-1">
-                    <span className="text-[10px] uppercase tracking-[0.16em] text-white/40">
-                        Telegram ID{" "}
-                        <span className="normal-case tracking-normal text-white/25">
-                            — напиши /start боту{" "}
-                            <span className="text-cyan-400/70">@CryptoCompanionBot</span>
-                        </span>
-                    </span>
+                <label className="flex flex-col gap-1.5">
+                    <span className="text-[10px] uppercase tracking-[0.16em] text-white/40">Telegram ID</span>
+                    <a
+                        href="https://t.me/crycom_bot"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-1.5 rounded-md border border-cyan-400/25 bg-cyan-400/8 py-1.5 text-[12px] font-medium text-cyan-300 transition hover:border-cyan-400/50 hover:text-cyan-200"
+                    >
+                        Написать /start боту @crycom_bot →
+                    </a>
                     <input
                         type="text"
                         inputMode="numeric"
