@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "pdf:to-jpg": "node scripts/pdf-to-jpg.mjs"
   },
   "dependencies": {
@@ -20,13 +22,18 @@
   "devDependencies": {
     "@napi-rs/canvas": "^0.1.80",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6",
+    "@testing-library/react": "^16",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/ui": "^3",
     "eslint": "^9",
     "eslint-config-next": "16.2.0",
+    "jsdom": "^26",
     "pdfjs-dist": "^4.10.38",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3"
   }
 }
