@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Bot, Cpu, GraduationCap, LayoutDashboard, Newspaper, UserRound } from "lucide-react";
@@ -15,10 +16,22 @@ const items = [
 
 export function DashboardNav() {
     const pathname = usePathname();
+    const [isScrolled, setIsScrolled] = useState(false);
+
+    useEffect(() => {
+        const updateScrolled = () => setIsScrolled(window.scrollY > 0);
+
+        updateScrolled();
+        window.addEventListener("scroll", updateScrolled, { passive: true });
+
+        return () => window.removeEventListener("scroll", updateScrolled);
+    }, []);
 
     return (
         <nav
-            className="flex w-full flex-wrap items-center gap-2 rounded-2xl border border-white/8 bg-[#0E1117]/80 p-1.5"
+            className={`sticky top-3 z-50 flex w-full flex-wrap items-center gap-2 rounded-2xl border border-white/8 p-1.5 shadow-[0_12px_30px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-colors duration-200 ${
+                isScrolled ? "bg-[#0E1117]/50" : "bg-[#0E1117]/80"
+            }`}
             aria-label="Основные разделы"
         >
             {items.map(({ href, label, labelEn, icon: Icon }) => {
