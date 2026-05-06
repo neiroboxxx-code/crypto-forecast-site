@@ -167,12 +167,7 @@ export function CatalystFeed({ maxItems = 5 }: CatalystFeedProps) {
     const { data, loading, error } = useApi<NewsData>(getNews, [], { intervalMs: REFRESH_MS });
     const [openKey, setOpenKey] = useState<string | null>(null);
     const [infoOpen, setInfoOpen] = useState(false);
-    const [stored, setStored] = useState<Stored | null>(null);
-
-    // Подтягиваем кеш предыдущего выпуска один раз на маунте — чтобы лента не была пустой.
-    useEffect(() => {
-        setStored(readStored());
-    }, []);
+    const [stored, setStored] = useState<Stored | null>(() => readStored());
 
     // При каждом обновлении data решаем: фиксируем новый выпуск или оставляем прежний.
     useEffect(() => {
@@ -188,8 +183,10 @@ export function CatalystFeed({ maxItems = 5 }: CatalystFeedProps) {
         const picked = pickTop(data.items ?? [], maxItems);
         if (picked.length === 0) return; // не сохраняем пустой набор — оставляем что было
         const next: Stored = { day: newDay, updated_at: data.updated_at, items: picked };
-        setStored(next);
-        writeStored(next);
+        queueMicrotask(() => {
+            setStored(next);
+            writeStored(next);
+        });
     }, [data, stored, maxItems]);
 
     // Что реально показываем: сначала зафиксированный выпуск, иначе — свежевычисленный из data.

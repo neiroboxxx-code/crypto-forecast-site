@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Check, Pencil } from "lucide-react";
 
 const STORAGE_DISPLAY = "cfd-cabinet-display-name";
@@ -40,18 +40,13 @@ function ensureSessionId(): string {
 }
 
 export function CabinetUserCard() {
-    const [displayName, setDisplayName] = useState("");
-    const [sessionTag, setSessionTag] = useState("");
-    const [editing, setEditing] = useState(false);
-    const [draft, setDraft] = useState("");
-
-    useEffect(() => {
+    const [displayName, setDisplayName] = useState(() => readStorage(STORAGE_DISPLAY)?.trim() || "Трейдер");
+    const [sessionTag] = useState(() => {
         const sid = ensureSessionId();
-        setSessionTag(sid.replace(/-/g, "").slice(0, 8).toUpperCase());
-        const name = readStorage(STORAGE_DISPLAY)?.trim() || "Трейдер";
-        setDisplayName(name);
-        setDraft(name);
-    }, []);
+        return sid.replace(/-/g, "").slice(0, 8).toUpperCase();
+    });
+    const [editing, setEditing] = useState(false);
+    const [draft, setDraft] = useState(() => readStorage(STORAGE_DISPLAY)?.trim() || "Трейдер");
 
     const initials = useMemo(() => initialsFromDisplayName(displayName), [displayName]);
 

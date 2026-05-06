@@ -4,6 +4,29 @@ import type { ReactNode } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { BookOpen, Camera, ChevronDown, ImagePlus, Plus, Save } from "lucide-react";
 
+function Field({
+    label,
+    children,
+    className = "",
+}: {
+    label: string;
+    children: ReactNode;
+    className?: string;
+}) {
+    return (
+        <label className={`flex flex-col gap-1.5 ${className}`}>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/45">{label}</span>
+            {children}
+        </label>
+    );
+}
+
+function SelectChevron() {
+    return (
+        <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" aria-hidden />
+    );
+}
+
 export type JournalTrade = {
     id: string;
     date: string;
@@ -129,9 +152,10 @@ export function TradingJournal() {
     };
 
     useEffect(() => {
+        const registry = blobRegistry.current;
         return () => {
-            blobRegistry.current.forEach((u) => URL.revokeObjectURL(u));
-            blobRegistry.current.clear();
+            registry.forEach((u) => URL.revokeObjectURL(u));
+            registry.clear();
         };
     }, []);
 
@@ -164,25 +188,7 @@ export function TradingJournal() {
     const resolvedTimeframe =
         timeframeSelectOptions.find((o) => o.value === form.timeframe.trim())?.value ?? "H1";
 
-    useEffect(() => {
-        if (dateSelectOptions.length === 0) return;
-        if (!dateSelectOptions.some((o) => o.value === form.date)) {
-            const next = dateSelectOptions[0]?.value ?? isoDateLocal();
-            setForm((f) => (f.date === next ? f : { ...f, date: next }));
-        }
-    }, [form.date, dateSelectOptions]);
-
-    useEffect(() => {
-        if (!form.instrument.trim()) {
-            setForm((f) => (f.instrument === INSTRUMENTS[0] ? f : { ...f, instrument: INSTRUMENTS[0] }));
-        }
-    }, [form.instrument]);
-
-    useEffect(() => {
-        if (!form.timeframe.trim()) {
-            setForm((f) => (f.timeframe === "H1" ? f : { ...f, timeframe: "H1" }));
-        }
-    }, [form.timeframe]);
+    // Note: avoid setState-in-effect patterns here; we normalize via resolved* fallbacks instead.
 
     const revokeOrphanSlots = () => {
         if (form.beforeUrl && !urlsReferencedByTrades.has(form.beforeUrl)) revokeIfTracked(form.beforeUrl);
@@ -255,29 +261,10 @@ export function TradingJournal() {
         if (editingId === id) resetForm();
     };
 
-    const Field = ({
-        label,
-        children,
-        className = "",
-    }: {
-        label: string;
-        children: ReactNode;
-        className?: string;
-    }) => (
-        <label className={`flex flex-col gap-1.5 ${className}`}>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/45">{label}</span>
-            {children}
-        </label>
-    );
-
     const inputClass =
         "w-full rounded-lg border border-white/10 bg-black/35 px-3 py-2 text-sm text-white outline-none transition placeholder:text-white/25 focus:border-cyan-400/35 focus:ring-1 focus:ring-cyan-400/15";
 
     const selectClass = `${inputClass} cursor-pointer appearance-none pr-10 tabular-nums`;
-
-    const SelectChevron = () => (
-        <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" aria-hidden />
-    );
     const shotSlot = (slot: "before" | "after", label: string) => {
         const url = slot === "before" ? form.beforeUrl : form.afterUrl;
         const inputRef = slot === "before" ? beforeInputRef : afterInputRef;

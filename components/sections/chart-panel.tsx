@@ -59,13 +59,14 @@ export function ChartPanel() {
 
         widgetWrap.appendChild(widgetEl);
         widgetWrap.appendChild(script);
-        containerRef.current.appendChild(widgetWrap);
+        const containerEl = containerRef.current;
+        containerEl?.appendChild(widgetWrap);
 
         return () => {
             if (process.env.NODE_ENV !== "production") {
                 console.error = originalConsoleError;
             }
-            if (containerRef.current) containerRef.current.innerHTML = "";
+            if (containerEl) containerEl.innerHTML = "";
         };
     }, []);
 

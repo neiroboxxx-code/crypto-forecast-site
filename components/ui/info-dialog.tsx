@@ -42,7 +42,9 @@ type InfoDialogProps = {
 
 export function InfoDialog({ open, onClose, title, subtitle, children }: InfoDialogProps) {
     const onCloseRef = useRef(onClose);
-    onCloseRef.current = onClose;
+    useEffect(() => {
+        onCloseRef.current = onClose;
+    }, [onClose]);
 
     useEffect(() => {
         if (!open) return;

@@ -207,8 +207,6 @@ type ThesisBlock =
     | { kind: "event"; ordinal: number; titleRest: string; content: string; event?: ThesisEvent };
 
 function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () => void }) {
-    const [mounted, setMounted] = useState(false);
-    useEffect(() => setMounted(true), []);
     useEffect(() => {
         if (!event) return;
         const onKey = (e: KeyboardEvent) => {
@@ -223,7 +221,8 @@ function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () 
         };
     }, [event, onClose]);
 
-    if (!mounted || !event.snapshot_url) return null;
+    if (typeof document === "undefined") return null;
+    if (!event.snapshot_url) return null;
 
     return createPortal(
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 p-3 backdrop-blur-sm">

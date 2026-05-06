@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Activity } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { PaperBotMonitor } from "@/lib/api";
@@ -12,9 +13,9 @@ type Props = {
     compact?: boolean;
 };
 
-function fmtAgo(iso: string | null): string {
+function fmtAgo(nowMs: number, iso: string | null): string {
     if (!iso) return "никогда";
-    const diffMs = Date.now() - new Date(iso).getTime();
+    const diffMs = nowMs - new Date(iso).getTime();
     const mins = Math.floor(diffMs / 60_000);
     if (mins < 1) return "только что";
     if (mins === 1) return "1 мин назад";
@@ -31,9 +32,11 @@ function fmtPrice(p: number | null): string {
 function StatusDot({
     lastAt,
     mode,
+    nowMs,
 }: {
     lastAt: string | null;
     mode: "inactive" | "waiting" | "alive" | "stale" | "never";
+    nowMs: number;
 }) {
     if (mode === "inactive") {
         return <span className="h-2 w-2 rounded-full bg-white/20" />;
@@ -44,7 +47,7 @@ function StatusDot({
     if (!lastAt) {
         return <span className="h-2 w-2 rounded-full bg-white/20" />;
     }
-    const mins = Math.floor((Date.now() - new Date(lastAt).getTime()) / 60_000);
+    const mins = Math.floor((nowMs - new Date(lastAt).getTime()) / 60_000);
     // Считаем живым если последний тик был менее 20 мин назад (15 + небольшой запас)
     const alive = mins < 20;
     return (
@@ -61,7 +64,14 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount, 
     const lastAt = monitor?.lastAt ?? null;
     const lastPrice = monitor?.lastPrice ?? null;
     const lastPositions = monitor?.lastPositions ?? 0;
-    const mins = lastAt ? Math.floor((Date.now() - new Date(lastAt).getTime()) / 60_000) : null;
+    const [nowMs, setNowMs] = useState(() => Date.now());
+    useEffect(() => {
+        // Minute-level refresh is enough for "ago" display.
+        const id = window.setInterval(() => setNowMs(Date.now()), 30_000);
+        return () => window.clearInterval(id);
+    }, []);
+
+    const mins = lastAt ? Math.floor((nowMs - new Date(lastAt).getTime()) / 60_000) : null;
     const alive = mins !== null && mins < 20;
     const waitingForPositions = botActive && openPositionsCount === 0;
 
@@ -109,7 +119,7 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount, 
                 <div
                     className={`flex shrink-0 items-center gap-2 rounded-xl border border-white/8 bg-black/20 ${compact ? "px-2 py-2" : "px-4 py-3"}`}
                 >
-                    <StatusDot lastAt={lastAt} mode={mode} />
+                    <StatusDot lastAt={lastAt} mode={mode} nowMs={nowMs} />
                     <div className="min-w-0 flex-1">
                         <div className={`font-semibold text-white/85 ${compact ? "text-[11px]" : "text-[12px]"}`}>
                             {compact ? statusShort : mode === "inactive"
@@ -127,7 +137,7 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount, 
                                 {mode === "waiting"
                                     ? "Запустится автоматически при открытой позиции"
                                     : lastAt
-                                        ? `Последняя проверка: ${fmtAgo(lastAt)}`
+                                        ? `Последняя проверка: ${fmtAgo(nowMs, lastAt)}`
                                         : "Монитор запустится по расписанию cron"}
                             </div>
                         )}
@@ -136,7 +146,7 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount, 
                                 {mode === "waiting"
                                     ? "При открытии поз."
                                     : lastAt
-                                        ? fmtAgo(lastAt)
+                                        ? fmtAgo(nowMs, lastAt)
                                         : "cron"}
                             </div>
                         )}
@@ -159,7 +169,7 @@ export function PaperbotMonitorWidget({ monitor, botActive, openPositionsCount, 
                         <div
                             className={`font-semibold tabular-nums leading-tight text-white/80 ${compact ? "mt-2 text-base" : "mt-1 text-[12px]"}`}
                         >
-                            {fmtAgo(lastAt)}
+                            {fmtAgo(nowMs, lastAt)}
                         </div>
                     </div>
                     <div

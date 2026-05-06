@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 export type ApiState<T> = {
     data: T | null;
@@ -27,36 +27,45 @@ export function useApi<T>(
     const [tick, setTick] = useState(0);
     const isInitial = useRef(true);
 
+    const depsKey = useMemo(() => {
+        try {
+            return JSON.stringify(deps);
+        } catch {
+            return String(deps.length);
+        }
+    }, [deps]);
+
     useEffect(() => {
         let alive = true;
         const initial = isInitial.current;
         isInitial.current = false;
 
         if (initial) {
-            setLoading(true);
+            queueMicrotask(() => setLoading(true));
         } else {
-            setRefreshing(true);
+            queueMicrotask(() => setRefreshing(true));
         }
-        setError(null);
+        queueMicrotask(() => setError(null));
 
         fetcher()
             .then((v) => {
                 if (!alive) return;
-                setData(v);
+                queueMicrotask(() => setData(v));
             })
             .catch((e: unknown) => {
                 if (!alive) return;
-                setError(e instanceof Error ? e.message : "Fetch failed");
+                queueMicrotask(() => setError(e instanceof Error ? e.message : "Fetch failed"));
             })
             .finally(() => {
                 if (!alive) return;
-                setLoading(false);
-                setRefreshing(false);
+                queueMicrotask(() => {
+                    setLoading(false);
+                    setRefreshing(false);
+                });
             });
 
         return () => { alive = false; };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tick, ...deps]);
+    }, [tick, fetcher, depsKey]);
 
     // Auto-refresh interval: increments tick on schedule
     useEffect(() => {
@@ -66,7 +75,6 @@ export function useApi<T>(
             setTick((t) => t + 1);
         }, options.intervalMs);
         return () => clearInterval(id);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [options.intervalMs]);
 
     return {

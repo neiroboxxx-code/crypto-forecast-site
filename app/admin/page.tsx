@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Play, Square, RefreshCw, LogOut, Shield, Save } from "lucide-react";
 import {
     getPaperbotState,
@@ -350,18 +350,14 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
 
 export default function AdminPage() {
     const [authed, setAuthed] = useState<boolean | null>(null);
-
-    const checkAuth = useCallback(async () => {
-        try {
-            const res = await fetch("/api/admin/auth");
-            const { ok } = await res.json();
-            setAuthed(ok);
-        } catch {
-            setAuthed(false);
-        }
+    useEffect(() => {
+        let alive = true;
+        fetch("/api/admin/auth")
+            .then((res) => res.json())
+            .then(({ ok }: { ok: boolean }) => { if (alive) setAuthed(ok); })
+            .catch(() => { if (alive) setAuthed(false); });
+        return () => { alive = false; };
     }, []);
-
-    useEffect(() => { checkAuth(); }, [checkAuth]);
 
     if (authed === null) {
         return (

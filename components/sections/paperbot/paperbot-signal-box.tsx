@@ -57,7 +57,7 @@ function gradeCls(cls: string): string {
     return "border-white/15 text-white/40";
 }
 
-function CandidatesSection({ compact }: { compact?: boolean }) {
+function CandidatesSection() {
     const { data, loading } = useApi(getReversal, [], { intervalMs: 4 * 60 * 60 * 1000 });
     const candidates: ReversalCandidate[] = data?.candidates ?? [];
 
@@ -255,7 +255,7 @@ export function PaperbotSignalBox({ signal, settings, compact }: Props) {
                         })}
                     </div>
 
-                    <CandidatesSection compact={compact} />
+                    <CandidatesSection />
                 </div>
             )}
         </Card>

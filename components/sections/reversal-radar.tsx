@@ -164,17 +164,16 @@ const META_STAMP_CLS =
     "rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-wider text-white/55 tabular-nums";
 
 function LiveClockStamp() {
-    const [text, setText] = useState<string>("--:--:--");
+    const formatNow = () =>
+        new Intl.DateTimeFormat("ru-RU", {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+        }).format(new Date());
+
+    const [text, setText] = useState<string>(() => formatNow());
 
     useEffect(() => {
-        const formatNow = () =>
-            new Intl.DateTimeFormat("ru-RU", {
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-            }).format(new Date());
-
-        setText(formatNow());
         const id = window.setInterval(() => setText(formatNow()), 1000);
         return () => window.clearInterval(id);
     }, []);

@@ -4,7 +4,6 @@ import {
     useCallback,
     useEffect,
     useId,
-    useLayoutEffect,
     useRef,
     useState,
     type MouseEvent as ReactMouseEvent,
@@ -114,24 +113,30 @@ export function AcademyDashboard({ categories }: Props) {
 
     useEffect(() => {
         if (!viewer) return;
-        setZoomIndex(0);
-        setPan({ x: 0, y: 0 });
+        const id = window.requestAnimationFrame(() => {
+            setZoomIndex(0);
+            setPan({ x: 0, y: 0 });
+        });
+        return () => window.cancelAnimationFrame(id);
     }, [viewer, viewer?.index]);
 
-    useLayoutEffect(() => {
-        if (zoomIndex === 0) {
-            setPan((p) => (p.x === 0 && p.y === 0 ? p : { x: 0, y: 0 }));
-            return;
-        }
-        const img = slideImgRef.current;
-        const vp = viewportRef.current;
-        if (!img || !vp) return;
-        const z = ZOOM_LEVELS[zoomIndex] ?? 1;
-        setPan((p) => {
-            const n = clampPan(p, vp.clientWidth, vp.clientHeight, img, z);
-            if (n.x === p.x && n.y === p.y) return p;
-            return n;
+    useEffect(() => {
+        const id = window.requestAnimationFrame(() => {
+            if (zoomIndex === 0) {
+                setPan((p) => (p.x === 0 && p.y === 0 ? p : { x: 0, y: 0 }));
+                return;
+            }
+            const img = slideImgRef.current;
+            const vp = viewportRef.current;
+            if (!img || !vp) return;
+            const z = ZOOM_LEVELS[zoomIndex] ?? 1;
+            setPan((p) => {
+                const n = clampPan(p, vp.clientWidth, vp.clientHeight, img, z);
+                if (n.x === p.x && n.y === p.y) return p;
+                return n;
+            });
         });
+        return () => window.cancelAnimationFrame(id);
     }, [zoomIndex]);
 
     useEffect(() => {
@@ -323,6 +328,7 @@ export function AcademyDashboard({ categories }: Props) {
                                         transform: `translate(${pan.x}px, ${pan.y}px)`,
                                     }}
                                 >
+                                    {/* eslint-disable-next-line @next/next/no-img-element -- large slide image, optimized externally */}
                                     <img
                                         ref={slideImgRef}
                                         key={viewer.slides[viewer.index]}

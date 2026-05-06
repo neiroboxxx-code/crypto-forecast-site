@@ -96,13 +96,6 @@ function parseStatus(v: string | undefined): "ok" | "warn" | "error" | "idle" {
 
 type Props = { data?: MarketDigestData | null };
 
-function toneTextClass(tone: Tone): string {
-    if (tone === "cyan") return "text-cyan-200/85";
-    if (tone === "amber") return "text-amber-200/85";
-    if (tone === "emerald") return "text-emerald-200/85";
-    return "text-fuchsia-200/85";
-}
-
 function toneCoinClass(tone: Tone): string {
     if (tone === "cyan") return "border-cyan-400/30 bg-cyan-400/[0.08] text-cyan-200/90";
     if (tone === "amber") return "border-amber-400/30 bg-amber-400/[0.08] text-amber-200/90";
