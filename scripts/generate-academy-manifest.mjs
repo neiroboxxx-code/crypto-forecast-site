@@ -9,6 +9,8 @@ const SLIDE_RE = /^slide-(\d+)\.(jpe?g|png)$/i;
 
 const FOLDERS = [
   "zone/Survival_Protocol",
+  "zone/Trade_Setup_Protocol",
+  "zone/Trade_Architecture",
   "Candlestick_Mastery.",
   "Tactical_Candlestick_Analysis",
   "Candlestick_Reversal_Anatomy",
