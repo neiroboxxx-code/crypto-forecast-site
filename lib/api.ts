@@ -415,15 +415,15 @@ export async function getPaperbotState(): Promise<PaperBotState> {
 }
 
 export async function startPaperbot(): Promise<void> {
-    await request<unknown>("/api/paperbot/start", { method: "POST" });
+    await request<unknown>("/api/admin/paperbot/start", { method: "POST" }, "");
 }
 
 export async function stopPaperbot(): Promise<void> {
-    await request<unknown>("/api/paperbot/stop", { method: "POST" });
+    await request<unknown>("/api/admin/paperbot/stop", { method: "POST" }, "");
 }
 
 export async function updatePaperbotSettings(s: Omit<PaperBotSettings, "isActive">): Promise<void> {
-    await request<unknown>("/api/paperbot/settings", {
+    await request<unknown>("/api/admin/paperbot/settings", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -438,11 +438,11 @@ export async function updatePaperbotSettings(s: Omit<PaperBotSettings, "isActive
             max_positions: s.maxPositions,
             position_timeout_hours: s.positionTimeoutHours,
         }),
-    });
+    }, "");
 }
 
 export async function runPaperbotTick(): Promise<void> {
-    await request<unknown>("/api/paperbot/run", { method: "POST" });
+    await request<unknown>("/api/admin/paperbot/run", { method: "POST" }, "");
 }
 
 // ---------- Health ----------

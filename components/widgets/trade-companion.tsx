@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "https://kirill-crypto.duckdns.org";
 const STORAGE_KEY = "trade-companion-plans-v1";
 const TG_STORAGE_KEY = "trade-companion-tg-id";
 
@@ -138,7 +137,7 @@ export function TradeCompanion() {
         setFormError(null);
 
         try {
-            const res = await fetch(`${API_BASE}/api/companion/plan`, {
+            const res = await fetch(`/api/companion/plan`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -180,7 +179,7 @@ export function TradeCompanion() {
 
     async function removePlan(id: string) {
         try {
-            await fetch(`${API_BASE}/api/companion/plan/${id}`, { method: "DELETE" });
+            await fetch(`/api/companion/plan/${id}`, { method: "DELETE" });
         } catch {}
         const next = plans.filter((p) => p.id !== id);
         setPlans(next);
@@ -189,7 +188,7 @@ export function TradeCompanion() {
 
     function clearAll() {
         plans.forEach((p) => {
-            fetch(`${API_BASE}/api/companion/plan/${p.id}`, { method: "DELETE" }).catch(() => {});
+            fetch(`/api/companion/plan/${p.id}`, { method: "DELETE" }).catch(() => {});
         });
         setPlans([]);
         persistLocalPlans([]);
