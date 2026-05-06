@@ -8,6 +8,23 @@ export class ApiError extends Error {
     }
 }
 
+function requireObject(data: unknown, context: string): Record<string, unknown> {
+    if (!data || typeof data !== "object") {
+        throw new ApiError(`Invalid response (not an object): ${context}`, 0);
+    }
+    return data as Record<string, unknown>;
+}
+
+function requireKeys<T>(data: unknown, keys: string[], context: string): T {
+    const obj = requireObject(data, context);
+    for (const k of keys) {
+        if (!(k in obj)) {
+            throw new ApiError(`Invalid response (missing "${k}"): ${context}`, 0);
+        }
+    }
+    return data as T;
+}
+
 async function request<T>(path: string, init?: RequestInit, base: string = API_URL, timeoutMs = 30_000): Promise<T> {
     const url = path.startsWith("http") ? path : `${base}${path}`;
     const controller = new AbortController();
@@ -130,7 +147,9 @@ function unwrap<T>(payload: unknown): T {
 
 export async function getReversal(): Promise<ReversalData> {
     const raw = await request<unknown>("/api/reversal/run");
-    return unwrap<ReversalData>(raw);
+    const data = unwrap<ReversalData>(raw);
+    requireKeys(data, ["meta", "market_context", "candidates"], "getReversal");
+    return data;
 }
 
 // ---------- Reversal AI Thesis (DeepSeek) ----------
@@ -411,7 +430,9 @@ export type PaperBotState = {
 };
 
 export async function getPaperbotState(): Promise<PaperBotState> {
-    return request<PaperBotState>("/api/paperbot/state");
+    const data = await request<PaperBotState>("/api/paperbot/state");
+    requireKeys(data, ["settings", "positions", "closedTrades", "log", "summary", "signal", "monitor"], "getPaperbotState");
+    return data;
 }
 
 export async function startPaperbot(): Promise<void> {
@@ -530,7 +551,9 @@ export type HtfContext = {
 };
 
 export async function fetchHtfContext(symbol = "BTCUSDT"): Promise<HtfContext> {
-    return request<HtfContext>(`/api/htf/context?symbol=${symbol}`);
+    const data = await request<HtfContext>(`/api/htf/context?symbol=${symbol}`);
+    requireKeys(data, ["status", "symbol", "updated_at", "key_levels", "risk_warnings", "cached"], "fetchHtfContext");
+    return data;
 }
 
 // ---------- HTF History ----------
