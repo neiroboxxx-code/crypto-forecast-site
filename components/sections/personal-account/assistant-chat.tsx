@@ -220,7 +220,7 @@ export function AssistantChat() {
             setInput("");
             scrollToBottomSoon();
 
-            let fetchTimer: ReturnType<typeof setTimeout> | undefined;
+            let fetchTimer: number | undefined;
             try {
                 const timeoutMs = chatMode === "platform" ? FETCH_TIMEOUT_MS_PLATFORM : FETCH_TIMEOUT_MS_PRO;
                 const ctrl = new AbortController();
