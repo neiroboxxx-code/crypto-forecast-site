@@ -26,6 +26,8 @@ export function useApi<T>(
     const [refreshing, setRefreshing] = useState(false);
     const [tick, setTick] = useState(0);
     const isInitial = useRef(true);
+    /** Не кладём fetcher в deps fetch-эффекта: иначе inline-функция с родителя даёт бесконечный refetch. */
+    const fetcherRef = useRef(fetcher);
 
     const depsKey = useMemo(() => {
         try {
@@ -35,6 +37,9 @@ export function useApi<T>(
         }
     }, [deps]);
 
+    useEffect(() => {
+        fetcherRef.current = fetcher;
+    }, [fetcher]);
     useEffect(() => {
         let alive = true;
         const initial = isInitial.current;
@@ -47,7 +52,8 @@ export function useApi<T>(
         }
         queueMicrotask(() => setError(null));
 
-        fetcher()
+        fetcherRef
+            .current()
             .then((v) => {
                 if (!alive) return;
                 queueMicrotask(() => setData(v));
@@ -65,7 +71,7 @@ export function useApi<T>(
             });
 
         return () => { alive = false; };
-    }, [tick, fetcher, depsKey]);
+    }, [tick, depsKey]);
 
     // Auto-refresh interval: increments tick on schedule
     useEffect(() => {
