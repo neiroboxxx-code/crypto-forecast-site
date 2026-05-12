@@ -203,6 +203,23 @@ a {
 }
 .thesis-prose a:hover { color: #67e8f9; }
 
+/* Режим модального окна «Исторические события»: крупнее заголовки Markdown */
+.thesis-prose--comfortable h1 { font-size: 1.35rem; margin: 0.55em 0 0.35em; }
+.thesis-prose--comfortable h2 { font-size: 1.2rem; margin: 0.5em 0 0.3em; }
+.thesis-prose--comfortable h3 {
+  font-size: 1rem;
+  margin: 0.55em 0 0.28em;
+  letter-spacing: 0.06em;
+}
+
+/* В модалке — шире и выше встроенные PNG из LLM */
+.thesis-modal-scope .thesis-prose .thesis-event-chart-frame {
+  max-width: min(1100px, 100%);
+}
+.thesis-modal-scope .thesis-prose .thesis-event-chart-frame img {
+  max-height: min(72vh, 880px);
+}
+
 /* Снимки исторических событий: обёртка из thesis-event-chart-frame.tsx */
 .thesis-prose .thesis-event-chart-frame {
   max-width: min(920px, 100%);

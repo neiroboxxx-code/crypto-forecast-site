@@ -232,14 +232,14 @@ function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () 
                 onClick={onClose}
                 className="absolute inset-0 cursor-default"
             />
-            <div className="relative z-10 max-h-[92vh] w-full max-w-[min(1120px,96vw)] overflow-y-auto overflow-x-hidden px-2 pb-3 pt-3">
+            <div className="relative z-10 max-h-[94vh] w-full max-w-[min(1320px,98vw)] overflow-y-auto overflow-x-hidden px-2 pb-4 pt-4 sm:px-3">
                 <button
                     type="button"
                     onClick={onClose}
                     aria-label="Закрыть"
-                    className="absolute right-2 top-2 z-30 inline-flex h-9 w-9 items-center justify-center rounded-xl border border-cyan-400/40 bg-[#0B0F18]/95 text-white/90 shadow-[0_8px_28px_-8px_rgba(0,0,0,0.85)] transition hover:border-cyan-300/60 hover:bg-[#0E141F] hover:text-white"
+                    className="absolute right-2 top-2 z-30 inline-flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-400/40 bg-[#0B0F18]/95 text-white/90 shadow-[0_8px_28px_-8px_rgba(0,0,0,0.85)] transition hover:border-cyan-300/60 hover:bg-[#0E141F] hover:text-white"
                 >
-                    <X className="h-4 w-4" />
+                    <X className="h-[18px] w-[18px]" />
                 </button>
                 <ThesisEventChartFrame
                     variant="modal"
@@ -253,7 +253,7 @@ function SnapshotLightbox({ event, onClose }: { event: ThesisEvent; onClose: () 
                         src={event.snapshot_url ?? ""}
                         alt={`Снимок события ${event.ordinal}`}
                         loading="eager"
-                        className="!max-h-[min(78vh,920px)]"
+                        className="!max-h-[min(86vh,1040px)]"
                     />
                 </ThesisEventChartFrame>
             </div>
@@ -301,30 +301,45 @@ function parseThesisBlocks(text: string, events: ThesisEvent[]): ThesisBlock[] {
 function EventHeading({
     block,
     onOpen,
+    density = "compact",
 }: {
     block: Extract<ThesisBlock, { kind: "event" }>;
     onOpen: (event: ThesisEvent) => void;
+    density?: "compact" | "comfortable";
 }) {
     const clickable = Boolean(block.event?.snapshot_url);
     const title = block.titleRest ? `: ${block.titleRest}` : "";
+    const comfortable = density === "comfortable";
     return (
-        <div className="mb-2 mt-5 flex flex-wrap items-center gap-2 border-t border-white/8 pt-4 first:mt-0 first:border-t-0 first:pt-0">
+        <div
+            className={`mb-2 mt-5 flex flex-wrap items-center gap-2 border-t border-white/8 pt-4 first:mt-0 first:border-t-0 first:pt-0 ${
+                comfortable ? "gap-3 pt-5" : ""
+            }`}
+        >
             <button
                 type="button"
                 disabled={!clickable}
                 onClick={() => {
                     if (block.event) onOpen(block.event);
                 }}
-                className={`rounded-lg border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] transition ${
-                    clickable
-                        ? "border-cyan-400/35 bg-cyan-400/[0.08] text-cyan-100 hover:border-cyan-400/60 hover:bg-cyan-400/[0.14]"
-                        : "cursor-not-allowed border-white/10 bg-white/[0.03] text-white/30"
+                className={`rounded-lg border font-bold uppercase tracking-[0.16em] transition ${
+                    comfortable
+                        ? `px-3.5 py-2 text-[12px] ${clickable ? "border-cyan-400/40 bg-cyan-400/[0.1] text-cyan-50 hover:border-cyan-400/65 hover:bg-cyan-400/[0.16]" : "cursor-not-allowed border-white/10 bg-white/[0.03] text-white/30"}`
+                        : `px-2.5 py-1 text-[10px] ${
+                              clickable
+                                  ? "border-cyan-400/35 bg-cyan-400/[0.08] text-cyan-100 hover:border-cyan-400/60 hover:bg-cyan-400/[0.14]"
+                                  : "cursor-not-allowed border-white/10 bg-white/[0.03] text-white/30"
+                          }`
                 }`}
             >
                 Событие {block.ordinal}
             </button>
             {title && (
-                <span className="text-[13px] font-semibold leading-snug text-white/85">
+                <span
+                    className={`font-semibold leading-snug text-white/85 ${
+                        comfortable ? "text-[15px] sm:text-[16px]" : "text-[13px]"
+                    }`}
+                >
                     {title}
                 </span>
             )}
@@ -332,22 +347,28 @@ function EventHeading({
     );
 }
 
+export type MarketThesisContentProps = {
+    /** В модальном окне — крупнее текст, кнопки событий и встроенные графики. */
+    density?: "compact" | "comfortable";
+};
+
 /**
  * Fetches the DeepSeek thesis and renders its body as Markdown.
- * Used by the analytics dropdown inside ChartPanel.
+ * Used by ChartPanel (модальное окно «Исторические события»).
  */
-export function MarketThesisContent() {
+export function MarketThesisContent({ density = "compact" }: MarketThesisContentProps) {
     const { data, loading, error } = useApi<MarketThesis>(getMarketThesis);
     const [activeEvent, setActiveEvent] = useState<ThesisEvent | null>(null);
+    const comfortable = density === "comfortable";
 
     if (loading) {
         return (
-            <div className="space-y-2">
-                <Skeleton className="h-4 w-3/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-4 w-2/3" />
-                <Skeleton className="h-4 w-4/5" />
+            <div className={`space-y-2 ${comfortable ? "space-y-3 py-1" : ""}`}>
+                <Skeleton className={comfortable ? "h-5 w-3/4" : "h-4 w-3/4"} />
+                <Skeleton className={comfortable ? "h-5 w-full" : "h-4 w-full"} />
+                <Skeleton className={comfortable ? "h-5 w-5/6" : "h-4 w-5/6"} />
+                <Skeleton className={comfortable ? "h-5 w-2/3" : "h-4 w-2/3"} />
+                <Skeleton className={comfortable ? "h-5 w-4/5" : "h-4 w-4/5"} />
             </div>
         );
     }
@@ -361,12 +382,20 @@ export function MarketThesisContent() {
     const events = data.events ?? [];
 
     const meta = (
-        <div className="mb-3 flex items-center gap-1.5">
-            <span className="rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] uppercase tracking-wider text-white/55">
+        <div className={`mb-3 flex flex-wrap items-center gap-1.5 ${comfortable ? "gap-2" : ""}`}>
+            <span
+                className={`rounded border border-white/10 bg-white/5 uppercase tracking-wider text-white/55 ${
+                    comfortable ? "px-2.5 py-1 text-[11px]" : "px-2 py-0.5 text-[10px]"
+                }`}
+            >
                 {taskLabel(task)}
             </span>
             {generatedAt && (
-                <span className="rounded border border-white/10 bg-white/5 px-2 py-0.5 text-[10px] tabular-nums text-white/45">
+                <span
+                    className={`rounded border border-white/10 bg-white/5 tabular-nums text-white/45 ${
+                        comfortable ? "px-2.5 py-1 text-[11px]" : "px-2 py-0.5 text-[10px]"
+                    }`}
+                >
                     {fmtTime(generatedAt)}
                 </span>
             )}
@@ -399,7 +428,13 @@ export function MarketThesisContent() {
     return (
         <>
             {meta}
-            <div className="thesis-prose text-[12.5px] leading-[1.65] text-white/80">
+            <div
+                className={`thesis-prose text-white/80 ${
+                    comfortable
+                        ? "thesis-prose--comfortable text-[15px] leading-[1.7] sm:text-[15.5px]"
+                        : "text-[12.5px] leading-[1.65]"
+                }`}
+            >
                 {parseThesisBlocks(text, events).map((block, idx) => {
                     if (block.kind === "intro") {
                         return (
@@ -411,7 +446,7 @@ export function MarketThesisContent() {
                     }
                     return (
                         <section key={`event-${block.ordinal}-${idx}`}>
-                            <EventHeading block={block} onOpen={setActiveEvent} />
+                            <EventHeading block={block} onOpen={setActiveEvent} density={density} />
                             <div
                                 dangerouslySetInnerHTML={{ __html: renderMarkdown(block.content) }}
                             />

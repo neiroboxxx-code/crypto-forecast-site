@@ -1,13 +1,37 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
+import { X } from "lucide-react";
 import { InfoDialog, InfoIconButton } from "@/components/ui/info-dialog";
 import { MarketThesisContent } from "./market-analysis";
 
 export function ChartPanel() {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const [analyticsOpen, setAnalyticsOpen] = useState(false);
+    const [historicalOverlayOpen, setHistoricalOverlayOpen] = useState(false);
     const [historicalInfoOpen, setHistoricalInfoOpen] = useState(false);
+    const isClient = useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false,
+    );
+
+    useEffect(() => {
+        if (!historicalOverlayOpen) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key !== "Escape") return;
+            // Пока открыт InfoDialog — Escape обрабатывает он; не закрываем панель истории.
+            if (historicalInfoOpen) return;
+            setHistoricalOverlayOpen(false);
+        };
+        document.addEventListener("keydown", onKey);
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.removeEventListener("keydown", onKey);
+            document.body.style.overflow = prev;
+        };
+    }, [historicalOverlayOpen, historicalInfoOpen]);
 
     useEffect(() => {
         if (!containerRef.current) return;
@@ -93,26 +117,19 @@ export function ChartPanel() {
                 />
             </div>
 
-            {/* Protruding tab — attached to the chart's bottom border.
-                Collapsed: label only. Expanded: accordion below pushes siblings down. */}
+            {/* Вкладка под графиком — открывает полноэкранное модальное окно с LLM-текстом. */}
             <div className="flex items-center justify-center border-t border-white/8 bg-gradient-to-b from-transparent to-black/30 py-2">
                 <button
                     type="button"
-                    onClick={() => setAnalyticsOpen((v) => !v)}
-                    aria-expanded={analyticsOpen}
-                    aria-controls="chart-analytics-dropdown"
+                    onClick={() => setHistoricalOverlayOpen(true)}
+                    aria-haspopup="dialog"
+                    aria-expanded={historicalOverlayOpen}
                     className="group flex h-11 items-center gap-2 rounded-lg border border-white/12 bg-white/[0.03] px-5 text-[11px] uppercase tracking-[0.18em] text-white/65 transition hover:border-white/25 hover:bg-white/[0.07] hover:text-white"
                 >
                     <span>Исторические события</span>
-                    <svg
-                        aria-hidden="true"
-                        viewBox="0 0 12 12"
-                        className={`h-3 w-3 transition-transform duration-200 ${
-                            analyticsOpen ? "rotate-180" : ""
-                        }`}
-                    >
+                    <svg aria-hidden="true" viewBox="0 0 12 12" className="h-3 w-3 opacity-70">
                         <path
-                            d="M2 4.5 L6 8.5 L10 4.5"
+                            d="M2 3.5 L6 8 L10 3.5"
                             fill="none"
                             stroke="currentColor"
                             strokeWidth="1.5"
@@ -123,25 +140,29 @@ export function ChartPanel() {
                 </button>
             </div>
 
-            {/* CSS-grid 1fr/0fr trick: pure-CSS height animation without measuring. */}
-            <div
-                id="chart-analytics-dropdown"
-                className="grid border-t border-white/8 transition-[grid-template-rows] duration-300 ease-out"
-                style={{ gridTemplateRows: analyticsOpen ? "minmax(0,1fr)" : "0fr" }}
-            >
-                <div className="min-h-0 overflow-hidden">
-                    <div className="max-h-[460px] overflow-y-auto px-5 py-4">
-                        {analyticsOpen && (
-                            <>
-                                <div className="mb-4 flex items-start justify-between gap-3 border-b border-white/6 pb-3">
-                                    <div className="min-w-0">
-                                        <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-white/45">
-                                            Исторические события
-                                        </div>
-                                        <p className="mt-0.5 text-[11px] leading-snug text-white/50">
-                                            Контекст рынка по фактам с движка — см. пояснение справа.
-                                        </p>
-                                    </div>
+            {isClient &&
+                historicalOverlayOpen &&
+                createPortal(
+                    <div
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/78 p-3 backdrop-blur-[6px] sm:p-5"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="historical-events-title"
+                    >
+                        <div className="relative flex max-h-[min(92vh,920px)] w-full max-w-[min(1080px,calc(100vw-1.5rem))] flex-col overflow-hidden rounded-2xl border border-white/12 bg-[#0B0E14]/97 shadow-[0_28px_80px_-24px_rgba(0,0,0,0.92),inset_0_1px_0_rgba(255,255,255,0.04)]">
+                            <header className="flex shrink-0 items-start justify-between gap-3 border-b border-white/10 bg-[#080a10]/95 px-4 py-3.5 sm:px-6">
+                                <div className="min-w-0 pt-0.5">
+                                    <h2
+                                        id="historical-events-title"
+                                        className="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/45"
+                                    >
+                                        Исторические события
+                                    </h2>
+                                    <p className="mt-1 text-[13px] leading-snug text-white/55 sm:text-[14px]">
+                                        Контекст рынка по фактам с движка — пояснение справа от заголовка.
+                                    </p>
+                                </div>
+                                <div className="flex shrink-0 items-center gap-1">
                                     <InfoIconButton
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -149,19 +170,29 @@ export function ChartPanel() {
                                         }}
                                         label="Что означает этот текст"
                                     />
+                                    <button
+                                        type="button"
+                                        onClick={() => setHistoricalOverlayOpen(false)}
+                                        aria-label="Закрыть"
+                                        className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/14 bg-white/[0.05] text-white/85 transition hover:border-white/28 hover:bg-white/[0.09] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/40"
+                                    >
+                                        <X className="h-[18px] w-[18px]" strokeWidth={2} />
+                                    </button>
                                 </div>
-                                <MarketThesisContent />
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
+                            </header>
+                            <div className="thesis-modal-scope min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-5 sm:px-7 sm:py-6">
+                                <MarketThesisContent density="comfortable" />
+                            </div>
+                        </div>
+                    </div>,
+                    document.body,
+                )}
 
             <InfoDialog
                 open={historicalInfoOpen}
                 onClose={() => setHistoricalInfoOpen(false)}
                 title="Исторические события"
-                subtitle="Откуда берётся текст под графиком"
+                subtitle="Откуда берётся текст в этом окне"
             >
                 <p>
                     Движок смотрит на рынок на горизонте примерно двух недель, проходит историю

@@ -70,7 +70,7 @@ export function InfoDialog({ open, onClose, title, subtitle, children }: InfoDia
     return createPortal(
         <div
             data-app-modal-portal=""
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+            className="fixed inset-0 z-[125] flex items-center justify-center p-4"
             role="dialog"
             aria-modal="true"
             aria-label={title}

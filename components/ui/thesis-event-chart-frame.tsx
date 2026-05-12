@@ -13,6 +13,8 @@ const shellModal =
 const hudBarCn =
     "flex items-center justify-between gap-2 border-b border-cyan-400/14 bg-black/45 px-2.5 py-1 backdrop-blur-[2px]";
 const hudMuted = "text-[8.5px] font-medium uppercase tracking-[0.22em] text-cyan-200/45";
+const hudMutedModal =
+    "text-[10px] sm:text-[10.5px] font-medium uppercase tracking-[0.18em] text-cyan-200/55";
 
 type Props = {
     /** Короткая подпись верхней полосы (например «Событие 2 · BTCUSDT · 4H») */
@@ -68,21 +70,39 @@ export function ThesisEventChartFrame({
                     }`}
                     aria-hidden
                 />
-                <header className={hudBarCn}>
-                    <span className={`${hudMuted} min-w-0 truncate font-mono`}>
+                <header className={`${hudBarCn} ${variant === "modal" ? "px-3 py-1.5" : ""}`}>
+                    <span
+                        className={`min-w-0 truncate font-mono ${
+                            variant === "modal" ? hudMutedModal : hudMuted
+                        }`}
+                    >
                         {hudTitle ?? "REVERSAL · SNAPSHOT · ENGINE"}
                     </span>
-                    <span className={`shrink-0 font-mono ${hudMuted}`}>
+                    <span
+                        className={`shrink-0 font-mono ${
+                            variant === "modal" ? hudMutedModal : hudMuted
+                        }`}
+                    >
                         {hudAside ?? "HIST MODE · LIVE DATA"}
                     </span>
                 </header>
-                <div className="relative bg-[linear-gradient(180deg,rgba(6,8,12,0.88)_0%,rgba(7,10,16,0.95)_55%,rgba(5,8,13,1)_100%)] p-2 sm:p-2.5">
-                    <div className="rounded-md border border-white/[0.06] bg-[#070911]/90 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]">
+                <div
+                    className={`relative bg-[linear-gradient(180deg,rgba(6,8,12,0.88)_0%,rgba(7,10,16,0.95)_55%,rgba(5,8,13,1)_100%)] ${
+                        variant === "modal" ? "p-2.5 sm:p-3" : "p-2 sm:p-2.5"
+                    }`}
+                >
+                    <div className="rounded-md border border-white/[0.06] bg-[#070911]/90 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] sm:p-2">
                         {children}
                     </div>
                 </div>
                 <footer className="flex items-center justify-center border-t border-white/[0.06] bg-black/30 py-1">
-                    <span className="font-mono text-[7.5px] uppercase tracking-[0.35em] text-white/22">
+                    <span
+                        className={`font-mono uppercase tracking-[0.35em] text-white/22 ${
+                            variant === "modal"
+                                ? "text-[8px] sm:text-[8.5px]"
+                                : "text-[7.5px]"
+                        }`}
+                    >
                         market structure · reversal engine
                     </span>
                 </footer>
