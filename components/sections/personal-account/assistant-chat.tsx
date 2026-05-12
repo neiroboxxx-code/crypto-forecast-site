@@ -38,6 +38,10 @@ function apiBase(): string {
     return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 }
 
+/** Без этого fetch может ждать ответ бесконечно (обрыв сети, зависший upstream). */
+const FETCH_TIMEOUT_MS_PLATFORM = 35_000;
+const FETCH_TIMEOUT_MS_PRO = 95_000;
+
 function stripCitationLines(text: string): string {
     return text
         .split("\n")
@@ -216,11 +220,17 @@ export function AssistantChat() {
             setInput("");
             scrollToBottomSoon();
 
+            let fetchTimer: ReturnType<typeof setTimeout> | undefined;
             try {
+                const timeoutMs = chatMode === "platform" ? FETCH_TIMEOUT_MS_PLATFORM : FETCH_TIMEOUT_MS_PRO;
+                const ctrl = new AbortController();
+                fetchTimer = window.setTimeout(() => ctrl.abort(), timeoutMs);
+
                 const res = await fetch(`${apiBase()}/api/assistant/chat`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json", Accept: "application/json" },
                     cache: "no-store",
+                    signal: ctrl.signal,
                     body: JSON.stringify({
                         session_id: sessionId,
                         scenario: "free_chat",
@@ -260,7 +270,12 @@ export function AssistantChat() {
                 );
                 scrollToBottomSoon();
             } catch (e) {
-                const msg = e instanceof Error ? e.message : "Неизвестная ошибка";
+                const aborted = e instanceof Error && e.name === "AbortError";
+                const msg = aborted
+                    ? `Превышено время ожидания (${chatMode === "platform" ? Math.round(FETCH_TIMEOUT_MS_PLATFORM / 1000) : Math.round(FETCH_TIMEOUT_MS_PRO / 1000)} с). Проверь сеть или адрес API.`
+                    : e instanceof Error
+                      ? e.message
+                      : "Неизвестная ошибка";
                 setError(msg);
                 setThreads((prev) =>
                     prev.map((t) => {
@@ -282,6 +297,9 @@ export function AssistantChat() {
                 );
                 scrollToBottomSoon();
             } finally {
+                if (fetchTimer !== undefined) {
+                    window.clearTimeout(fetchTimer);
+                }
                 setIsSending(false);
             }
         },
