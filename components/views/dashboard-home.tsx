@@ -24,7 +24,13 @@ export function DashboardHome() {
                 <section className="flex flex-col gap-3">
                     <ChartPanel />
                     <ReversalRadar />
-                    <RsiGauges />
+                    {/* RSI — ~половина ширины колонки; справа резерв под второй виджет строки */}
+                    <div className="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:items-start">
+                        <div className="min-w-0">
+                            <RsiGauges />
+                        </div>
+                        <div className="hidden min-w-0 lg:block" aria-hidden />
+                    </div>
                 </section>
 
                 <aside className="flex flex-col gap-3">
