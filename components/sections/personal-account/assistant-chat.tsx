@@ -30,6 +30,21 @@ type StoredBundle = {
 const V1_SESSION = "assistant:v1:session_id";
 const V2_BUNDLE = "assistant:v2:bundle";
 
+const STALE_PENDING_REPLY =
+    "Предыдущий ответ не был получен (запрос прервался или вкладка обновилась до ответа сервера). Напиши сообщение ещё раз.";
+
+/** После перезагрузки страницы в localStorage остаётся assistant со status pending — без нового fetch UI «думает» вечно. */
+function finalizeStalePendingMessages(threads: ChatThread[]): ChatThread[] {
+    return threads.map((t) => ({
+        ...t,
+        messages: t.messages.map((m) =>
+            m.role === "assistant" && m.status === "pending"
+                ? { ...m, status: "final" as const, content: m.content.trim() || STALE_PENDING_REPLY }
+                : m,
+        ),
+    }));
+}
+
 function nowIso(): string {
     return new Date().toISOString();
 }
@@ -110,7 +125,7 @@ export function AssistantChat() {
                 const b = JSON.parse(raw) as Partial<StoredBundle>;
                 if (b.v === 2 && b.sessionId && Array.isArray(b.threads) && b.activeThreadId) {
                     setSessionId(b.sessionId);
-                    setThreads(b.threads);
+                    setThreads(finalizeStalePendingMessages(b.threads));
                     setActiveThreadId(b.activeThreadId);
                     setReady(true);
                     return;
