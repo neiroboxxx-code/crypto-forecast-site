@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getReversal, type Forecast, type ForecastHorizon, type ReversalCandidate, type ReversalData } from "@/lib/api";
-import { useApi } from "@/hooks/use-api";
+import { type Forecast, type ForecastHorizon, type ReversalCandidate } from "@/lib/api";
+import { useDashboardData } from "@/components/providers/dashboard-data-provider";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorState } from "@/components/ui/error-state";
@@ -190,11 +190,8 @@ function LiveClockStamp() {
 // ---------------------------------------------------------------------------
 
 export function ReversalRadar() {
-    const { data, loading, error, refreshing } = useApi<ReversalData>(
-        getReversal,
-        [],
-        { intervalMs: 4 * 60 * 60 * 1000 },
-    );
+    const { reversal } = useDashboardData();
+    const { data, loading, error, refreshing } = reversal;
     const [infoOpen, setInfoOpen] = useState(false);
 
     const candidates = data?.candidates ?? [];

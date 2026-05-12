@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getHealth, getMicro, getReversal, type MicroData, type ReversalData } from "@/lib/api";
-import { useApi } from "@/hooks/use-api";
+import { getHealth } from "@/lib/api";
+import { useDashboardData } from "@/components/providers/dashboard-data-provider";
 import { fmtPctFraction, fmtPrice } from "@/lib/format";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -20,8 +20,7 @@ function biasLabel(bias: string): string {
 }
 
 export function TopBar() {
-    const micro = useApi<MicroData>(getMicro);
-    const reversal = useApi<ReversalData>(getReversal);
+    const { micro, reversal } = useDashboardData();
 
     const [health, setHealth] = useState<boolean | null>(null);
     const [healthTs, setHealthTs] = useState<string>("");

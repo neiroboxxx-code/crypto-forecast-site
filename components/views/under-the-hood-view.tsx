@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { getReversal, type ReversalData, type ReversalScores } from "@/lib/api";
-import { useApi } from "@/hooks/use-api";
+import { type ReversalData, type ReversalScores } from "@/lib/api";
+import { useDashboardData } from "@/components/providers/dashboard-data-provider";
 import { Card } from "@/components/ui/card";
 
 // ── Cron schedule math ────────────────────────────────────────────────────
@@ -227,11 +227,9 @@ export function UnderTheHoodView() {
     }, [doPing]);
 
     // ── Real reversal data
-    const { data: reversal, loading: revLoading } = useApi<ReversalData>(
-        getReversal,
-        [],
-        { intervalMs: 5 * 60_000 },
-    );
+    const { reversal: reversalApi } = useDashboardData();
+    const reversal = reversalApi.data as ReversalData | undefined;
+    const revLoading = reversalApi.loading;
 
     const candidate = reversal?.candidates?.[0] ?? null;
     const scores: ReversalScores | null = candidate?.scores ?? null;

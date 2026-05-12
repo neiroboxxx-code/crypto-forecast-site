@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { fetchHtfContext, type HtfContext, type HtfRiskWarning } from "@/lib/api";
-import { useApi } from "@/hooks/use-api";
+import { type HtfContext, type HtfRiskWarning } from "@/lib/api";
+import { useDashboardData } from "@/components/providers/dashboard-data-provider";
 import { InfoDialog, InfoIconButton } from "@/components/ui/info-dialog";
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -253,9 +253,8 @@ function HtfPanelInner({ data }: { data: HtfContext }) {
 }
 
 export function HtfContextPanel({ symbol = "BTCUSDT" }: { symbol?: string }) {
-    const { data, loading, error } = useApi(() => fetchHtfContext(symbol), [symbol], {
-        intervalMs: 6 * 60 * 60 * 1000,
-    });
+    const { htf } = useDashboardData();
+    const { data, loading, error } = htf;
     const [infoOpen, setInfoOpen] = useState(false);
 
     return (
