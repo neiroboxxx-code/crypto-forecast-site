@@ -242,20 +242,25 @@ function ContribBar({ value }: { value: number }) {
 
 function ZonesLegend() {
     return (
-        <div className="space-y-1.5 text-[11px]">
-            <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/30">
+        <div className="space-y-2.5 text-[13px] sm:text-[14px]">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/40 sm:text-[12px]">
                 Зоны
             </div>
             {ZONES.map((z) => (
-                <div key={z.from} className="flex items-center gap-2">
+                <div key={z.from} className="flex items-center gap-3 sm:gap-3.5">
                     <span
-                        className="h-1.5 w-1.5 shrink-0 rounded-full"
-                        style={{ backgroundColor: z.color, boxShadow: `0 0 5px ${z.color}80` }}
+                        className="h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-white/10 sm:h-3 sm:w-3"
+                        style={{
+                            backgroundColor: z.color,
+                            boxShadow: `0 0 10px ${z.color}99, 0 0 18px ${z.color}40`,
+                        }}
                     />
-                    <span className="w-8 shrink-0 font-mono text-[9px] text-white/25">
+                    <span className="w-[3.25rem] shrink-0 font-mono text-[12px] tabular-nums text-white/35 sm:w-[3.5rem] sm:text-[13px]">
                         {z.from}–{z.to}
                     </span>
-                    <span className="text-[10px] text-white/45">{z.hint}</span>
+                    <span className={`min-w-0 text-[12px] leading-snug sm:text-[13px] ${z.textCls}`}>
+                        {z.hint}
+                    </span>
                 </div>
             ))}
         </div>
