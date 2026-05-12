@@ -220,55 +220,57 @@ export function AssistantChat() {
             setInput("");
             scrollToBottomSoon();
 
-            let fetchTimer: number | undefined;
             try {
                 const timeoutMs = chatMode === "platform" ? FETCH_TIMEOUT_MS_PLATFORM : FETCH_TIMEOUT_MS_PRO;
                 const ctrl = new AbortController();
-                fetchTimer = window.setTimeout(() => ctrl.abort(), timeoutMs);
+                const abortTimer = window.setTimeout(() => ctrl.abort(), timeoutMs);
+                try {
+                    const res = await fetch(`${apiBase()}/api/assistant/chat`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", Accept: "application/json" },
+                        cache: "no-store",
+                        signal: ctrl.signal,
+                        body: JSON.stringify({
+                            session_id: sessionId,
+                            scenario: "free_chat",
+                            chat_mode: chatMode,
+                            message: trimmed,
+                            history: historyPayload,
+                        }),
+                    });
 
-                const res = await fetch(`${apiBase()}/api/assistant/chat`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", Accept: "application/json" },
-                    cache: "no-store",
-                    signal: ctrl.signal,
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        scenario: "free_chat",
-                        chat_mode: chatMode,
-                        message: trimmed,
-                        history: historyPayload,
-                    }),
-                });
+                    if (!res.ok) {
+                        const detail = await res.text().catch(() => "");
+                        throw new Error(`HTTP ${res.status}${detail ? ` · ${detail}` : ""}`);
+                    }
 
-                if (!res.ok) {
-                    const detail = await res.text().catch(() => "");
-                    throw new Error(`HTTP ${res.status}${detail ? ` · ${detail}` : ""}`);
+                    const payload = (await res.json()) as unknown;
+                    const obj = payload && typeof payload === "object" ? (payload as Record<string, unknown>) : null;
+                    const topReply = obj?.reply;
+                    const dataReply =
+                        obj?.data && typeof obj.data === "object"
+                            ? (obj.data as Record<string, unknown>).reply
+                            : undefined;
+                    const rawReply =
+                        (typeof topReply === "string" ? topReply : undefined)
+                        ?? (typeof dataReply === "string" ? dataReply : undefined)
+                        ?? "Ответ не распознан (проверь контракт /api/assistant/chat).";
+                    const reply =
+                        chatMode === "platform" ? stripAssistantDisplayText(rawReply) : rawReply.trim();
+
+                    setThreads((prev) =>
+                        prev.map((t) => {
+                            if (t.id !== tid) return t;
+                            const nextMsgs = t.messages.map((m) =>
+                                m.id === pendingId ? { ...m, content: reply, status: "final" as const } : m,
+                            );
+                            return { ...t, messages: nextMsgs, updatedAt: nowIso() };
+                        }),
+                    );
+                    scrollToBottomSoon();
+                } finally {
+                    window.clearTimeout(abortTimer);
                 }
-
-                const payload = (await res.json()) as unknown;
-                const obj = payload && typeof payload === "object" ? (payload as Record<string, unknown>) : null;
-                const topReply = obj?.reply;
-                const dataReply =
-                    obj?.data && typeof obj.data === "object"
-                        ? (obj.data as Record<string, unknown>).reply
-                        : undefined;
-                const rawReply =
-                    (typeof topReply === "string" ? topReply : undefined)
-                    ?? (typeof dataReply === "string" ? dataReply : undefined)
-                    ?? "Ответ не распознан (проверь контракт /api/assistant/chat).";
-                const reply =
-                    chatMode === "platform" ? stripAssistantDisplayText(rawReply) : rawReply.trim();
-
-                setThreads((prev) =>
-                    prev.map((t) => {
-                        if (t.id !== tid) return t;
-                        const nextMsgs = t.messages.map((m) =>
-                            m.id === pendingId ? { ...m, content: reply, status: "final" as const } : m,
-                        );
-                        return { ...t, messages: nextMsgs, updatedAt: nowIso() };
-                    }),
-                );
-                scrollToBottomSoon();
             } catch (e) {
                 const aborted = e instanceof Error && e.name === "AbortError";
                 const msg = aborted
@@ -297,9 +299,6 @@ export function AssistantChat() {
                 );
                 scrollToBottomSoon();
             } finally {
-                if (fetchTimer !== undefined) {
-                    window.clearTimeout(fetchTimer);
-                }
                 setIsSending(false);
             }
         },
