@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getReversal, type ForecastFactor, type ReversalDiagnostics } from "@/lib/api";
-import { useApi } from "@/hooks/use-api";
+import { type ForecastFactor } from "@/lib/api";
+import { useDashboardData } from "@/components/providers/dashboard-data-provider";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -238,82 +238,26 @@ function ContribBar({ value }: { value: number }) {
     );
 }
 
-// ── Правая панель ─────────────────────────────────────────────────────────
+// ── Легенда зон (под спидометрами) ────────────────────────────────────────
 
-function InfoPanel({ diag, rsiFactor }: {
-    diag: ReversalDiagnostics;
-    rsiFactor: ForecastFactor | undefined;
-}) {
-    const contrib    = rsiFactor?.contribution ?? 0;
-    const momentum   = diag.momentum_slowdown_status_4h;
-    const isSlowing  = momentum === "slowing";
-    const rsi4h      = diag.latest_rsi_4h ?? 50;
-    const rsi1d      = diag.latest_rsi_1d ?? 50;
-    const zone4h     = zoneFor(rsi4h);
-    const zone1d     = zoneFor(rsi1d);
-
+function ZonesLegend() {
     return (
-        <div className="flex flex-col gap-4 text-[11px]">
-
-            {/* Contribution bar */}
-            <ContribBar value={contrib} />
-
-            {/* Разделитель */}
-            <div className="h-px bg-white/6" />
-
-            {/* Таблица состояний */}
-            <div className="space-y-2.5">
-                <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/30">
-                    Текущее состояние
-                </div>
-
-                {/* RSI 4H зона */}
-                <div className="flex items-center justify-between gap-2">
-                    <span className="text-white/40">RSI 4H</span>
-                    <span className={`font-semibold text-[11px] ${zone4h.textCls}`}
-                        style={{ filter: `drop-shadow(0 0 6px ${zone4h.color}60)` }}>
-                        {zone4h.label}
-                    </span>
-                </div>
-
-                {/* RSI 1D зона */}
-                <div className="flex items-center justify-between gap-2">
-                    <span className="text-white/40">RSI 1D</span>
-                    <span className={`font-semibold text-[11px] ${zone1d.textCls}`}
-                        style={{ filter: `drop-shadow(0 0 6px ${zone1d.color}60)` }}>
-                        {zone1d.label}
-                    </span>
-                </div>
-
-                {/* Импульс */}
-                <div className="flex items-center justify-between gap-2">
-                    <span className="text-white/40">Импульс 4H</span>
-                    <span className={`font-semibold ${isSlowing ? "text-amber-300" : "text-white/50"}`}>
-                        {isSlowing ? "↓ замедляется" : "→ стабильный"}
-                    </span>
-                </div>
+        <div className="space-y-1.5 text-[11px]">
+            <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/30">
+                Зоны
             </div>
-
-            {/* Разделитель */}
-            <div className="h-px bg-white/6" />
-
-            {/* Легенда зон — компактная */}
-            <div className="space-y-1.5">
-                <div className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/30">
-                    Зоны
+            {ZONES.map((z) => (
+                <div key={z.from} className="flex items-center gap-2">
+                    <span
+                        className="h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ backgroundColor: z.color, boxShadow: `0 0 5px ${z.color}80` }}
+                    />
+                    <span className="w-8 shrink-0 font-mono text-[9px] text-white/25">
+                        {z.from}–{z.to}
+                    </span>
+                    <span className="text-[10px] text-white/45">{z.hint}</span>
                 </div>
-                {ZONES.map(z => (
-                    <div key={z.from} className="flex items-center gap-2">
-                        <span
-                            className="h-1.5 w-1.5 shrink-0 rounded-full"
-                            style={{ backgroundColor: z.color, boxShadow: `0 0 5px ${z.color}80` }}
-                        />
-                        <span className="font-mono text-[9px] text-white/25 w-8 shrink-0">{z.from}–{z.to}</span>
-                        <span className="text-white/45 text-[10px]">{z.hint}</span>
-                    </div>
-                ))}
-            </div>
-
+            ))}
         </div>
     );
 }
@@ -321,12 +265,14 @@ function InfoPanel({ diag, rsiFactor }: {
 // ── Основной компонент ───────────────────────────────────────────────────
 
 export function RsiGauges() {
-    const { data, loading } = useApi(getReversal, [], { intervalMs: 4 * 60 * 60 * 1000 });
+    const { reversal } = useDashboardData();
+    const { data, loading } = reversal;
 
     const diag      = data?.diagnostics;
     const rsi4h     = diag?.latest_rsi_4h;
     const rsi1d     = diag?.latest_rsi_1d;
     const rsiFactor = data?.forecast?.factors?.find((f: ForecastFactor) => f.name === "RSI");
+    const contrib = rsiFactor?.contribution ?? 0;
 
     if (loading && !data) {
         return (
@@ -340,21 +286,13 @@ export function RsiGauges() {
 
     return (
         <Card title="RSI Monitor" subtitle="Индикатор перекупленности / перепроданности" padded>
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-
-                {/* Два круглых спидометра */}
-                <div className="flex gap-2 shrink-0 justify-center sm:justify-start">
+            <div className="flex flex-col gap-5">
+                <ContribBar value={contrib} />
+                <div className="flex shrink-0 justify-center gap-2">
                     <Gauge rsi={rsi4h} label="RSI · 4H" uid="rsi4h" />
                     <Gauge rsi={rsi1d} label="RSI · 1D" uid="rsi1d" />
                 </div>
-
-                {/* Вертикальный разделитель */}
-                <div className="hidden sm:block w-px self-stretch bg-white/8" />
-
-                {/* Правая панель */}
-                <div className="flex-1 min-w-0">
-                    <InfoPanel diag={diag!} rsiFactor={rsiFactor} />
-                </div>
+                <ZonesLegend />
             </div>
         </Card>
     );
