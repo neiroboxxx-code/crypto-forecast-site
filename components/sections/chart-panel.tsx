@@ -57,6 +57,10 @@ function mountTradingView(container: HTMLElement): () => void {
     widgetWrap.appendChild(script);
     container.appendChild(widgetWrap);
 
+    requestAnimationFrame(() => {
+        window.dispatchEvent(new Event("resize"));
+    });
+
     return () => {
         if (process.env.NODE_ENV !== "production") {
             console.error = originalConsoleError;
@@ -180,12 +184,12 @@ export function ChartPanel() {
                 chartExpanded &&
                 createPortal(
                     <div
-                        className="fixed inset-0 z-[98] flex items-center justify-center bg-black/82 p-3 backdrop-blur-[6px] sm:p-5"
+                        className="fixed inset-0 z-[98] flex items-center justify-center bg-black/82 p-2 backdrop-blur-[6px] sm:p-4"
                         role="dialog"
                         aria-modal="true"
                         aria-labelledby="chart-expanded-title"
                     >
-                        <div className="flex max-h-[min(94vh,960px)] w-full max-w-[min(1440px,calc(100vw-1.25rem))] flex-col overflow-hidden rounded-2xl border border-white/12 bg-[#0B0E14]/98 shadow-[0_28px_80px_-24px_rgba(0,0,0,0.92)]">
+                        <div className="flex h-[min(92dvh,960px)] w-full max-w-[min(1440px,calc(100vw-0.75rem))] min-h-0 flex-col overflow-hidden rounded-2xl border border-white/12 bg-[#0B0E14]/98 shadow-[0_28px_80px_-24px_rgba(0,0,0,0.92)]">
                             <header className="flex shrink-0 items-center justify-between gap-3 border-b border-white/10 bg-[#080a10]/95 px-3 py-2.5 sm:px-5">
                                 <div className="min-w-0">
                                     <h2
@@ -221,7 +225,7 @@ export function ChartPanel() {
                             </header>
                             <div
                                 ref={expandedChartRef}
-                                className="h-[min(86vh,900px)] min-h-0 w-full flex-1 bg-[#0A0C12]"
+                                className="min-h-0 w-full flex-1 overflow-hidden bg-[#0A0C12]"
                             />
                         </div>
                     </div>,
