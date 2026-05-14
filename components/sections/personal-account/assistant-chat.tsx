@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Bot, ChevronLeft, ChevronRight, Paperclip, Plus, Send, Trash2, X } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -525,14 +526,34 @@ export function AssistantChat() {
                                                 )}
 
                                                 {/* Message bubble / text */}
-                                                <div className={`relative whitespace-pre-wrap text-[13.5px] leading-relaxed tracking-tight ${
+                                                <div className={`relative text-[15px] leading-relaxed tracking-tight ${
                                                     isUser
-                                                        ? "rounded-2xl rounded-tr-sm bg-white/[0.07] px-3.5 py-2.5 text-white/88"
+                                                        ? "rounded-2xl rounded-tr-sm bg-white/[0.07] px-3.5 py-2.5 text-white/88 whitespace-pre-wrap"
                                                         : m.status === "pending"
                                                           ? "text-white/40"
-                                                          : "text-white/78"
+                                                          : "text-white/82"
                                                 }`}>
-                                                    {m.status === "pending" ? <TypingDots /> : m.content}
+                                                    {m.status === "pending" ? <TypingDots /> : isUser ? m.content : (
+                                                        <ReactMarkdown
+                                                            components={{
+                                                                p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                                                                strong: ({ children }) => <strong className="font-semibold text-white/95">{children}</strong>,
+                                                                em: ({ children }) => <em className="italic text-white/75">{children}</em>,
+                                                                ol: ({ children }) => <ol className="my-2 ml-4 list-decimal space-y-1.5">{children}</ol>,
+                                                                ul: ({ children }) => <ul className="my-2 ml-4 list-disc space-y-1.5">{children}</ul>,
+                                                                li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                                                                h1: ({ children }) => <h1 className="mb-2 mt-3 text-[16px] font-semibold text-white/90">{children}</h1>,
+                                                                h2: ({ children }) => <h2 className="mb-1.5 mt-3 text-[15px] font-semibold text-white/85">{children}</h2>,
+                                                                h3: ({ children }) => <h3 className="mb-1 mt-2 text-[14px] font-medium text-white/80">{children}</h3>,
+                                                                code: ({ children }) => <code className="rounded bg-white/[0.07] px-1.5 py-0.5 text-[13px] text-fuchsia-200/80">{children}</code>,
+                                                                pre: ({ children }) => <pre className="my-2 overflow-x-auto rounded-xl bg-white/[0.05] p-3 text-[13px]">{children}</pre>,
+                                                                blockquote: ({ children }) => <blockquote className="my-2 border-l-2 border-fuchsia-400/30 pl-3 text-white/55">{children}</blockquote>,
+                                                                hr: () => <hr className="my-3 border-white/[0.08]" />,
+                                                            }}
+                                                        >
+                                                            {m.content}
+                                                        </ReactMarkdown>
+                                                    )}
                                                 </div>
 
                                                 {/* Timestamp on hover */}
