@@ -21,7 +21,7 @@ export function PersonalAccountView() {
         {
             id: "assistant",
             label: "Ассистент",
-            hint: "LLM-чат + сценарии",
+            hint: "",
             activeClass: "border-fuchsia-400/35 bg-fuchsia-400/10 text-fuchsia-50",
         },
         {
@@ -57,9 +57,11 @@ export function PersonalAccountView() {
                                 <span className="whitespace-nowrap text-[11px] font-semibold uppercase tracking-[0.12em]">
                                     {t.label}
                                 </span>
-                                <span className={`mt-0.5 text-[10px] ${active ? "text-white/55" : "text-white/35"}`}>
-                                    {t.hint}
-                                </span>
+                                {t.hint && (
+                                    <span className={`mt-0.5 text-[10px] ${active ? "text-white/55" : "text-white/35"}`}>
+                                        {t.hint}
+                                    </span>
+                                )}
                             </button>
                         );
                     })}
