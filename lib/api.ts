@@ -520,6 +520,7 @@ export type HtfContext = {
     horizon: string;
     macro_bias: "bullish" | "bearish" | "range" | "transition" | null;
     long_context: "favorable" | "neutral" | "unfavorable" | null;
+    trend_entry_signal: "ready" | "wait" | "caution" | null;
     trend_regime: "strong_uptrend" | "weak_uptrend" | "neutral" | "downtrend" | "overheated" | "unknown" | null;
     weekly_structure: {
         state: string;
