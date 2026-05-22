@@ -378,109 +378,110 @@ function TrendAdminTab() {
                 <PaperbotPositionsTable compact positions={positions} />
             </div>
 
-            {/* Summary + Settings */}
+            {/* Two columns: left = Summary → ClosedTrades, right = Settings → Log */}
             <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
-                <PaperbotSummary collapsible layout="vertical" summary={summary} />
+                {/* Left: summary directly above history */}
+                <div className="flex flex-col gap-4">
+                    <PaperbotSummary collapsible layout="vertical" summary={summary} />
+                    <PaperbotClosedTrades trades={closedTrades} />
+                </div>
 
-                {/* Trend Settings */}
-                <Card title="Параметры Trend Bot" subtitle="Риск и горизонт позиции" padded className="self-start">
-                    <div className="flex flex-col gap-4">
-                        {/* Deposit */}
-                        <div>
-                            <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Депозит ($)</div>
-                            <div className="mt-1.5 flex items-center gap-2">
-                                <input
-                                    type="number" min={100} max={100_000} step={100}
-                                    value={effective.depositUsd}
-                                    disabled={isActive}
-                                    onChange={(e) => patch({ depositUsd: Number(e.target.value) || effective.depositUsd })}
-                                    className="w-32 rounded border border-white/12 bg-black/35 px-2.5 py-1.5 text-[12px] tabular-nums text-white/80 outline-none focus:border-violet-400/40 disabled:opacity-50"
-                                />
-                                <span className="text-[11px] text-white/30">USD · виртуальные средства</span>
-                            </div>
-                        </div>
-
-                        {/* Risk */}
-                        <div>
-                            <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Риск на сделку</div>
-                            <div className="mt-1.5 flex flex-wrap gap-1.5">
-                                {TREND_RISK_OPTIONS.map(r => (
-                                    <PillBtn
-                                        key={r}
-                                        active={effective.riskPct === r}
+                {/* Right: settings directly above log */}
+                <div className="flex flex-col gap-4">
+                    <Card title="Параметры Trend Bot" subtitle="Риск и горизонт позиции" padded className="self-start">
+                        <div className="flex flex-col gap-4">
+                            {/* Deposit */}
+                            <div>
+                                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Депозит ($)</div>
+                                <div className="mt-1.5 flex items-center gap-2">
+                                    <input
+                                        type="number" min={100} max={100_000} step={100}
+                                        value={effective.depositUsd}
                                         disabled={isActive}
-                                        onClick={() => patch({ riskPct: r })}
-                                    >
-                                        {r}%
-                                    </PillBtn>
-                                ))}
+                                        onChange={(e) => patch({ depositUsd: Number(e.target.value) || effective.depositUsd })}
+                                        className="w-32 rounded border border-white/12 bg-black/35 px-2.5 py-1.5 text-[12px] tabular-nums text-white/80 outline-none focus:border-violet-400/40 disabled:opacity-50"
+                                    />
+                                    <span className="text-[11px] text-white/30">USD · виртуальные средства</span>
+                                </div>
                             </div>
-                            <div className="mt-1 text-[10px] text-white/30">
-                                SL = 2× недельный ATR · плечо не используется
-                            </div>
-                        </div>
 
-                        {/* Timeout */}
-                        <div>
-                            <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Тайм-аут позиции</div>
-                            <div className="mt-1.5 flex flex-wrap gap-1.5">
-                                {TREND_TIMEOUT_OPTIONS.map(opt => (
-                                    <PillBtn
-                                        key={opt.hours}
-                                        active={effective.positionTimeoutHours === opt.hours}
+                            {/* Risk */}
+                            <div>
+                                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Риск на сделку</div>
+                                <div className="mt-1.5 flex flex-wrap gap-1.5">
+                                    {TREND_RISK_OPTIONS.map(r => (
+                                        <PillBtn
+                                            key={r}
+                                            active={effective.riskPct === r}
+                                            disabled={isActive}
+                                            onClick={() => patch({ riskPct: r })}
+                                        >
+                                            {r}%
+                                        </PillBtn>
+                                    ))}
+                                </div>
+                                <div className="mt-1 text-[10px] text-white/30">
+                                    SL = 2× недельный ATR · плечо не используется
+                                </div>
+                            </div>
+
+                            {/* Timeout */}
+                            <div>
+                                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Тайм-аут позиции</div>
+                                <div className="mt-1.5 flex flex-wrap gap-1.5">
+                                    {TREND_TIMEOUT_OPTIONS.map(opt => (
+                                        <PillBtn
+                                            key={opt.hours}
+                                            active={effective.positionTimeoutHours === opt.hours}
+                                            disabled={isActive}
+                                            onClick={() => patch({ positionTimeoutHours: opt.hours })}
+                                        >
+                                            {opt.label}
+                                        </PillBtn>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Directions */}
+                            <div>
+                                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Направления</div>
+                                <div className="mt-1.5 flex gap-2">
+                                    <button
                                         disabled={isActive}
-                                        onClick={() => patch({ positionTimeoutHours: opt.hours })}
+                                        onClick={() => !isActive && patch({ allowLong: !effective.allowLong })}
+                                        className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-[11px] font-semibold transition-colors disabled:opacity-50 ${
+                                            effective.allowLong
+                                                ? "border-emerald-400/40 bg-emerald-400/15 text-emerald-200"
+                                                : "border-white/10 bg-white/[0.04] text-white/35"
+                                        }`}
                                     >
-                                        {opt.label}
-                                    </PillBtn>
-                                ))}
+                                        <span className={`h-2 w-2 rounded-full ${effective.allowLong ? "bg-emerald-400" : "bg-white/20"}`} />
+                                        LONG
+                                    </button>
+                                    <button
+                                        disabled={isActive}
+                                        onClick={() => !isActive && patch({ allowShort: !effective.allowShort })}
+                                        className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-[11px] font-semibold transition-colors disabled:opacity-50 ${
+                                            effective.allowShort
+                                                ? "border-rose-400/40 bg-rose-400/15 text-rose-200"
+                                                : "border-white/10 bg-white/[0.04] text-white/35"
+                                        }`}
+                                    >
+                                        <span className={`h-2 w-2 rounded-full ${effective.allowShort ? "bg-rose-400" : "bg-white/20"}`} />
+                                        SHORT
+                                    </button>
+                                </div>
                             </div>
+
+                            {isActive && (
+                                <div className="rounded-lg border border-amber-400/15 bg-amber-400/[0.05] px-3 py-2 text-[11px] text-amber-200/60">
+                                    Остановите бота для изменения параметров
+                                </div>
+                            )}
                         </div>
-
-                        {/* Directions */}
-                        <div>
-                            <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Направления</div>
-                            <div className="mt-1.5 flex gap-2">
-                                <button
-                                    disabled={isActive}
-                                    onClick={() => !isActive && patch({ allowLong: !effective.allowLong })}
-                                    className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-[11px] font-semibold transition-colors disabled:opacity-50 ${
-                                        effective.allowLong
-                                            ? "border-emerald-400/40 bg-emerald-400/15 text-emerald-200"
-                                            : "border-white/10 bg-white/[0.04] text-white/35"
-                                    }`}
-                                >
-                                    <span className={`h-2 w-2 rounded-full ${effective.allowLong ? "bg-emerald-400" : "bg-white/20"}`} />
-                                    LONG
-                                </button>
-                                <button
-                                    disabled={isActive}
-                                    onClick={() => !isActive && patch({ allowShort: !effective.allowShort })}
-                                    className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-[11px] font-semibold transition-colors disabled:opacity-50 ${
-                                        effective.allowShort
-                                            ? "border-rose-400/40 bg-rose-400/15 text-rose-200"
-                                            : "border-white/10 bg-white/[0.04] text-white/35"
-                                    }`}
-                                >
-                                    <span className={`h-2 w-2 rounded-full ${effective.allowShort ? "bg-rose-400" : "bg-white/20"}`} />
-                                    SHORT
-                                </button>
-                            </div>
-                        </div>
-
-                        {isActive && (
-                            <div className="rounded-lg border border-amber-400/15 bg-amber-400/[0.05] px-3 py-2 text-[11px] text-amber-200/60">
-                                Остановите бота для изменения параметров
-                            </div>
-                        )}
-                    </div>
-                </Card>
-            </div>
-
-            {/* Closed trades + Log */}
-            <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
-                <PaperbotClosedTrades trades={closedTrades} />
-                <PaperbotActivityLog entries={logEntries} />
+                    </Card>
+                    <PaperbotActivityLog entries={logEntries} />
+                </div>
             </div>
         </div>
     );
