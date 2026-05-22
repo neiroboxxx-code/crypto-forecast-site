@@ -120,11 +120,11 @@ function trendSignalConfig(signal: HtfContext["trend_entry_signal"]): {
             };
         case "caution":
             return {
-                label: "CAUTION",
-                color: "#f87171",
-                bg: "rgba(248,113,113,0.06)",
-                border: "rgba(248,113,113,0.2)",
-                icon: "!",
+                label: "НЕ СЕЙЧАС",
+                color: "#fb923c",
+                bg: "rgba(251,146,60,0.06)",
+                border: "rgba(251,146,60,0.18)",
+                icon: "○",
             };
         default:
             return {
@@ -466,7 +466,7 @@ export function HtfContextPanel({ symbol = "BTCUSDT" }: { symbol?: string }) {
                 <ul className="mt-2 space-y-1.5">
                     <li><span className="font-semibold text-emerald-400">READY</span> — все условия выровнены: бычий макрос, благоприятный контекст, нет HIGH-предупреждений, диапазон не исчерпан, цена не у сопротивления. Можно искать вход в тренд.</li>
                     <li><span className="font-semibold text-amber-400">WAIT</span> — бычий макрос, но не все условия подтверждены. Стратегия — ждать улучшения условий (откат к поддержке, свежая неделя).</li>
-                    <li><span className="font-semibold text-rose-400">CAUTION</span> — медвежий/переходный макрос или HIGH-предупреждение активно. Лонговые позиции в тренд-режиме не открываются.</li>
+                    <li><span className="font-semibold text-orange-400">НЕ СЕЙЧАС</span> — медвежий/переходный макрос или HIGH-предупреждение. Условия не выровнены, вход в тренд пропускается.</li>
                 </ul>
 
                 <h4 className="mt-4 text-xs font-semibold uppercase tracking-[0.14em] text-white/55">
