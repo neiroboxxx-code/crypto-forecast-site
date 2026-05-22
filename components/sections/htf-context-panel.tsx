@@ -39,12 +39,12 @@ function longContextColor(ctx: HtfContext["long_context"]): string {
 
 function regimeLabel(regime: HtfContext["trend_regime"]): string {
     switch (regime) {
-        case "strong_uptrend": return "Strong Uptrend";
-        case "weak_uptrend":   return "Uptrend";
-        case "neutral":        return "Neutral";
-        case "downtrend":      return "Downtrend";
-        case "overheated":     return "Overheated";
-        case "unknown":        return "Unknown";
+        case "strong_uptrend": return "STRONG UP";
+        case "weak_uptrend":   return "UPTREND";
+        case "neutral":        return "NEUTRAL";
+        case "downtrend":      return "DOWNTREND";
+        case "overheated":     return "OVERHEATED";
+        case "unknown":        return "UNKNOWN";
         default:               return "—";
     }
 }
@@ -57,6 +57,25 @@ function regimeColor(regime: HtfContext["trend_regime"]): string {
         case "downtrend":      return "#f87171";
         case "overheated":     return "#fb923c";
         default:               return "#6b7280";
+    }
+}
+
+function locationLabel(loc: string | null | undefined): string {
+    switch (loc) {
+        case "near_resistance": return "NEAR RES";
+        case "near_support":    return "NEAR SUP";
+        case "mid_range":       return "MID RANGE";
+        case "no_levels":       return "NO LEVELS";
+        default:                return loc ? loc.replace(/_/g, " ").toUpperCase() : "—";
+    }
+}
+
+function locationColor(loc: string | null | undefined): string {
+    switch (loc) {
+        case "near_resistance": return "#f87171";
+        case "near_support":    return "#34d399";
+        case "mid_range":       return "#94a3b8";
+        default:                return "#6b7280";
     }
 }
 
@@ -78,9 +97,9 @@ function severityColor(severity: HtfRiskWarning["severity"]): string {
     }
 }
 
-// trend_entry_signal config
+// trend_entry_signal static config (colors/icons only — subtitle is computed dynamically)
 function trendSignalConfig(signal: HtfContext["trend_entry_signal"]): {
-    label: string; color: string; bg: string; border: string; icon: string; sub: string;
+    label: string; color: string; bg: string; border: string; icon: string;
 } {
     switch (signal) {
         case "ready":
@@ -90,7 +109,6 @@ function trendSignalConfig(signal: HtfContext["trend_entry_signal"]): {
                 bg: "rgba(52,211,153,0.07)",
                 border: "rgba(52,211,153,0.25)",
                 icon: "↑",
-                sub: "Условия для трендового входа выровнены",
             };
         case "wait":
             return {
@@ -99,16 +117,14 @@ function trendSignalConfig(signal: HtfContext["trend_entry_signal"]): {
                 bg: "rgba(251,191,36,0.07)",
                 border: "rgba(251,191,36,0.25)",
                 icon: "→",
-                sub: "Макрос бычий, но не все условия подтверждены",
             };
         case "caution":
             return {
                 label: "CAUTION",
                 color: "#f87171",
-                bg: "rgba(248,113,113,0.07)",
-                border: "rgba(248,113,113,0.25)",
-                icon: "⚠",
-                sub: "Медвежий контекст или HIGH-предупреждение активно",
+                bg: "rgba(248,113,113,0.06)",
+                border: "rgba(248,113,113,0.2)",
+                icon: "!",
             };
         default:
             return {
@@ -117,9 +133,31 @@ function trendSignalConfig(signal: HtfContext["trend_entry_signal"]): {
                 bg: "rgba(107,114,128,0.07)",
                 border: "rgba(107,114,128,0.2)",
                 icon: "·",
-                sub: "Нет данных",
             };
     }
+}
+
+// Dynamic subtitle — shows the specific reason, not a generic fallback
+function trendSignalSubtitle(signal: HtfContext["trend_entry_signal"], data: HtfContext): string {
+    if (signal === "ready") {
+        return "Все условия выровнены — можно искать точку входа";
+    }
+    if (signal === "wait") {
+        const loc = data.distance_to_levels?.location;
+        const weekPct = data.atr_context?.week_range_used_pct;
+        if (loc === "near_resistance") return "Цена у сопротивления — ждём откат или пробой";
+        if (weekPct !== null && weekPct !== undefined && weekPct > 65) return "Недельный диапазон почти исчерпан — ждём новой недели";
+        return "Бычий макрос, но тренд ещё не подтверждён";
+    }
+    if (signal === "caution") {
+        if (data.macro_bias === "bearish") return "Медвежья структура на недельном ТФ";
+        if (data.macro_bias === "transition") return "Переходная структура — новый тренд не подтверждён";
+        if (!data.macro_bias) return "Недостаточно данных для анализа";
+        const highWarn = data.risk_warnings.find(w => w.severity === "high");
+        if (highWarn) return highWarn.message;
+        return "Активны предупреждения высокого уровня";
+    }
+    return "Нет данных";
 }
 
 function RangeBar({ pct, status }: { pct: number | null | undefined; status: string | null | undefined }) {
@@ -157,6 +195,7 @@ function HtfPanelInner({ data }: { data: HtfContext }) {
     const ema  = data.daily_ema_context;
     const dist = data.distance_to_levels;
     const sig  = trendSignalConfig(data.trend_entry_signal ?? null);
+    const sub  = trendSignalSubtitle(data.trend_entry_signal ?? null, data);
 
     // Top warning (highest severity, for collapsed view)
     const topWarning = data.risk_warnings.find(w => w.severity === "high")
@@ -178,7 +217,7 @@ function HtfPanelInner({ data }: { data: HtfContext }) {
                     Trend Entry Signal
                 </div>
                 <div className="mt-1 text-[11px] text-white/40">
-                    {sig.sub}
+                    {sub}
                 </div>
             </div>
 
@@ -200,15 +239,17 @@ function HtfPanelInner({ data }: { data: HtfContext }) {
                 </div>
                 <div className="rounded-lg border border-white/8 bg-black/20 p-2">
                     <div className="text-[10px] uppercase tracking-[0.14em] text-white/35 mb-1">Regime</div>
-                    <span className="text-xs font-medium" style={{ color: regimeColor(data.trend_regime) }}>
-                        {regimeLabel(data.trend_regime)}
-                    </span>
+                    <Badge
+                        label={regimeLabel(data.trend_regime)}
+                        color={regimeColor(data.trend_regime)}
+                    />
                 </div>
                 <div className="rounded-lg border border-white/8 bg-black/20 p-2">
                     <div className="text-[10px] uppercase tracking-[0.14em] text-white/35 mb-1">Location</div>
-                    <span className="text-xs text-white/70">
-                        {dist?.location?.replace(/_/g, " ") ?? "—"}
-                    </span>
+                    <Badge
+                        label={locationLabel(dist?.location)}
+                        color={locationColor(dist?.location)}
+                    />
                 </div>
             </div>
 
