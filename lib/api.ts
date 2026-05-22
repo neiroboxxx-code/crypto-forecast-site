@@ -202,19 +202,29 @@ export async function getMarketThesis(): Promise<MarketThesis> {
 
 // ---------- 24H Micro ----------
 
+export type MicroPredictionFactor = {
+    name: string;
+    signal: "bull" | "bear" | "neutral" | string;
+    contribution: number;
+    raw: number;
+    weight: number;
+};
+
 export type MicroPrediction = {
     symbol: string;
     prediction_time: string;
     target_time: string;
     current_price: number;
     prediction_direction: "up" | "down" | "sideways" | string;
-    trade_action: "enter_long" | "avoid_long" | "no_trade" | string;
+    trade_action: "enter_long" | "avoid_long" | "neutral" | "no_trade" | string;
     probability_up: number;
     probability_down: number;
     confidence: number;
     model_version: string;
     notes: string;
     latest_timestamp: string;
+    factors?: MicroPredictionFactor[];
+    raw_score?: number;
 };
 
 export type MicroFeatures = {

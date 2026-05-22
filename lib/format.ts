@@ -44,5 +44,5 @@ export function fmtClock(iso: string): string {
 export function toneForDirection(d: string): "long" | "short" | "info" {
     if (d === "up" || d === "bullish" || d === "enter_long") return "long";
     if (d === "down" || d === "bearish" || d === "avoid_long") return "short";
-    return "info";
+    return "info";  // "neutral" / "no_trade" → cyan / info tone
 }
