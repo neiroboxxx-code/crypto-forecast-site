@@ -36,33 +36,26 @@ export function PaperbotActivityLog({ entries }: Props) {
             title="Журнал"
             subtitle="События бота в хронологическом порядке"
             right={
-                entries.length > 0 ? (
-                    <button
-                        type="button"
-                        onClick={() => setOpen((v) => !v)}
-                        className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-white/50 transition hover:border-white/20 hover:text-white/70"
-                        aria-expanded={open}
-                    >
-                        <span className="tabular-nums">{entries.length}</span>
-                        <ChevronDown
-                            className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
-                            aria-hidden
-                        />
-                    </button>
-                ) : undefined
+                <button
+                    type="button"
+                    onClick={() => setOpen((v) => !v)}
+                    className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-white/50 transition hover:border-white/20 hover:text-white/70"
+                    aria-expanded={open}
+                >
+                    {entries.length > 0 && <span className="tabular-nums">{entries.length}</span>}
+                    <ChevronDown
+                        className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+                        aria-hidden
+                    />
+                </button>
             }
         >
-            {entries.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-emerald-500/15 bg-black/25 px-4 py-8 text-center">
+            {open && (entries.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-emerald-500/15 bg-black/25 px-4 py-6 text-center">
                     <p className="text-[12px] font-medium text-white/55">Журнал пуст</p>
-                    <p className="mx-auto mt-2 max-w-sm text-[11px] leading-relaxed text-white/42">
-                        Сюда попадут сигнал, расчёт риска, открытие и закрытие сделок, срабатывание SL/TP и отмены.
-                        Новые записи будут сверху.
-                    </p>
                 </div>
             ) : (
-                open && (
-                    <ul className="flex max-h-[440px] flex-col gap-2 overflow-y-auto pr-1">
+                <ul className="flex max-h-[440px] flex-col gap-2 overflow-y-auto pr-1">
                     {entries.map((e) => {
                         const Icon = levelIcon(e.level);
                         return (
@@ -98,8 +91,7 @@ export function PaperbotActivityLog({ entries }: Props) {
                         );
                     })}
                     </ul>
-                )
-            )}
+            ))}
         </Card>
     );
 }

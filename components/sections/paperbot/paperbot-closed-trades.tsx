@@ -64,32 +64,28 @@ export function PaperbotClosedTrades({ trades }: Props) {
             title="История сделок"
             subtitle="Закрытые позиции бота"
             right={
-                trades.length > 0 ? (
-                    <button
-                        type="button"
-                        onClick={() => setOpen((v) => !v)}
-                        className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-white/50 transition hover:border-white/20 hover:text-white/70"
-                        aria-expanded={open}
-                    >
-                        <span className="tabular-nums">{trades.length}</span>
-                        <ChevronDown
-                            className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
-                            aria-hidden
-                        />
-                    </button>
-                ) : undefined
+                <button
+                    type="button"
+                    onClick={() => setOpen((v) => !v)}
+                    className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] text-white/50 transition hover:border-white/20 hover:text-white/70"
+                    aria-expanded={open}
+                >
+                    {trades.length > 0 && <span className="tabular-nums">{trades.length}</span>}
+                    <ChevronDown
+                        className={`h-3.5 w-3.5 shrink-0 transition-transform ${open ? "rotate-180" : ""}`}
+                        aria-hidden
+                    />
+                </button>
             }
         >
-            {trades.length === 0 ? (
-                <div className="rounded-xl border border-dashed border-emerald-500/15 bg-black/25 px-4 py-8 text-center">
+            {open && (trades.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-emerald-500/15 bg-black/25 px-4 py-6 text-center">
                     <p className="text-[12px] font-medium text-white/55">История пуста</p>
-                    <p className="mx-auto mt-2 max-w-md text-[11px] leading-relaxed text-white/42">
-                        После закрытия первой сделки здесь появится таблица: инструмент, направление,
-                        цена входа и выхода, PnL, длительность и причина закрытия (SL / TP / сигнал / вручную).
+                    <p className="mx-auto mt-1.5 max-w-md text-[11px] leading-relaxed text-white/42">
+                        После закрытия первой сделки здесь появится таблица.
                     </p>
                 </div>
             ) : (
-                open && (
                     <div className="max-h-[440px] overflow-x-auto overflow-y-auto pr-1">
                         <table className="w-full min-w-[720px] border-separate border-spacing-0 text-[12px]">
                         <thead>
@@ -155,8 +151,7 @@ export function PaperbotClosedTrades({ trades }: Props) {
                         </tbody>
                     </table>
                     </div>
-                )
-            )}
+            ))}
         </Card>
     );
 }
