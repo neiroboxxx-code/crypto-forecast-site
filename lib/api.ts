@@ -476,6 +476,67 @@ export async function runPaperbotTick(): Promise<void> {
     await request<unknown>("/api/admin/paperbot/run", { method: "POST" }, "");
 }
 
+// ---------- Trend Bot ----------
+
+export type TrendBotSettings = {
+    depositUsd: number;
+    riskPct: number;
+    allowLong: boolean;
+    allowShort: boolean;
+    maxPositions: number;
+    positionTimeoutHours: number;
+    isActive: boolean;
+};
+
+export type TrendBotHtfSignal = {
+    trend_entry_signal: "ready" | "wait" | "caution" | null;
+    macro_bias: string | null;
+    long_context: string | null;
+    updated_at: string | null;
+};
+
+export type TrendBotState = {
+    settings: TrendBotSettings;
+    positions: PaperBotPosition[];
+    closedTrades: PaperBotClosedTrade[];
+    log: PaperBotLogEntry[];
+    summary: PaperBotSummary;
+    htfSignal: TrendBotHtfSignal | null;
+};
+
+export async function getTrendBotState(): Promise<TrendBotState> {
+    const data = await request<TrendBotState>("/api/paperbot/trend/state");
+    requireKeys(data, ["settings", "positions", "closedTrades", "log", "summary"], "getTrendBotState");
+    return data;
+}
+
+export async function startTrendBot(): Promise<void> {
+    await request<unknown>("/api/admin/paperbot/trend-start", { method: "POST" }, "");
+}
+
+export async function stopTrendBot(): Promise<void> {
+    await request<unknown>("/api/admin/paperbot/trend-stop", { method: "POST" }, "");
+}
+
+export async function updateTrendBotSettings(s: Omit<TrendBotSettings, "isActive">): Promise<void> {
+    await request<unknown>("/api/admin/paperbot/trend-settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            deposit_usd: s.depositUsd,
+            risk_pct: s.riskPct,
+            allow_long: s.allowLong,
+            allow_short: s.allowShort,
+            max_positions: s.maxPositions,
+            position_timeout_hours: s.positionTimeoutHours,
+        }),
+    }, "");
+}
+
+export async function runTrendBotTick(): Promise<void> {
+    await request<unknown>("/api/admin/paperbot/trend-run", { method: "POST" }, "");
+}
+
 // ---------- Health ----------
 
 export type HealthStatus = {
