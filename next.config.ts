@@ -1,9 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  outputFileTracingExcludes: {
-    "*": ["./public/**/*.pdf"],
-  },
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;
