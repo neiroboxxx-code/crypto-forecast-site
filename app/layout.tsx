@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import { MaintenanceBanner } from "@/components/ui/maintenance-banner";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -19,7 +20,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${geist.variable} h-full`}>
-      <body>{children}</body>
+      <body>
+        <MaintenanceBanner />
+        {children}
+      </body>
     </html>
   );
 }
