@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useApi } from "@/hooks/use-api";
 import { getScanner, type ScannerRow } from "@/lib/api";
 
@@ -81,10 +82,13 @@ function ScannerRowItem({
     onClick: () => void;
 }) {
     if (row.status !== "ok") {
+        const isLoading = row.status === "loading" || row.status === "cache_miss";
         return (
             <tr className="border-b border-white/5">
                 <td className="px-3 py-2 font-mono text-[11px] text-white/50">{row.symbol}</td>
-                <td colSpan={7} className="px-3 py-2 text-[11px] text-red-400/70">ошибка данных</td>
+                <td colSpan={7} className={`px-3 py-2 text-[11px] ${isLoading ? "text-white/30 animate-pulse" : "text-red-400/70"}`}>
+                    {isLoading ? "загрузка данных…" : "ошибка данных"}
+                </td>
             </tr>
         );
     }
@@ -208,8 +212,16 @@ export function ScannerPanel({ selectedSymbol, onSelectSymbol }: ScannerPanelPro
     const { data, loading, error, refreshing, refresh } = useApi(
         getScanner,
         [],
-        { intervalMs: 60 * 60 * 1000 }, // auto-refresh 1h (data TTL on server is 1h)
+        { intervalMs: 60 * 60 * 1000 }, // auto-refresh 1h (data TTL on server is 6h)
     );
+
+    // Auto-poll every 30s while any symbol is still loading (background warm-up in progress)
+    const hasLoading = data?.rows.some(r => r.status === "loading" || r.status === "cache_miss");
+    useEffect(() => {
+        if (!hasLoading) return;
+        const timer = setTimeout(() => { refresh(); }, 30_000);
+        return () => clearTimeout(timer);
+    }, [hasLoading, refresh]);
 
     return (
         <section className="overflow-hidden rounded-2xl border border-white/8 bg-[#0E1117]/80">
