@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { type HtfContext, type HtfRiskWarning } from "@/lib/api";
+import { fetchHtfContext, type HtfContext, type HtfRiskWarning } from "@/lib/api";
 import { useDashboardData } from "@/components/providers/dashboard-data-provider";
+import { useApi } from "@/hooks/use-api";
 import { InfoDialog, InfoIconButton } from "@/components/ui/info-dialog";
 
 // ── Helpers ────────────────────────────────────────────────────────────────
@@ -488,6 +489,71 @@ export function HtfContextPanel({ symbol = "BTCUSDT" }: { symbol?: string }) {
                     все предупреждения. Это для анализа — основной сигнал в верхней части.
                 </p>
 
+                <p className="mt-3 text-xs text-white/50">
+                    Это не финансовый совет. Сигнал — один из инструментов анализа.
+                </p>
+            </InfoDialog>
+        </>
+    );
+}
+
+// ── Standalone variant — fetches its own data, symbol-aware ───────────────
+// Used on pages that are not wrapped by DashboardDataProvider.
+
+export function HtfContextPanelStandalone({ symbol = "BTCUSDT" }: { symbol?: string }) {
+    const { data, loading, error } = useApi(
+        () => fetchHtfContext(symbol),
+        [symbol],
+        { intervalMs: 10 * 60_000 },
+    );
+    const [infoOpen, setInfoOpen] = useState(false);
+
+    return (
+        <>
+            <section className="rounded-xl border border-white/10 bg-[#0d1117] p-4">
+                <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-sm font-semibold text-slate-200 tracking-wide">
+                        HTF Context
+                        <span className="ml-2 text-xs text-slate-500 font-normal">1W / 1M</span>
+                    </h2>
+                    <div className="flex items-center gap-2">
+                        {data && !loading && (
+                            <span className="text-xs text-slate-500">{symbol}</span>
+                        )}
+                        <InfoIconButton
+                            onClick={() => setInfoOpen(true)}
+                            label="Показать пояснение к HTF Context"
+                        />
+                    </div>
+                </div>
+
+                {loading && (
+                    <div className="space-y-3">
+                        <div className="h-20 rounded-lg bg-white/5 animate-pulse" />
+                        <div className="grid grid-cols-2 gap-2">
+                            {[1,2,3,4].map(i => <div key={i} className="h-12 rounded-lg bg-white/5 animate-pulse" />)}
+                        </div>
+                    </div>
+                )}
+
+                {error && !loading && (
+                    <div className="text-xs text-rose-400 py-2">HTF данные недоступны</div>
+                )}
+
+                {data && !loading && <HtfPanelInner data={data} />}
+            </section>
+
+            <InfoDialog
+                open={infoOpen}
+                onClose={() => setInfoOpen(false)}
+                title="HTF Context"
+                subtitle="Позиционирование на старших таймфреймах (1W / 1M)"
+            >
+                <p>
+                    Инструмент трендовой торговли на горизонте 1–4 недели. Агрегирует недельную
+                    структуру рынка, ключевые уровни, EMA-режим и диапазон недели/месяца
+                    в один сигнал. Данные обновляются раз в 6 часов.
+                </p>
                 <p className="mt-3 text-xs text-white/50">
                     Это не финансовый совет. Сигнал — один из инструментов анализа.
                 </p>

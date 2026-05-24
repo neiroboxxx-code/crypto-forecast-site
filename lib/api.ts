@@ -628,6 +628,77 @@ export async function fetchHtfContext(symbol = "BTCUSDT"): Promise<HtfContext> {
     return data;
 }
 
+// ---------- Scanner ----------
+
+export type ScannerRow = {
+    symbol: string;
+    asset_class: string;
+    status: "ok" | "error" | string;
+    cached: boolean;
+    updated_at: string;
+    data_freshest_candle_at: string | null;
+    macro_bias: "bullish" | "bearish" | "range" | "transition" | null;
+    trend_regime: "strong_uptrend" | "weak_uptrend" | "neutral" | "downtrend" | "overheated" | "unknown" | null;
+    trend_entry_signal: "ready" | "wait" | "caution" | null;
+    long_context: "favorable" | "neutral" | "unfavorable" | null;
+    weekly_structure: string | null;
+    momentum_12w_positive: boolean | null;
+    rsi_14: number | null;
+    weekly_adx: number | null;
+    minervini_ok: boolean | null;
+    above_sma_30w: boolean | null;
+    location: string | null;
+    nearest_support_pct: number | null;
+    nearest_resistance_pct: number | null;
+    weekly_range_status: string | null;
+    risk_warnings_count: number;
+};
+
+export type ScannerData = {
+    updated_at: string;
+    symbols_count: number;
+    rows: ScannerRow[];
+};
+
+export async function getScanner(): Promise<ScannerData> {
+    return request<ScannerData>("/api/scanner");
+}
+
+// ---------- Candles (KlineCharts) ----------
+
+export type CandleBar = {
+    /** Unix timestamp in milliseconds */
+    t: number;
+    o: number;
+    h: number;
+    l: number;
+    c: number;
+    v: number;
+};
+
+export type CandlesResponse = {
+    symbol: string;
+    interval: string;
+    count: number;
+    cached: boolean;
+    candles: CandleBar[];
+};
+
+/**
+ * Fetch OHLCV candles for KlineCharts.
+ * interval: "D" | "W" | "M" | "4H"
+ * limit: 0 = server default (500 for D, 104 for W, 24 for M)
+ */
+export async function getCandles(
+    symbol: string,
+    interval: string,
+    limit = 0,
+): Promise<CandlesResponse> {
+    return request<CandlesResponse>(
+        `/api/candles/${symbol}?interval=${interval}&limit=${limit}`,
+    );
+}
+
 // ---------- HTF History ----------
 
 export type HtfSnapshot = {

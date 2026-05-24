@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bot, Cpu, GraduationCap, LayoutDashboard, Newspaper, UserRound } from "lucide-react";
+import { Bot, Cpu, GraduationCap, LayoutDashboard, Newspaper, TrendingUp, UserRound } from "lucide-react";
 
 const items = [
     { href: "/", label: "Дашборд", labelEn: "Dashboard", icon: LayoutDashboard },
+    { href: "/trend-trading", label: "Trend Trading", labelEn: "Trends", icon: TrendingUp },
     { href: "/academy", label: "Академия", labelEn: "Academy", icon: GraduationCap },
     { href: "/cryptonews", label: "CryptoNews", labelEn: "CryptoNews", icon: Newspaper },
     { href: "/paperbot", label: "Пейпербот", labelEn: "Paperbot", icon: Bot },
