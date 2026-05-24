@@ -92,7 +92,7 @@ export function EpubReader({ bookId, fileUrl, initialCfi }: EpubReaderProps) {
                     getRendition={getRendition}
                     showToc
                     epubOptions={{ allowScriptedContent: false }}
-                    styles={{
+                    readerStyles={{
                         container: { background: "#0E1117", height: "100%" },
                         readerArea: { background: "#0E1117" },
                         arrow: {
