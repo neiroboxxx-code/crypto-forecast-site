@@ -12,6 +12,8 @@ import {
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Minus, Plus, X } from "lucide-react";
 import type { AcademyCategoryId, AcademyCategoryPayload, AcademyCoursePayload } from "@/lib/academy/types";
+import { Bookshelf } from "@/components/library/bookshelf";
+import { BOOKS } from "@/lib/library/books";
 
 /** Дискретные уровни масштаба (кнопки + / −). */
 const ZOOM_LEVELS = [1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 3, 3.5, 4] as const;
@@ -245,7 +247,12 @@ export function AcademyDashboard({ categories }: Props) {
             </div>
 
             {/* ── Active section ── */}
-            {activeCategory && (
+            {activeCategory && activeCategory.id === "library" ? (
+                /* Library tab — show 3D bookshelf */
+                <section className="rounded-xl border border-white/8 bg-[#0E1117]/80 p-6">
+                    <Bookshelf books={BOOKS} />
+                </section>
+            ) : activeCategory ? (
                 <section aria-labelledby={`academy-${activeCategory.id}`}>
                     <header className="mb-1.5 flex flex-wrap items-end justify-between gap-2">
                         <div className="min-w-0">
@@ -278,7 +285,7 @@ export function AcademyDashboard({ categories }: Props) {
                         ))}
                     </div>
                 </section>
-            )}
+            ) : null}
 
             {/* ── Lightbox ── */}
             {viewer && (

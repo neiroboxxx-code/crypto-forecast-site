@@ -39,6 +39,8 @@ export const ACADEMY_FOLDER_GROUPS: Record<AcademyCategoryId, readonly string[]>
         "NEWS/Price Action Trader/Universal_Price_Action_Mechanics",
         "NEWS/Price Action Trader/YTC_Price_Action_Blueprint",
     ],
+    // Library tab has no slide folders — handled separately in AcademyDashboard
+    library: [],
 };
 
 export const CATEGORY_META: readonly { id: AcademyCategoryId; label: string; hint: string }[] = [
@@ -81,5 +83,10 @@ export const CATEGORY_META: readonly { id: AcademyCategoryId; label: string; hin
         id: "price_action_trader",
         label: "Price Action Trader",
         hint: "YTC Price Action · Lance Beggs",
+    },
+    {
+        id: "library",
+        label: "📚 Библиотека",
+        hint: "Книги · PDF и EPUB",
     },
 ];
