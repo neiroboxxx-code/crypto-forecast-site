@@ -5,7 +5,8 @@ export type AcademyCategoryId =
     | "anatomy"
     | "local"
     | "zones"
-    | "infographic";
+    | "infographic"
+    | "price_action_trader";
 
 export type AcademyCoursePayload = {
     folder: string;

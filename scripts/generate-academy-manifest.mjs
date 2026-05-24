@@ -30,6 +30,13 @@ const FOLDERS = [
   "zone/Important_about_volume",
   "zone/RSI_Market_Pulse",
   "zone/Anatomy_of_a_candle",
+  "NEWS/Price Action Trader/Anatomy_of_Execution",
+  "NEWS/Price Action Trader/Capital_Survival_Protocol",
+  "NEWS/Price Action Trader/Market_X-Ray",
+  "NEWS/Price Action Trader/Price_Action_Anatomy",
+  "NEWS/Price Action Trader/The_Aviator_Protocol",
+  "NEWS/Price Action Trader/Universal_Price_Action_Mechanics",
+  "NEWS/Price Action Trader/YTC_Price_Action_Blueprint",
 ];
 
 const manifest = {};

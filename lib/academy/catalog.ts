@@ -30,6 +30,15 @@ export const ACADEMY_FOLDER_GROUPS: Record<AcademyCategoryId, readonly string[]>
         "zone/RSI_Market_Pulse",
     ],
     infographic: ["zone/Anatomy_of_a_candle"],
+    price_action_trader: [
+        "NEWS/Price Action Trader/Anatomy_of_Execution",
+        "NEWS/Price Action Trader/Capital_Survival_Protocol",
+        "NEWS/Price Action Trader/Market_X-Ray",
+        "NEWS/Price Action Trader/Price_Action_Anatomy",
+        "NEWS/Price Action Trader/The_Aviator_Protocol",
+        "NEWS/Price Action Trader/Universal_Price_Action_Mechanics",
+        "NEWS/Price Action Trader/YTC_Price_Action_Blueprint",
+    ],
 };
 
 export const CATEGORY_META: readonly { id: AcademyCategoryId; label: string; hint: string }[] = [
@@ -67,5 +76,10 @@ export const CATEGORY_META: readonly { id: AcademyCategoryId; label: string; hin
         id: "infographic",
         label: "Инфографика",
         hint: "Схемы и наглядные справки",
+    },
+    {
+        id: "price_action_trader",
+        label: "Price Action Trader",
+        hint: "YTC Price Action · Lance Beggs",
     },
 ];
