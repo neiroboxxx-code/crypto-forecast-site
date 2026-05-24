@@ -8,7 +8,10 @@ import { saveProgress } from "@/lib/library/progress";
 
 // ── Dynamically import ReactReader — no SSR ────────────────────────────────
 const ReactReader = dynamic(
-    () => import("react-reader").then((m) => m.ReactReader),
+    () => import("react-reader").then((m) => {
+        // Capture default styles for override merging at render time
+        return m.ReactReader;
+    }),
     {
         ssr: false,
         loading: () => (
@@ -21,6 +24,26 @@ const ReactReader = dynamic(
         ),
     },
 );
+
+// ── Full readerStyles object (react-reader requires ALL fields) ────────────
+// We import ReactReaderStyle defaults and override what we need.
+// Using `any` cast to avoid importing the type which may not be exported cleanly.
+function buildReaderStyles(): any {
+    try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const { ReactReaderStyle } = require("react-reader");
+        return {
+            ...ReactReaderStyle,
+            container: { ...ReactReaderStyle.container, background: "#0E1117" },
+            readerArea: { ...ReactReaderStyle.readerArea, background: "#0E1117" },
+            arrow: { ...ReactReaderStyle.arrow, color: "rgba(255,255,255,0.35)", fontSize: 30 },
+            arrowHover: { ...ReactReaderStyle.arrowHover, color: "#ffffff" },
+            titleArea: { ...ReactReaderStyle.titleArea, color: "rgba(255,255,255,0.3)", fontSize: 10 },
+        };
+    } catch {
+        return undefined; // fallback: no custom styles
+    }
+}
 
 // ── Dark theme override injected into the epub iframe ─────────────────────
 const EPUB_DARK_THEME = {
@@ -46,6 +69,7 @@ export function EpubReader({ bookId, fileUrl, initialCfi }: EpubReaderProps) {
     const [percent, setPercent] = useState(0);
     const renditionRef = useRef<any>(null);
     const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const readerStyles = useRef(buildReaderStyles());
 
     const handleLocationChange = useCallback((cfi: string) => {
         setLocation(cfi);
@@ -92,20 +116,7 @@ export function EpubReader({ bookId, fileUrl, initialCfi }: EpubReaderProps) {
                     getRendition={getRendition}
                     showToc
                     epubOptions={{ allowScriptedContent: false }}
-                    readerStyles={{
-                        container: { background: "#0E1117", height: "100%" },
-                        readerArea: { background: "#0E1117" },
-                        arrow: {
-                            color: "rgba(255,255,255,0.35)",
-                            fontSize: 30,
-                        },
-                        arrowHover: { color: "#ffffff" },
-                        titleArea: {
-                            color: "rgba(255,255,255,0.3)",
-                            fontSize: 10,
-                            paddingTop: 4,
-                        },
-                    }}
+                    readerStyles={readerStyles.current}
                 />
             </div>
 
