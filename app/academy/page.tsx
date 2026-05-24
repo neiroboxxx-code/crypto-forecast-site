@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { AcademyDashboard } from "@/components/sections/academy/academy-dashboard";
 import { AcademyPageBackdrop } from "@/components/sections/academy/academy-page-backdrop";
@@ -10,7 +11,9 @@ export default function AcademyPage() {
 
     return (
         <DashboardShell ornament={<AcademyPageBackdrop />}>
-            <AcademyDashboard categories={categories} />
+            <Suspense>
+                <AcademyDashboard categories={categories} />
+            </Suspense>
         </DashboardShell>
     );
 }

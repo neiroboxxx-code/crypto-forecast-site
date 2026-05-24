@@ -10,6 +10,7 @@ import {
     type TouchEvent as ReactTouchEvent,
 } from "react";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight, Minus, Plus, X } from "lucide-react";
 import type { AcademyCategoryId, AcademyCategoryPayload, AcademyCoursePayload } from "@/lib/academy/types";
 import { Bookshelf } from "@/components/library/bookshelf";
@@ -42,9 +43,12 @@ type Props = {
 };
 
 export function AcademyDashboard({ categories }: Props) {
-    const [activeTab, setActiveTab] = useState<AcademyCategoryId>(
-        () => categories[0]?.id ?? "technical",
-    );
+    const searchParams = useSearchParams();
+    const [activeTab, setActiveTab] = useState<AcademyCategoryId>(() => {
+        const tab = searchParams?.get("tab") as AcademyCategoryId | null;
+        if (tab && categories.some((c) => c.id === tab)) return tab;
+        return categories[0]?.id ?? "technical";
+    });
     const [viewer, setViewer] = useState<{ title: string; slides: string[]; index: number } | null>(null);
     const [zoomIndex, setZoomIndex] = useState(0);
     const [pan, setPan] = useState({ x: 0, y: 0 });

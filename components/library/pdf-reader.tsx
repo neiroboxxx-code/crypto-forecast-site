@@ -8,181 +8,183 @@ interface PdfReaderProps {
     bookId: string;
     fileUrl: string;
     initialPage?: number;
-    onProgress?: (page: number, totalPages: number, percent: number) => void;
 }
 
-export function PdfReader({ bookId, fileUrl, initialPage = 1, onProgress }: PdfReaderProps) {
+export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const pdfRef = useRef<any>(null);
     const renderTaskRef = useRef<any>(null);
+    const currentPageRef = useRef(initialPage);
 
     const [page, setPage] = useState(initialPage);
     const [totalPages, setTotalPages] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [renderScale, setRenderScale] = useState(1);
+    const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+    const [loadMsg, setLoadMsg] = useState("Инициализация…");
 
-    // Save progress — throttled to avoid too many API calls
-    const saveRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const scheduleSave = useCallback((p: number, total: number) => {
-        if (saveRef.current) clearTimeout(saveRef.current);
-        saveRef.current = setTimeout(() => {
-            const percent = total > 0 ? Math.round((p / total) * 100) : 0;
-            saveProgress({ book_id: bookId, page: p, total_pages: total, percent });
-            onProgress?.(p, total, percent);
-        }, 1000);
-    }, [bookId, onProgress]);
+    // ── Stable scale: based on viewport, not canvas container ──────────────
+    function calcScale(vpWidth: number, vpHeight: number, pdfW: number, pdfH: number): number {
+        // Reserve space for header (48px) and nav bar (64px) + 32px padding
+        const maxH = vpHeight - 48 - 64 - 32;
+        const maxW = vpWidth - 32;
+        const byW = maxW / pdfW;
+        const byH = maxH / pdfH;
+        return Math.min(byW, byH, 2.5); // cap at 2.5x
+    }
 
-    // Load PDF document
+    // ── Render a specific page ──────────────────────────────────────────────
+    const renderPage = useCallback(async (pageNum: number) => {
+        if (!pdfRef.current || !canvasRef.current) return;
+
+        // Cancel any pending render
+        if (renderTaskRef.current) {
+            renderTaskRef.current.cancel();
+            renderTaskRef.current = null;
+        }
+
+        try {
+            const pdfPage = await pdfRef.current.getPage(pageNum);
+            const nativeVp = pdfPage.getViewport({ scale: 1 });
+            const scale = calcScale(
+                window.innerWidth,
+                window.innerHeight,
+                nativeVp.width,
+                nativeVp.height,
+            );
+            const vp = pdfPage.getViewport({ scale });
+
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext("2d")!;
+            // Set exact pixel dimensions — prevents layout shifts
+            canvas.width = vp.width;
+            canvas.height = vp.height;
+            canvas.style.width = `${vp.width}px`;
+            canvas.style.height = `${vp.height}px`;
+
+            const task = pdfPage.render({ canvasContext: ctx, viewport: vp });
+            renderTaskRef.current = task;
+            await task.promise;
+
+            // Save progress (debounced 1s)
+            const total = pdfRef.current.numPages;
+            const pct = Math.round((pageNum / total) * 100);
+            saveProgress({ book_id: bookId, page: pageNum, total_pages: total, percent: pct });
+        } catch (e: any) {
+            if (e?.name !== "RenderingCancelledException") {
+                console.error("PDF render error:", e);
+            }
+        }
+    }, [bookId]);
+
+    // ── Load PDF document ───────────────────────────────────────────────────
     useEffect(() => {
         let cancelled = false;
 
-        async function loadPdf() {
+        async function load() {
             try {
-                setLoading(true);
-                setError(null);
+                setStatus("loading");
+                setLoadMsg("Загрузка PDF.js…");
 
-                // Dynamically import pdfjs to avoid SSR issues
                 const pdfjs = await import("pdfjs-dist");
+                if (cancelled) return;
 
-                // Set worker — use CDN to avoid bundling the large worker file
-                if (!pdfjs.GlobalWorkerOptions.workerSrc) {
-                    pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
-                }
+                // Use local worker (no CDN, no CORS issues)
+                pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
+
+                setLoadMsg("Загрузка файла…");
 
                 const pdf = await pdfjs.getDocument({
                     url: fileUrl,
-                    cMapUrl: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/cmaps/",
-                    cMapPacked: true,
+                    // Range requests — loads pages on demand, not the whole file at once
+                    rangeChunkSize: 65536,
+                    disableAutoFetch: false,
+                    disableStream: false,
                 }).promise;
 
                 if (cancelled) return;
-
                 pdfRef.current = pdf;
                 setTotalPages(pdf.numPages);
-                setLoading(false);
-            } catch (err) {
+                setStatus("ready");
+            } catch (e) {
                 if (!cancelled) {
-                    setError("Не удалось загрузить PDF");
-                    setLoading(false);
-                    console.error("PDF load error:", err);
+                    console.error("PDF load error:", e);
+                    setStatus("error");
                 }
             }
         }
 
-        loadPdf();
+        load();
         return () => { cancelled = true; };
     }, [fileUrl]);
 
-    // Render current page
+    // ── Render whenever page changes or PDF becomes ready ──────────────────
     useEffect(() => {
-        if (!pdfRef.current || !canvasRef.current || loading) return;
+        if (status !== "ready") return;
+        currentPageRef.current = page;
+        renderPage(page);
+    }, [page, status, renderPage]);
 
-        let cancelled = false;
+    // ── Re-render on window resize (debounced) ─────────────────────────────
+    useEffect(() => {
+        if (status !== "ready") return;
+        let timer: ReturnType<typeof setTimeout>;
+        const onResize = () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => renderPage(currentPageRef.current), 200);
+        };
+        window.addEventListener("resize", onResize);
+        return () => { window.removeEventListener("resize", onResize); clearTimeout(timer); };
+    }, [status, renderPage]);
 
-        async function renderPage() {
-            if (cancelled) return;
-
-            // Cancel any in-progress render
-            if (renderTaskRef.current) {
-                renderTaskRef.current.cancel();
-                renderTaskRef.current = null;
-            }
-
-            try {
-                const pdfPage = await pdfRef.current.getPage(page);
-                if (cancelled) return;
-
-                const container = containerRef.current;
-                const containerWidth = container?.clientWidth ?? 800;
-
-                const viewport = pdfPage.getViewport({ scale: 1 });
-                const scale = Math.min(containerWidth / viewport.width, 1.8);
-                const scaledViewport = pdfPage.getViewport({ scale });
-
-                const canvas = canvasRef.current!;
-                const ctx = canvas.getContext("2d")!;
-                canvas.width = scaledViewport.width;
-                canvas.height = scaledViewport.height;
-                setRenderScale(scale);
-
-                const renderTask = pdfPage.render({
-                    canvasContext: ctx,
-                    viewport: scaledViewport,
-                });
-
-                renderTaskRef.current = renderTask;
-                await renderTask.promise;
-
-                if (!cancelled) {
-                    scheduleSave(page, pdfRef.current.numPages);
-                }
-            } catch (err: any) {
-                if (err?.name !== "RenderingCancelledException" && !cancelled) {
-                    console.error("PDF render error:", err);
-                }
-            }
-        }
-
-        renderPage();
-        return () => { cancelled = true; };
-    }, [page, loading, scheduleSave]);
-
-    const goPrev = useCallback(() => {
-        setPage((p) => Math.max(1, p - 1));
-    }, []);
-
-    const goNext = useCallback(() => {
-        setPage((p) => Math.min(totalPages, p + 1));
-    }, [totalPages]);
-
-    // Keyboard navigation
+    // ── Keyboard navigation ─────────────────────────────────────────────────
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
-            if (e.key === "ArrowLeft" || e.key === "PageUp") goPrev();
-            if (e.key === "ArrowRight" || e.key === "PageDown") goNext();
+            if (e.key === "ArrowLeft"  || e.key === "PageUp")   setPage((p) => Math.max(1, p - 1));
+            if (e.key === "ArrowRight" || e.key === "PageDown") setPage((p) => Math.min(totalPages, p + 1));
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [goPrev, goNext]);
+    }, [totalPages]);
 
     const percent = totalPages > 0 ? Math.round((page / totalPages) * 100) : 0;
 
     return (
         <div className="flex h-full flex-col bg-[#0B0D12]">
-            {/* Canvas area */}
+            {/* ── Canvas area — FIXED, never resizes to fit content ── */}
             <div
                 ref={containerRef}
-                className="relative flex flex-1 flex-col items-center justify-center overflow-auto bg-[#0B0D12] px-2 py-4"
+                className="relative flex min-h-0 flex-1 items-center justify-center overflow-hidden bg-[#0B0D12]"
             >
-                {loading && (
-                    <div className="flex flex-col items-center gap-3">
+                {status === "loading" && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
                         <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-cyan-400" />
-                        <span className="text-[12px] text-white/40">Загрузка PDF…</span>
+                        <span className="text-[12px] text-white/40">{loadMsg}</span>
                     </div>
                 )}
 
-                {error && (
-                    <div className="text-center text-sm text-red-400/80">{error}</div>
+                {status === "error" && (
+                    <div className="text-sm text-red-400/80">Не удалось загрузить PDF</div>
                 )}
 
-                {!loading && !error && (
-                    <canvas
-                        ref={canvasRef}
-                        className="rounded shadow-2xl"
-                        style={{ maxWidth: "100%", display: "block" }}
-                    />
-                )}
+                {/* Canvas always rendered (hidden while loading) */}
+                <canvas
+                    ref={canvasRef}
+                    className="shadow-2xl transition-opacity duration-200"
+                    style={{
+                        display: "block",
+                        opacity: status === "ready" ? 1 : 0,
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                    }}
+                />
             </div>
 
-            {/* Navigation bar */}
-            {!loading && !error && totalPages > 0 && (
+            {/* ── Navigation bar ── */}
+            {status === "ready" && totalPages > 0 && (
                 <div className="flex shrink-0 items-center justify-between border-t border-white/8 bg-[#0E1117]/95 px-4 py-3">
-                    {/* Prev */}
                     <button
                         type="button"
-                        onClick={goPrev}
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
                         disabled={page <= 1}
                         className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 bg-white/5 px-3 py-2 text-[11px] font-semibold text-white/80 transition hover:border-cyan-400/35 hover:bg-cyan-400/10 hover:text-white disabled:pointer-events-none disabled:opacity-30"
                     >
@@ -190,12 +192,11 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1, onProgress }: PdfR
                         Назад
                     </button>
 
-                    {/* Page indicator + progress */}
                     <div className="flex flex-col items-center gap-1">
                         <span className="text-[11px] font-medium tabular-nums text-white/70">
                             {page} / {totalPages}
                         </span>
-                        <div className="h-1 w-32 overflow-hidden rounded-full bg-white/10">
+                        <div className="h-1 w-36 overflow-hidden rounded-full bg-white/10">
                             <div
                                 className="h-full rounded-full bg-cyan-400 transition-all duration-300"
                                 style={{ width: `${percent}%` }}
@@ -204,10 +205,9 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1, onProgress }: PdfR
                         <span className="text-[10px] tabular-nums text-white/35">{percent}%</span>
                     </div>
 
-                    {/* Next */}
                     <button
                         type="button"
-                        onClick={goNext}
+                        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                         disabled={page >= totalPages}
                         className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 bg-white/5 px-3 py-2 text-[11px] font-semibold text-white/80 transition hover:border-cyan-400/35 hover:bg-cyan-400/10 hover:text-white disabled:pointer-events-none disabled:opacity-30"
                     >

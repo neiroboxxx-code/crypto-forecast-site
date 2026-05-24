@@ -54,11 +54,11 @@ export default function LibraryReaderPage() {
             <header className="flex shrink-0 items-center gap-3 border-b border-white/8 bg-[#0E1117]/95 px-4 py-3">
                 <button
                     type="button"
-                    onClick={() => router.back()}
+                    onClick={() => router.push("/academy?tab=library")}
                     className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-[11px] text-white/60 transition hover:border-white/20 hover:text-white"
                 >
                     <ArrowLeft className="h-3.5 w-3.5" />
-                    Назад
+                    На полку
                 </button>
 
                 <div className="min-w-0 flex-1">
