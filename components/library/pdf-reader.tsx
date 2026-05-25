@@ -1,26 +1,29 @@
 "use client";
 
 /**
- * PDF Reader — two-page spread, centered, full-screen height.
- * Left canvas = current page, Right canvas = current + 1.
+ * PDF Reader — fullscreen overlay, two-page spread, macOS Preview style.
+ * Renders as position:fixed over the entire site.
+ * Left canvas = current page (always odd), Right canvas = current + 1.
  * Navigation jumps 2 pages at a time.
  */
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { saveProgress } from "@/lib/library/progress";
 
 interface PdfReaderProps {
     bookId: string;
+    title: string;
     fileUrl: string;
     initialPage?: number;
+    onClose: () => void;
 }
 
-// Reserve px for header + nav + vertical padding
+// Layout constants (px)
 const HEADER_H = 48;
-const NAV_H    = 56;
-const PAD_V    = 16;
-const PAD_H    = 32; // total horizontal padding for the two-page container
+const NAV_H    = 52;
+const PAD_V    = 20;
+const PAD_H    = 48; // total horizontal padding inside canvas area
 
 function calcScale(
     vpW: number,
@@ -30,11 +33,8 @@ function calcScale(
     twoPages: boolean,
 ): number {
     const availH = vpH - HEADER_H - NAV_H - PAD_V;
-    // Each page gets half the viewport width minus gutter
     const availW = twoPages ? (vpW - PAD_H) / 2 - 8 : vpW - PAD_H;
-    const byW = availW / pdfW;
-    const byH = availH / pdfH;
-    return Math.min(byW, byH, 2.5);
+    return Math.min(availW / pdfW, availH / pdfH, 2.5);
 }
 
 async function renderPageToCanvas(
@@ -44,31 +44,28 @@ async function renderPageToCanvas(
     scale: number,
 ) {
     const pdfPage = await pdfDoc.getPage(pageNum);
-    // Multiply by devicePixelRatio for crisp Retina/HiDPI rendering.
-    // Canvas buffer is DPR× larger; CSS size stays at logical pixels.
     const dpr = (typeof window !== "undefined" ? window.devicePixelRatio : 1) || 1;
-    const vp = pdfPage.getViewport({ scale: scale * dpr });
+    const vp  = pdfPage.getViewport({ scale: scale * dpr });
     const ctx = canvas.getContext("2d")!;
     canvas.width  = vp.width;
     canvas.height = vp.height;
     canvas.style.width  = `${vp.width  / dpr}px`;
     canvas.style.height = `${vp.height / dpr}px`;
-    const task = pdfPage.render({ canvasContext: ctx, viewport: vp });
-    await task.promise;
+    await pdfPage.render({ canvasContext: ctx, viewport: vp }).promise;
 }
 
-export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) {
-    const leftRef  = useRef<HTMLCanvasElement>(null);
-    const rightRef = useRef<HTMLCanvasElement>(null);
-    const pdfRef   = useRef<any>(null);
-    const renderGen = useRef(0); // generation counter to cancel stale renders
+export function PdfReader({ bookId, title, fileUrl, initialPage = 1, onClose }: PdfReaderProps) {
+    const leftRef   = useRef<HTMLCanvasElement>(null);
+    const rightRef  = useRef<HTMLCanvasElement>(null);
+    const pdfRef    = useRef<any>(null);
+    const renderGen = useRef(0);
 
-    // Always keep leftPage odd (1, 3, 5…) so spreads align like a real book
+    // leftPage is always odd so spreads align like a real book
     const normalise = (p: number) => (p % 2 === 0 ? Math.max(1, p - 1) : p);
-    const [leftPage, setLeftPage] = useState(() => normalise(initialPage));
+    const [leftPage,   setLeftPage]   = useState(() => normalise(initialPage));
     const [totalPages, setTotalPages] = useState(0);
-    const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
-    const [loadMsg, setLoadMsg] = useState("Загрузка…");
+    const [status,     setStatus]     = useState<"loading" | "ready" | "error">("loading");
+    const [loadMsg,    setLoadMsg]    = useState("Загрузка…");
 
     // ── Load PDF ──────────────────────────────────────────────────────────────
     useEffect(() => {
@@ -99,25 +96,16 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) 
     // ── Render spread whenever leftPage / ready ───────────────────────────────
     useEffect(() => {
         if (status !== "ready" || !pdfRef.current) return;
-
         const gen = ++renderGen.current;
 
         async function render() {
-            const pdf    = pdfRef.current;
-            const total  = pdf.numPages;
-            const right  = leftPage + 1;
-            const twoP   = right <= total;
-            const scale  = calcScale(
-                window.innerWidth,
-                window.innerHeight,
-                // Get native page dimensions from page 1 (assumed uniform)
-                0, 0, // will override below
-                twoP,
-            );
+            const pdf   = pdfRef.current;
+            const total = pdf.numPages;
+            const right = leftPage + 1;
+            const twoP  = right <= total;
 
-            // Get actual page size from leftPage
-            const refPage  = await pdf.getPage(leftPage);
-            const nativeVp = refPage.getViewport({ scale: 1 });
+            const refPage    = await pdf.getPage(leftPage);
+            const nativeVp   = refPage.getViewport({ scale: 1 });
             const finalScale = calcScale(
                 window.innerWidth,
                 window.innerHeight,
@@ -126,27 +114,22 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) 
                 twoP,
             );
 
-            if (gen !== renderGen.current) return; // stale
+            if (gen !== renderGen.current) return;
 
-            // Render left page
-            if (leftRef.current) {
+            if (leftRef.current)
                 await renderPageToCanvas(pdf, leftPage, leftRef.current, finalScale);
-            }
 
             if (gen !== renderGen.current) return;
 
-            // Render right page (if exists)
             if (twoP && rightRef.current) {
                 await renderPageToCanvas(pdf, right, rightRef.current, finalScale);
             } else if (rightRef.current) {
-                // Clear right canvas when no second page
                 const c = rightRef.current;
                 c.width = 0; c.height = 0;
             }
 
             if (gen !== renderGen.current) return;
 
-            // Save progress
             const pct = Math.round((leftPage / total) * 100);
             saveProgress({ book_id: bookId, page: leftPage, total_pages: total, percent: pct });
         }
@@ -160,7 +143,7 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) 
         let timer: ReturnType<typeof setTimeout>;
         const onResize = () => {
             clearTimeout(timer);
-            timer = setTimeout(() => setLeftPage((p) => p), 200); // re-trigger render
+            timer = setTimeout(() => setLeftPage((p) => p), 200);
         };
         window.addEventListener("resize", onResize);
         return () => { window.removeEventListener("resize", onResize); clearTimeout(timer); };
@@ -169,6 +152,7 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) 
     // ── Keyboard navigation ───────────────────────────────────────────────────
     useEffect(() => {
         const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") { onClose(); return; }
             if (e.key === "ArrowLeft"  || e.key === "PageUp")
                 setLeftPage((p) => normalise(Math.max(1, p - 2)));
             if (e.key === "ArrowRight" || e.key === "PageDown")
@@ -176,17 +160,54 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) 
         };
         window.addEventListener("keydown", onKey);
         return () => window.removeEventListener("keydown", onKey);
-    }, [totalPages]);
+    }, [totalPages, onClose]);
 
     const goPrev = () => setLeftPage((p) => normalise(Math.max(1, p - 2)));
     const goNext = () => setLeftPage((p) => normalise(Math.min(totalPages, p + 2)));
 
-    const rightPage  = leftPage + 1;
-    const hasRight   = rightPage <= totalPages;
-    const percent    = totalPages > 0 ? Math.round((leftPage / totalPages) * 100) : 0;
+    const rightPage = leftPage + 1;
+    const hasRight  = rightPage <= totalPages;
+    const percent   = totalPages > 0 ? Math.round((leftPage / totalPages) * 100) : 0;
 
     return (
-        <div className="flex h-full flex-col bg-[#0B0D12]">
+        /* ── Fullscreen overlay, covers the entire site ── */
+        <div className="fixed inset-0 z-[999] flex flex-col bg-[#0B0D12]">
+
+            {/* ── Header bar ── */}
+            <div
+                className="flex shrink-0 items-center gap-3 border-b border-white/8 bg-[#0E1117] px-4"
+                style={{ height: HEADER_H }}
+            >
+                <button
+                    type="button"
+                    onClick={onClose}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] font-medium text-white/60 transition hover:border-white/20 hover:text-white"
+                >
+                    <ChevronLeft className="h-3.5 w-3.5" />
+                    На полку
+                </button>
+
+                <div className="mx-1 h-4 w-px bg-white/10" />
+
+                <span className="flex-1 truncate text-[13px] font-semibold text-white/80">
+                    {title}
+                </span>
+
+                {totalPages > 0 && (
+                    <span className="text-[11px] tabular-nums text-white/35">
+                        {hasRight ? `стр. ${leftPage}–${rightPage}` : `стр. ${leftPage}`} из {totalPages}
+                    </span>
+                )}
+
+                <button
+                    type="button"
+                    onClick={onClose}
+                    className="ml-2 rounded-md p-1.5 text-white/30 transition hover:bg-white/8 hover:text-white/70"
+                    aria-label="Закрыть"
+                >
+                    <X className="h-4 w-4" />
+                </button>
+            </div>
 
             {/* ── Page spread area ── */}
             <div className="relative flex min-h-0 flex-1 items-center justify-center bg-[#0B0D12]">
@@ -204,25 +225,29 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) 
 
                 {/* Two-page spread */}
                 <div
-                    className="flex items-stretch gap-1"
+                    className="flex items-stretch gap-0"
                     style={{ opacity: status === "ready" ? 1 : 0, transition: "opacity .2s" }}
                 >
                     {/* Left page */}
                     <div className="flex items-center justify-end">
                         <canvas
                             ref={leftRef}
-                            className="block shadow-[4px_0_24px_rgba(0,0,0,0.7)]"
-                            style={{ display: "block", borderRadius: "2px 0 0 2px" }}
+                            className="block"
+                            style={{
+                                display: "block",
+                                borderRadius: "3px 0 0 3px",
+                                boxShadow: "4px 0 32px rgba(0,0,0,0.8)",
+                            }}
                         />
                     </div>
 
-                    {/* Spine (decorative) */}
+                    {/* Spine */}
                     <div
                         className="shrink-0 self-stretch"
                         style={{
-                            width: 3,
-                            background: "linear-gradient(to right, #1a1a2e, #2d2d4e, #1a1a2e)",
-                            boxShadow: "0 0 12px rgba(100,100,200,0.15)",
+                            width: 4,
+                            background: "linear-gradient(to right, #111320, #1e2044, #111320)",
+                            boxShadow: "0 0 16px rgba(80,80,180,0.2)",
                         }}
                     />
 
@@ -231,23 +256,35 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) 
                         {hasRight ? (
                             <canvas
                                 ref={rightRef}
-                                className="block shadow-[-4px_0_24px_rgba(0,0,0,0.7)]"
-                                style={{ display: "block", borderRadius: "0 2px 2px 0" }}
+                                className="block"
+                                style={{
+                                    display: "block",
+                                    borderRadius: "0 3px 3px 0",
+                                    boxShadow: "-4px 0 32px rgba(0,0,0,0.8)",
+                                }}
                             />
                         ) : (
-                            // Blank right page when last page is odd
+                            // Blank right page when last page is odd-numbered
                             <div
-                                className="flex items-center justify-center bg-[#0d0d1a]"
-                                style={{ width: 40, alignSelf: "stretch", borderRadius: "0 2px 2px 0", opacity: 0.3 }}
+                                style={{
+                                    width: 40,
+                                    alignSelf: "stretch",
+                                    borderRadius: "0 3px 3px 0",
+                                    background: "#0d0d1a",
+                                    opacity: 0.3,
+                                }}
                             />
                         )}
                     </div>
                 </div>
             </div>
 
-            {/* ── Navigation ── */}
+            {/* ── Navigation bar ── */}
             {status === "ready" && totalPages > 0 && (
-                <div className="flex shrink-0 items-center justify-between border-t border-white/8 bg-[#0E1117]/95 px-6 py-3">
+                <div
+                    className="flex shrink-0 items-center justify-between border-t border-white/8 bg-[#0E1117]/95 px-6"
+                    style={{ height: NAV_H }}
+                >
                     <button
                         type="button"
                         onClick={goPrev}
@@ -259,12 +296,7 @@ export function PdfReader({ bookId, fileUrl, initialPage = 1 }: PdfReaderProps) 
                     </button>
 
                     <div className="flex flex-col items-center gap-1.5">
-                        <span className="text-[12px] font-medium tabular-nums text-white/60">
-                            {hasRight
-                                ? `стр. ${leftPage}–${rightPage} из ${totalPages}`
-                                : `стр. ${leftPage} из ${totalPages}`}
-                        </span>
-                        <div className="h-1 w-40 overflow-hidden rounded-full bg-white/10">
+                        <div className="h-1 w-48 overflow-hidden rounded-full bg-white/10">
                             <div
                                 className="h-full rounded-full bg-cyan-400 transition-all duration-300"
                                 style={{ width: `${percent}%` }}
