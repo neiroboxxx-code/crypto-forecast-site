@@ -30,7 +30,9 @@ export interface Book {
     category: BookCategory;
 }
 
-export const BOOKS: Book[] = [
+// ── Book catalogue ────────────────────────────────────────────────────────────
+
+const tradingBooks: Book[] = [
     {
         id: "zarabotok-v-kripte",
         title: "Заработок в крипте",
@@ -52,6 +54,9 @@ export const BOOKS: Book[] = [
         spineColor: "#0891b2",
         category: "trading",
     },
+];
+
+const financeBooks: Book[] = [
     {
         id: "forex-5-hours",
         title: "FOREX на 5 часов",
@@ -61,8 +66,34 @@ export const BOOKS: Book[] = [
         type: "epub",
         filename: "forex-5-hours.epub",
         spineColor: "#b45309",
-        category: "trading",
+        category: "finance",
     },
+];
+
+// Журналы Трейдеру 2012–2013 (16 выпусков)
+const journalBooks: Book[] = [
+    ...[2012, 2013].flatMap((year) =>
+        Array.from({ length: 8 }, (_, i) => {
+            const num = String(i + 1).padStart(2, "0");
+            return {
+                id: `zhurnal-treyderu-${year}-${num}`,
+                title: "Журнал Трейдеру",
+                subtitle: `${year} / ${num}`,
+                author: "Редакция",
+                year,
+                type: "pdf" as BookType,
+                filename: `zhurnal-treyderu-${year}-${num}.pdf`,
+                spineColor: "#166534",
+                category: "journals" as BookCategory,
+            };
+        }),
+    ),
+];
+
+export const BOOKS: Book[] = [
+    ...tradingBooks,
+    ...financeBooks,
+    ...journalBooks,
 ];
 
 export const BOOKS_BY_ID: Record<string, Book> = Object.fromEntries(
