@@ -176,27 +176,18 @@ function TrendStatusCard({ data, loading, refreshing, enabledSymbols }: {
                                 <span className="text-[11px] font-semibold text-violet-300">{value}</span>
                             </div>
                         ))}
+                        {/* Символы — продолжение той же строки чипов */}
+                        {enabledSymbols.map(sym => (
+                            <span
+                                key={sym}
+                                className="rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] font-semibold text-white/55"
+                            >
+                                {sym}
+                            </span>
+                        ))}
                     </div>
                 )}
-                {/* Список активных активов — всегда показываем если есть */}
-                {!loading && enabledSymbols.length > 0 && (
-                    <div className="mt-3 border-t border-white/[0.06] pt-3">
-                        <div className="mb-1.5 text-[10px] uppercase tracking-[0.14em] text-white/30">
-                            Отслеживает
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                            {enabledSymbols.map(sym => (
-                                <span
-                                    key={sym}
-                                    className="rounded border border-violet-500/20 bg-violet-500/[0.07] px-2 py-0.5 font-mono text-[10px] text-violet-300/80"
-                                >
-                                    {sym}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                )}
-                {!loading && !isActive && enabledSymbols.length === 0 && (
+                {!loading && !isActive && (
                     <div className="mt-1.5 text-[11px] text-white/35">Ожидает запуска</div>
                 )}
             </div>
