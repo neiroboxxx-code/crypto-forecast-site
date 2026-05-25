@@ -247,11 +247,12 @@ export function PdfReader({ bookId, title, fileUrl, initialPage = 1, onClose }: 
                 if (stopped) return;
                 try {
                     const page = await pdf.getPage(p);
-                    const vp   = page.getViewport({ scale: THUMB_SCALE });
+                    const dpr  = (typeof window !== "undefined" ? window.devicePixelRatio : 1) || 1;
+                    const vp   = page.getViewport({ scale: THUMB_SCALE * dpr });
                     const c    = document.createElement("canvas");
                     c.width = vp.width; c.height = vp.height;
                     await page.render({ canvasContext: c.getContext("2d")!, viewport: vp }).promise;
-                    const url = c.toDataURL("image/jpeg", 0.65);
+                    const url = c.toDataURL("image/jpeg", 0.82);
                     setThumbs((prev) => { const m = new Map(prev); m.set(p, url); return m; });
                 } catch { /* skip bad page */ }
                 await new Promise((r) => setTimeout(r, 12)); // yield to browser
