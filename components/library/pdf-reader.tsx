@@ -170,13 +170,16 @@ export function PdfReader({ bookId, title, fileUrl, initialPage = 1, onClose }: 
     useEffect(() => {
         if (viewMode !== "scroll" || pendingScrollPage.current === null) return;
         const target = pendingScrollPage.current;
-        // Wait for scroll DOM + page placeholders to render
+        // Wait for scroll DOM + page placeholders to render, then scroll inline
         const timer = setTimeout(() => {
-            scrollToPage(target);
+            const el = pageRefs.current.get(target);
+            if (el && scrollContainerRef.current) {
+                scrollContainerRef.current.scrollTo({ top: el.offsetTop - 16, behavior: "smooth" });
+            }
             pendingScrollPage.current = null;
         }, 250);
         return () => clearTimeout(timer);
-    }, [viewMode, scrollToPage]);
+    }, [viewMode]);
 
     // ── SCROLL: lazy page rendering via IntersectionObserver ──────────────────
     useEffect(() => {
