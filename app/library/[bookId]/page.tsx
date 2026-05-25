@@ -88,8 +88,10 @@ export default function LibraryReaderPage() {
                 ) : book.type === "pdf" ? (
                     <PdfReader
                         bookId={bookId}
+                        title={book.subtitle ? `${book.title}: ${book.subtitle}` : book.title}
                         fileUrl={fileUrl}
                         initialPage={progress?.page ?? 1}
+                        onClose={() => router.push("/academy?tab=library")}
                     />
                 ) : (
                     <EpubReader
