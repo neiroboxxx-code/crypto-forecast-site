@@ -399,7 +399,7 @@ export type PaperBotClosedTrade = {
     closedAt: string;
     pnlUsd: number;
     pnlPct: number;
-    closeReason: "sl" | "tp" | "manual" | "signal_flip";
+    closeReason: "sl" | "tp" | "manual" | "signal_flip" | "partial_tp" | "timeout";
 };
 
 export type PaperBotLogEntry = {
@@ -476,9 +476,14 @@ export async function runPaperbotTick(): Promise<void> {
     await request<unknown>("/api/admin/paperbot/run", { method: "POST" }, "");
 }
 
+export async function runPaperbotMonitor(): Promise<void> {
+    await request<unknown>("/api/admin/paperbot/run-monitor", { method: "POST" }, "");
+}
+
 // ---------- Trend Bot ----------
 
 export type TrendBotSettings = {
+    symbol: string;
     depositUsd: number;
     riskPct: number;
     allowLong: boolean;
@@ -486,6 +491,7 @@ export type TrendBotSettings = {
     maxPositions: number;
     positionTimeoutHours: number;
     isActive: boolean;
+    enabled: boolean;
 };
 
 export type TrendBotHtfSignal = {
@@ -495,6 +501,12 @@ export type TrendBotHtfSignal = {
     updated_at: string | null;
 };
 
+export type TrendBotMonitor = {
+    lastAt: string | null;
+    lastPrice: number | null;
+    lastPositions: number;
+};
+
 export type TrendBotState = {
     settings: TrendBotSettings;
     positions: PaperBotPosition[];
@@ -502,11 +514,40 @@ export type TrendBotState = {
     log: PaperBotLogEntry[];
     summary: PaperBotSummary;
     htfSignal: TrendBotHtfSignal | null;
+    monitor: TrendBotMonitor;
+};
+
+export type TrendBotSymbolState = {
+    symbol: string;
+    settings: TrendBotSettings;
+    positions: PaperBotPosition[];
+    closedTrades: PaperBotClosedTrade[];
+    summary: PaperBotSummary;
+    htfSignal: TrendBotHtfSignal | null;
+    monitor: TrendBotMonitor;
+};
+
+export type TrendBotAllState = {
+    globalActive: boolean;
+    symbols: TrendBotSymbolState[];
+    log: PaperBotLogEntry[];
+    aggregate: {
+        total_trades: number;
+        total_pnl_usd: number;
+        open_positions: number;
+        win_rate_pct: number;
+    };
 };
 
 export async function getTrendBotState(): Promise<TrendBotState> {
     const data = await request<TrendBotState>("/api/paperbot/trend/state");
     requireKeys(data, ["settings", "positions", "closedTrades", "log", "summary"], "getTrendBotState");
+    return data;
+}
+
+export async function getTrendBotAllState(): Promise<TrendBotAllState> {
+    const data = await request<TrendBotAllState>("/api/paperbot/trend/all-state");
+    requireKeys(data, ["globalActive", "symbols", "log"], "getTrendBotAllState");
     return data;
 }
 
@@ -518,8 +559,19 @@ export async function stopTrendBot(): Promise<void> {
     await request<unknown>("/api/admin/paperbot/trend-stop", { method: "POST" }, "");
 }
 
-export async function updateTrendBotSettings(s: Omit<TrendBotSettings, "isActive">): Promise<void> {
-    await request<unknown>("/api/admin/paperbot/trend-settings", {
+export async function updateTrendBotSettings(
+    symbol: string,
+    s: {
+        depositUsd: number;
+        riskPct: number;
+        allowLong: boolean;
+        allowShort: boolean;
+        maxPositions: number;
+        positionTimeoutHours: number;
+        enabled: boolean;
+    },
+): Promise<void> {
+    await request<unknown>(`/api/admin/paperbot/trend-settings/${encodeURIComponent(symbol)}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -529,12 +581,17 @@ export async function updateTrendBotSettings(s: Omit<TrendBotSettings, "isActive
             allow_short: s.allowShort,
             max_positions: s.maxPositions,
             position_timeout_hours: s.positionTimeoutHours,
+            enabled: s.enabled,
         }),
     }, "");
 }
 
 export async function runTrendBotTick(): Promise<void> {
     await request<unknown>("/api/admin/paperbot/trend-run", { method: "POST" }, "");
+}
+
+export async function runTrendBotMonitor(): Promise<void> {
+    await request<unknown>("/api/admin/paperbot/trend-monitor", { method: "POST" }, "");
 }
 
 // ---------- Health ----------

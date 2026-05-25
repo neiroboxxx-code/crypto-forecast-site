@@ -1,6 +1,7 @@
 "use client";
 
 import { Bot } from "lucide-react";
+import { AutoRefresh } from "@/components/utils/auto-refresh";
 import {
     getPaperbotState,
     getTrendBotState,
@@ -45,15 +46,15 @@ function toSignal(s: PaperBotState["signal"]): PaperSignalState | null {
 }
 
 function trendSignalColor(s: string | null | undefined): string {
-    if (s === "ready") return "#34d399";
-    if (s === "wait") return "#fbbf24";
+    if (s === "ready")   return "#34d399";
+    if (s === "wait")    return "#fbbf24";
     if (s === "caution") return "#fb923c";
     return "#6b7280";
 }
 
 function trendSignalLabel(s: string | null | undefined): string {
-    if (s === "ready") return "READY";
-    if (s === "wait") return "WAIT";
+    if (s === "ready")   return "READY";
+    if (s === "wait")    return "WAIT";
     if (s === "caution") return "НЕ СЕЙЧАС";
     return "—";
 }
@@ -64,7 +65,9 @@ function StatusDot({ active, color }: { active: boolean; color: "emerald" | "vio
     const glow = color === "emerald"
         ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
         : "bg-violet-400 shadow-[0_0_8px_rgba(139,92,246,0.5)]";
-    const dim = color === "emerald" ? "bg-emerald-400/50 animate-paperbot-standby" : "bg-violet-400/40";
+    const dim = color === "emerald"
+        ? "bg-emerald-400/50 animate-paperbot-standby"
+        : "bg-violet-400/40";
     return (
         <span className={`h-2.5 w-2.5 shrink-0 rounded-full ring-2 ring-white/10 ${active ? glow : dim}`} />
     );
@@ -97,8 +100,9 @@ function SwingStatusCard({ data, loading, refreshing }: {
         >
             <div className={`rounded-xl border p-4 transition-colors ${
                 loading ? "border-white/8 bg-black/30"
-                : isActive ? "border-emerald-500/30 bg-emerald-500/[0.07] shadow-[0_0_40px_rgba(52,211,153,0.06)_inset]"
-                : "border-white/8 bg-black/30"
+                : isActive
+                    ? "border-emerald-500/30 bg-emerald-500/[0.07] shadow-[0_0_40px_rgba(52,211,153,0.06)_inset]"
+                    : "border-white/8 bg-black/30"
             }`}>
                 <div className="flex items-center gap-2.5">
                     <StatusDot active={isActive} color="emerald" />
@@ -110,9 +114,9 @@ function SwingStatusCard({ data, loading, refreshing }: {
                 {!loading && isActive && s && (
                     <div className="mt-2.5 flex flex-wrap gap-1.5">
                         {[
-                            { label: "Риск", value: `${s.riskPct}%` },
-                            { label: "Плечо", value: s.leverageEnabled ? `${s.leverage}x` : "без плеча" },
-                            { label: "Сигнал", value: `≥ ${s.minConfidence.toUpperCase()}` },
+                            { label: "Риск",        value: `${s.riskPct}%` },
+                            { label: "Плечо",       value: s.leverageEnabled ? `${s.leverage}x` : "без плеча" },
+                            { label: "Сигнал",      value: `≥ ${s.minConfidence.toUpperCase()}` },
                             { label: "Вероятность", value: `≥ ${s.minProbabilityPct}%` },
                         ].map(({ label, value }) => (
                             <div key={label} className="flex items-center gap-1.5 rounded-lg border border-emerald-500/15 bg-emerald-500/[0.06] px-2.5 py-1">
@@ -146,8 +150,9 @@ function TrendStatusCard({ data, loading, refreshing }: {
         >
             <div className={`rounded-xl border p-4 transition-colors ${
                 loading ? "border-white/8 bg-black/30"
-                : isActive ? "border-violet-500/30 bg-violet-500/[0.07] shadow-[0_0_40px_rgba(139,92,246,0.06)_inset]"
-                : "border-white/8 bg-black/30"
+                : isActive
+                    ? "border-violet-500/30 bg-violet-500/[0.07] shadow-[0_0_40px_rgba(139,92,246,0.06)_inset]"
+                    : "border-white/8 bg-black/30"
             }`}>
                 <div className="flex items-center gap-2.5">
                     <StatusDot active={isActive} color="violet" />
@@ -159,8 +164,8 @@ function TrendStatusCard({ data, loading, refreshing }: {
                 {!loading && isActive && data && (
                     <div className="mt-2.5 flex flex-wrap gap-1.5">
                         {[
-                            { label: "Риск", value: `${data.settings.riskPct}%` },
-                            { label: "Плечо", value: "без плеча" },
+                            { label: "Риск",     value: `${data.settings.riskPct}%` },
+                            { label: "Плечо",    value: "без плеча" },
                             { label: "Тайм-аут", value: `${Math.round(data.settings.positionTimeoutHours / 24)}д` },
                         ].map(({ label, value }) => (
                             <div key={label} className="flex items-center gap-1.5 rounded-lg border border-violet-500/15 bg-violet-500/[0.06] px-2.5 py-1">
@@ -179,7 +184,7 @@ function TrendStatusCard({ data, loading, refreshing }: {
 }
 
 function TrendSignalCard({ data, loading }: { data: TrendBotState | null; loading: boolean }) {
-    const htf = data?.htfSignal;
+    const htf    = data?.htfSignal;
     const signal = htf?.trend_entry_signal;
     const sigColor = trendSignalColor(signal);
 
@@ -267,6 +272,7 @@ export function PaperbotView() {
         closeReason: t.closeReason as "sl" | "tp" | "manual" | "signal_flip",
     })) ?? [];
 
+    // ── Logs полностью разделены: swing читает mode="swing", trend — mode="trend" ──
     const swingLog = swingData?.log.map(e => ({
         id: e.id, ts: e.ts, level: e.level as "info" | "trade" | "risk", message: e.message,
     })) ?? [];
@@ -277,12 +283,14 @@ export function PaperbotView() {
 
     return (
         <div className="relative">
+            <AutoRefresh />
             <div
                 className="pointer-events-none absolute inset-x-0 -top-4 h-48 bg-gradient-to-b from-emerald-500/[0.05] via-violet-500/[0.02] to-transparent blur-2xl"
                 aria-hidden
             />
 
             <div className="relative flex flex-col gap-4 border-l border-emerald-500/20 pl-4 md:pl-5">
+
                 {/* Breadcrumb */}
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.18em] text-white/38">
                     <span className="inline-flex items-center gap-1.5 text-emerald-400/75">
@@ -296,14 +304,13 @@ export function PaperbotView() {
                 </div>
 
                 {/*
-                  One flat grid — pairs of blocks share the same row on xl,
-                  so corresponding rows auto-align by height.
-                  DOM order: all Swing first (mobile), then all Trend.
-                  xl:order-* interleaves them into paired rows.
+                  Два бота в сетке xl:grid-cols-2 — каждый в своей колонке.
+                  DOM-порядок: Swing первым (мобайл), Trend вторым.
+                  На xl xl:order-* чередует строки: статус/сигнал/summary/позиции/сделки/журнал.
                 */}
                 <div className="grid gap-3 xl:grid-cols-2">
 
-                    {/* ── Swing column (DOM first = mobile first) ── */}
+                    {/* ── Swing column ── */}
                     <div className="xl:order-1">
                         <SwingStatusCard data={swingData} loading={swingLoading} refreshing={swingRefreshing} />
                     </div>
@@ -323,8 +330,8 @@ export function PaperbotView() {
                         <PaperbotActivityLog entries={swingLog} />
                     </div>
 
-                    {/* Mobile separator between bots */}
-                    <div className="xl:hidden xl:order-[0] col-span-full my-2 flex items-center gap-3">
+                    {/* Mobile divider */}
+                    <div className="xl:hidden col-span-full my-2 flex items-center gap-3">
                         <div className="h-px flex-1 bg-white/8" />
                         <span className="text-[10px] uppercase tracking-[0.18em] text-violet-400/60">Trend Bot</span>
                         <div className="h-px flex-1 bg-white/8" />

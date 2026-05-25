@@ -1,22 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Play, Square, RefreshCw, LogOut, Shield, Save } from "lucide-react";
+import { Play, Square, RefreshCw, LogOut, Shield, Save, Activity } from "lucide-react";
 import {
     getPaperbotState,
     startPaperbot,
     stopPaperbot,
     updatePaperbotSettings,
     runPaperbotTick,
-    getTrendBotState,
-    startTrendBot,
-    stopTrendBot,
-    updateTrendBotSettings,
-    runTrendBotTick,
+    runPaperbotMonitor,
     type PaperBotSettings,
     type PaperBotState,
-    type TrendBotSettings,
-    type TrendBotState,
 } from "@/lib/api";
 import { useApi } from "@/hooks/use-api";
 import { PaperbotSummary } from "@/components/sections/paperbot/paperbot-summary";
@@ -27,6 +21,7 @@ import { PaperbotSignalBox } from "@/components/sections/paperbot/paperbot-signa
 import { PaperbotSettings } from "@/components/sections/paperbot/paperbot-settings";
 import { PaperbotMonitorWidget } from "@/components/sections/paperbot/paperbot-monitor-widget";
 import { AccuracyPanel } from "@/components/sections/accuracy-panel";
+import { TrendBotPanel } from "@/components/sections/trend-bot/trend-bot-panel";
 import { Card } from "@/components/ui/card";
 import type { PaperSettings, PaperSignalState } from "@/components/sections/paperbot/types";
 
@@ -120,378 +115,12 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
     );
 }
 
-// ── Trend Bot tab ─────────────────────────────────────────────────────────────
-
-type TrendLocalSettings = {
-    depositUsd: number;
-    riskPct: number;
-    allowLong: boolean;
-    allowShort: boolean;
-    maxPositions: number;
-    positionTimeoutHours: number;
-};
-
-const TREND_RISK_OPTIONS = [0.25, 0.5, 1, 2];
-const TREND_TIMEOUT_OPTIONS = [
-    { label: "14д", hours: 336 },
-    { label: "21д", hours: 504 },
-    { label: "30д", hours: 720 },
-];
-
-function trendSignalColor(s: string | null | undefined): string {
-    if (s === "ready") return "#34d399";
-    if (s === "wait") return "#fbbf24";
-    if (s === "caution") return "#fb923c";
-    return "#6b7280";
-}
-
-function trendSignalLabel(s: string | null | undefined): string {
-    if (s === "ready") return "READY";
-    if (s === "wait") return "WAIT";
-    if (s === "caution") return "НЕ СЕЙЧАС";
-    return "—";
-}
-
-function PillBtn({
-    active, disabled, onClick, children, activeClass,
-}: {
-    active: boolean; disabled?: boolean; onClick: () => void;
-    children: React.ReactNode; activeClass?: string;
-}) {
-    return (
-        <button
-            disabled={disabled}
-            onClick={onClick}
-            className={`rounded border px-2.5 py-1 text-[11px] font-medium transition-colors disabled:opacity-50 ${
-                active
-                    ? (activeClass ?? "border-violet-400/40 bg-violet-400/15 text-violet-200")
-                    : "border-white/10 bg-white/[0.04] text-white/50 hover:border-white/20 hover:text-white/70"
-            }`}
-        >
-            {children}
-        </button>
-    );
-}
-
-function TrendAdminTab() {
-    const [actionPending, setActionPending] = useState(false);
-    const [tickPending, setTickPending] = useState(false);
-    const [settingsPending, setSettingsPending] = useState(false);
-    const [tickMsg, setTickMsg] = useState<string | null>(null);
-    const [localSettings, setLocalSettings] = useState<TrendLocalSettings | null>(null);
-
-    const { data, loading, refresh } = useApi<TrendBotState>(
-        getTrendBotState, [], { intervalMs: 15_000 },
-    );
-
-    const isActive = data?.settings.isActive ?? false;
-    const effective: TrendLocalSettings = localSettings ?? (data ? {
-        depositUsd: data.settings.depositUsd,
-        riskPct: data.settings.riskPct,
-        allowLong: data.settings.allowLong,
-        allowShort: data.settings.allowShort,
-        maxPositions: data.settings.maxPositions,
-        positionTimeoutHours: data.settings.positionTimeoutHours,
-    } : { depositUsd: 1000, riskPct: 0.5, allowLong: true, allowShort: false, maxPositions: 1, positionTimeoutHours: 504 });
-
-    function patch(patch: Partial<TrendLocalSettings>) {
-        setLocalSettings({ ...effective, ...patch });
-    }
-
-    async function handleToggle() {
-        setActionPending(true);
-        try {
-            if (isActive) {
-                await stopTrendBot();
-            } else {
-                if (localSettings) {
-                    setSettingsPending(true);
-                    try { await updateTrendBotSettings(localSettings as Omit<TrendBotSettings, "isActive">); }
-                    finally { setSettingsPending(false); }
-                }
-                await startTrendBot();
-                setLocalSettings(null);
-            }
-            refresh();
-        } finally {
-            setActionPending(false);
-        }
-    }
-
-    async function handleSave() {
-        if (!localSettings) return;
-        setSettingsPending(true);
-        try {
-            await updateTrendBotSettings(localSettings as Omit<TrendBotSettings, "isActive">);
-            setLocalSettings(null);
-            refresh();
-        } finally {
-            setSettingsPending(false);
-        }
-    }
-
-    async function handleTick() {
-        setTickPending(true);
-        setTickMsg(null);
-        try {
-            await runTrendBotTick();
-            setTickMsg("Тик выполнен");
-            refresh();
-        } catch {
-            setTickMsg("Ошибка тика");
-        } finally {
-            setTickPending(false);
-            setTimeout(() => setTickMsg(null), 4000);
-        }
-    }
-
-    const htf = data?.htfSignal;
-    const signal = htf?.trend_entry_signal;
-    const sigColor = trendSignalColor(signal);
-
-    const summary = data ? {
-        equityUsd: data.summary.equityUsd,
-        startingUsd: data.summary.startingUsd,
-        unrealizedUsd: data.summary.unrealizedUsd,
-        realizedTodayUsd: data.summary.realizedTodayUsd,
-        winRatePct: data.summary.winRatePct,
-        tradesToday: data.summary.tradesToday,
-        winRateLifetimePct: data.summary.winRateLifetimePct,
-        maxDrawdownPct: data.summary.maxDrawdownPct,
-        totalTrades: data.summary.totalTrades,
-    } : null;
-
-    const positions = data?.positions.map(p => ({
-        id: p.id, symbol: p.symbol, side: p.side as "long" | "short",
-        size: p.size, entry: p.entry, mark: p.mark, sl: p.sl, tp: p.tp,
-        leverage: p.leverage, openedAt: p.openedAt,
-        pnlUsd: p.pnlUsd, pnlPct: p.pnlPct,
-        distanceToSlPct: p.distanceToSlPct, distanceToTpPct: p.distanceToTpPct,
-    })) ?? [];
-
-    const closedTrades = data?.closedTrades.map(t => ({
-        id: t.id, symbol: t.symbol, side: t.side as "long" | "short",
-        entry: t.entry, exit: t.exit, size: t.size, leverage: t.leverage,
-        openedAt: t.openedAt, closedAt: t.closedAt,
-        pnlUsd: t.pnlUsd, pnlPct: t.pnlPct,
-        closeReason: t.closeReason as "sl" | "tp" | "manual" | "signal_flip",
-    })) ?? [];
-
-    const logEntries = data?.log.map(e => ({
-        id: e.id, ts: e.ts,
-        level: e.level as "info" | "trade" | "risk",
-        message: e.message,
-    })) ?? [];
-
-    const settingsChanged = localSettings !== null;
-
-    return (
-        <div className="flex flex-col gap-4">
-            {/* Top row: controls + HTF signal + positions */}
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 xl:items-stretch">
-                {/* Controls */}
-                <Card
-                    title="Trend Bot"
-                    subtitle={isActive ? "Активен" : "Стоп"}
-                    padded
-                    className="flex flex-col border-violet-500/15 bg-gradient-to-br from-violet-500/[0.04] via-[#0E1117]/90 to-transparent"
-                >
-                    <div className="flex flex-1 flex-col items-center justify-center gap-3">
-                        <div className="text-[10px] uppercase tracking-[0.16em] text-white/30">
-                            HTF · без плеча · до 21 дня
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={handleToggle}
-                                disabled={actionPending || loading}
-                                title={isActive ? "Остановить" : "Запустить"}
-                                className={`inline-flex h-11 w-11 items-center justify-center rounded-xl border transition-colors disabled:opacity-50 ${
-                                    isActive
-                                        ? "border-rose-400/35 bg-rose-400/15 text-rose-200 hover:bg-rose-400/25"
-                                        : "border-violet-400/40 bg-violet-400/15 text-violet-200 hover:bg-violet-400/25"
-                                }`}
-                            >
-                                {isActive
-                                    ? <Square className="h-5 w-5" fill="currentColor" />
-                                    : <Play className="h-5 w-5 translate-x-0.5" fill="currentColor" />}
-                            </button>
-                            <button
-                                onClick={handleTick}
-                                disabled={tickPending || loading}
-                                title="Ручной тик"
-                                className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-200 hover:bg-cyan-400/20 disabled:opacity-50 transition-colors"
-                            >
-                                <RefreshCw className={`h-5 w-5 ${tickPending ? "animate-spin" : ""}`} />
-                            </button>
-                            {settingsChanged && !isActive && (
-                                <button
-                                    onClick={handleSave}
-                                    disabled={settingsPending}
-                                    title="Сохранить настройки"
-                                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-amber-400/35 bg-amber-400/10 text-amber-200 hover:bg-amber-400/20 disabled:opacity-50 transition-colors"
-                                >
-                                    <Save className="h-4 w-4" />
-                                </button>
-                            )}
-                        </div>
-                        {tickMsg && (
-                            <p className="text-center text-[10px] leading-tight text-emerald-300/80">{tickMsg}</p>
-                        )}
-                    </div>
-                </Card>
-
-                {/* HTF Signal */}
-                <Card title="HTF Сигнал" subtitle="Trend Entry Signal" padded className="flex flex-col">
-                    {loading ? (
-                        <div className="flex flex-1 items-center justify-center">
-                            <div className="h-8 w-24 animate-pulse rounded bg-white/8" />
-                        </div>
-                    ) : (
-                        <div className="flex flex-1 flex-col items-center justify-center gap-2">
-                            <div className="text-3xl font-bold tracking-widest" style={{ color: sigColor }}>
-                                {trendSignalLabel(signal)}
-                            </div>
-                            <div className="flex flex-wrap items-center justify-center gap-1.5">
-                                {htf?.macro_bias && (
-                                    <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-white/50">
-                                        {htf.macro_bias}
-                                    </span>
-                                )}
-                                {htf?.long_context && (
-                                    <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-white/50">
-                                        {htf.long_context}
-                                    </span>
-                                )}
-                            </div>
-                            {htf?.updated_at && (
-                                <div className="text-[10px] text-white/25">
-                                    обновлено {new Date(htf.updated_at).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
-                                </div>
-                            )}
-                            {!htf && !loading && (
-                                <div className="text-[11px] text-white/30">HTF кеш пуст — запустите /api/htf/run</div>
-                            )}
-                        </div>
-                    )}
-                </Card>
-
-                <PaperbotPositionsTable compact positions={positions} />
-            </div>
-
-            {/* Two columns: left = Summary → ClosedTrades, right = Settings → Log */}
-            <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
-                {/* Left: summary directly above history */}
-                <div className="flex flex-col gap-4">
-                    <PaperbotSummary collapsible layout="vertical" summary={summary} />
-                    <PaperbotClosedTrades trades={closedTrades} />
-                </div>
-
-                {/* Right: settings directly above log */}
-                <div className="flex flex-col gap-4">
-                    <Card title="Параметры Trend Bot" subtitle="Риск и горизонт позиции" padded className="self-start">
-                        <div className="flex flex-col gap-4">
-                            {/* Deposit */}
-                            <div>
-                                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Депозит ($)</div>
-                                <div className="mt-1.5 flex items-center gap-2">
-                                    <input
-                                        type="number" min={100} max={100_000} step={100}
-                                        value={effective.depositUsd}
-                                        disabled={isActive}
-                                        onChange={(e) => patch({ depositUsd: Number(e.target.value) || effective.depositUsd })}
-                                        className="w-32 rounded border border-white/12 bg-black/35 px-2.5 py-1.5 text-[12px] tabular-nums text-white/80 outline-none focus:border-violet-400/40 disabled:opacity-50"
-                                    />
-                                    <span className="text-[11px] text-white/30">USD · виртуальные средства</span>
-                                </div>
-                            </div>
-
-                            {/* Risk */}
-                            <div>
-                                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Риск на сделку</div>
-                                <div className="mt-1.5 flex flex-wrap gap-1.5">
-                                    {TREND_RISK_OPTIONS.map(r => (
-                                        <PillBtn
-                                            key={r}
-                                            active={effective.riskPct === r}
-                                            disabled={isActive}
-                                            onClick={() => patch({ riskPct: r })}
-                                        >
-                                            {r}%
-                                        </PillBtn>
-                                    ))}
-                                </div>
-                                <div className="mt-1 text-[10px] text-white/30">
-                                    SL = 2× недельный ATR · плечо не используется
-                                </div>
-                            </div>
-
-                            {/* Timeout */}
-                            <div>
-                                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Тайм-аут позиции</div>
-                                <div className="mt-1.5 flex flex-wrap gap-1.5">
-                                    {TREND_TIMEOUT_OPTIONS.map(opt => (
-                                        <PillBtn
-                                            key={opt.hours}
-                                            active={effective.positionTimeoutHours === opt.hours}
-                                            disabled={isActive}
-                                            onClick={() => patch({ positionTimeoutHours: opt.hours })}
-                                        >
-                                            {opt.label}
-                                        </PillBtn>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Directions */}
-                            <div>
-                                <div className="text-[10px] uppercase tracking-[0.14em] text-white/40">Направления</div>
-                                <div className="mt-1.5 flex gap-2">
-                                    <button
-                                        disabled={isActive}
-                                        onClick={() => !isActive && patch({ allowLong: !effective.allowLong })}
-                                        className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-[11px] font-semibold transition-colors disabled:opacity-50 ${
-                                            effective.allowLong
-                                                ? "border-emerald-400/40 bg-emerald-400/15 text-emerald-200"
-                                                : "border-white/10 bg-white/[0.04] text-white/35"
-                                        }`}
-                                    >
-                                        <span className={`h-2 w-2 rounded-full ${effective.allowLong ? "bg-emerald-400" : "bg-white/20"}`} />
-                                        LONG
-                                    </button>
-                                    <button
-                                        disabled={isActive}
-                                        onClick={() => !isActive && patch({ allowShort: !effective.allowShort })}
-                                        className={`flex items-center gap-1.5 rounded border px-3 py-1.5 text-[11px] font-semibold transition-colors disabled:opacity-50 ${
-                                            effective.allowShort
-                                                ? "border-rose-400/40 bg-rose-400/15 text-rose-200"
-                                                : "border-white/10 bg-white/[0.04] text-white/35"
-                                        }`}
-                                    >
-                                        <span className={`h-2 w-2 rounded-full ${effective.allowShort ? "bg-rose-400" : "bg-white/20"}`} />
-                                        SHORT
-                                    </button>
-                                </div>
-                            </div>
-
-                            {isActive && (
-                                <div className="rounded-lg border border-amber-400/15 bg-amber-400/[0.05] px-3 py-2 text-[11px] text-amber-200/60">
-                                    Остановите бота для изменения параметров
-                                </div>
-                            )}
-                        </div>
-                    </Card>
-                    <PaperbotActivityLog entries={logEntries} />
-                </div>
-            </div>
-        </div>
-    );
-}
-
-// ── Swing Bot tab (existing content) ─────────────────────────────────────────
+// ── Swing Bot tab ────────────────────────────────────────────────────────────
 
 function SwingAdminTab() {
     const [actionPending, setActionPending] = useState(false);
     const [tickPending, setTickPending] = useState(false);
+    const [monitorPending, setMonitorPending] = useState(false);
     const [settingsPending, setSettingsPending] = useState(false);
     const [tickMsg, setTickMsg] = useState<string | null>(null);
 
@@ -551,6 +180,21 @@ function SwingAdminTab() {
             setTickMsg("Ошибка при выполнении тика");
         } finally {
             setTickPending(false);
+            setTimeout(() => setTickMsg(null), 4000);
+        }
+    }
+
+    async function handleMonitor() {
+        setMonitorPending(true);
+        setTickMsg(null);
+        try {
+            await runPaperbotMonitor();
+            setTickMsg("Монитор запущен");
+            refresh();
+        } catch {
+            setTickMsg("Ошибка монитора");
+        } finally {
+            setMonitorPending(false);
             setTimeout(() => setTickMsg(null), 4000);
         }
     }
@@ -620,10 +264,19 @@ function SwingAdminTab() {
                                 type="button"
                                 onClick={handleTick}
                                 disabled={tickPending || loading}
-                                title="Ручной тик"
+                                title="Ручной тик (сигнал + вход)"
                                 className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 text-cyan-200 transition-colors hover:bg-cyan-400/20 disabled:cursor-not-allowed disabled:opacity-50"
                             >
                                 <RefreshCw className={`h-5 w-5 ${tickPending ? "animate-spin" : ""}`} />
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleMonitor}
+                                disabled={monitorPending || loading}
+                                title="Монитор позиций (SL/TP/trailing)"
+                                className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-violet-400/30 bg-violet-400/10 text-violet-200 transition-colors hover:bg-violet-400/20 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                <Activity className={`h-5 w-5 ${monitorPending ? "animate-pulse" : ""}`} />
                             </button>
                         </div>
                         {localSettings && !isActive && (
@@ -729,7 +382,7 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
 
             <div className="mx-auto max-w-7xl">
                 {activeTab === "swing" && <SwingAdminTab />}
-                {activeTab === "trend" && <TrendAdminTab />}
+                {activeTab === "trend" && <TrendBotPanel />}
             </div>
         </div>
     );

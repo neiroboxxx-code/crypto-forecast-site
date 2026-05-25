@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowDownRight, ArrowUpRight, X, Target, RefreshCw, Hand, ChevronDown } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, X, Target, RefreshCw, Hand, Clock, ChevronDown } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import type { PaperClosedTrade } from "@/components/sections/paperbot/types";
 
@@ -45,6 +45,20 @@ function ReasonBadge({ reason }: { reason: PaperClosedTrade["closeReason"] }) {
         return (
             <span className="inline-flex items-center gap-1 rounded border border-cyan-400/30 bg-cyan-400/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-cyan-300">
                 <RefreshCw className="h-3 w-3" aria-hidden /> Сигнал
+            </span>
+        );
+    }
+    if (reason === "partial_tp") {
+        return (
+            <span className="inline-flex items-center gap-1 rounded border border-violet-400/30 bg-violet-400/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-violet-300">
+                <Target className="h-3 w-3" aria-hidden /> Partial
+            </span>
+        );
+    }
+    if (reason === "timeout") {
+        return (
+            <span className="inline-flex items-center gap-1 rounded border border-amber-400/30 bg-amber-400/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-300">
+                <Clock className="h-3 w-3" aria-hidden /> Timeout
             </span>
         );
     }

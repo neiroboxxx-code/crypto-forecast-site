@@ -7,11 +7,13 @@ import { CatalystFeed } from "@/components/sections/catalyst-feed";
 import { MarketBias } from "@/components/sections/market-bias";
 import { ReversalRadar } from "@/components/sections/reversal-radar";
 import { RsiGauges } from "@/components/sections/rsi-gauge";
-import { HtfContextPanel } from "@/components/sections/htf-context-panel";
+import { HtfMarketContext } from "@/components/sections/htf-market-context";
+import { AutoRefresh } from "@/components/utils/auto-refresh";
 
 export function DashboardHome() {
     return (
         <>
+            <AutoRefresh />
             <TopBar />
 
             <div className="grid gap-3 lg:grid-cols-[280px_1fr_340px] lg:items-start">
@@ -34,7 +36,7 @@ export function DashboardHome() {
                 </section>
 
                 <aside className="flex flex-col gap-3">
-                    <HtfContextPanel />
+                    <HtfMarketContext />
                     <MarketBias />
                     <CatalystFeed />
                 </aside>

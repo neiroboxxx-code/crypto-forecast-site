@@ -31,7 +31,7 @@ export type PaperClosedTrade = {
     closedAt: string;
     pnlUsd: number;
     pnlPct: number;
-    closeReason: "sl" | "tp" | "manual" | "signal_flip";
+    closeReason: "sl" | "tp" | "manual" | "signal_flip" | "partial_tp" | "timeout";
 };
 
 export type PaperLogEntry = {

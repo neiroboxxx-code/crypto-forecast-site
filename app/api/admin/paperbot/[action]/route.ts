@@ -14,6 +14,7 @@ function upstreamPath(action: string): { path: string; method: "POST" | "PUT" } 
     if (action === "trend-start") return { path: "/api/paperbot/trend/start", method: "POST" };
     if (action === "trend-stop") return { path: "/api/paperbot/trend/stop", method: "POST" };
     if (action === "trend-run") return { path: "/api/paperbot/run-trend", method: "POST" };
+    if (action === "trend-monitor") return { path: "/api/paperbot/run-trend-monitor", method: "POST" };
     if (action === "trend-settings") return { path: "/api/paperbot/trend/settings", method: "PUT" };
     return null;
 }
