@@ -5,8 +5,10 @@ import { AutoRefresh } from "@/components/utils/auto-refresh";
 import {
     getPaperbotState,
     getTrendBotState,
+    getTrendBotAllState,
     type PaperBotState,
     type TrendBotState,
+    type TrendBotAllState,
     type PaperBotSettings,
 } from "@/lib/api";
 import { useApi } from "@/hooks/use-api";
@@ -136,8 +138,9 @@ function SwingStatusCard({ data, loading, refreshing }: {
 
 // ── Trend Bot blocks ──────────────────────────────────────────────────────────
 
-function TrendStatusCard({ data, loading, refreshing }: {
+function TrendStatusCard({ data, loading, refreshing, enabledSymbols }: {
     data: TrendBotState | null; loading: boolean; refreshing: boolean;
+    enabledSymbols: string[];
 }) {
     const isActive = data?.settings.isActive ?? false;
 
@@ -175,7 +178,25 @@ function TrendStatusCard({ data, loading, refreshing }: {
                         ))}
                     </div>
                 )}
-                {!loading && !isActive && (
+                {/* Список активных активов — всегда показываем если есть */}
+                {!loading && enabledSymbols.length > 0 && (
+                    <div className="mt-3 border-t border-white/[0.06] pt-3">
+                        <div className="mb-1.5 text-[10px] uppercase tracking-[0.14em] text-white/30">
+                            Отслеживает
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                            {enabledSymbols.map(sym => (
+                                <span
+                                    key={sym}
+                                    className="rounded border border-violet-500/20 bg-violet-500/[0.07] px-2 py-0.5 font-mono text-[10px] text-violet-300/80"
+                                >
+                                    {sym}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                {!loading && !isActive && enabledSymbols.length === 0 && (
                     <div className="mt-1.5 text-[11px] text-white/35">Ожидает запуска</div>
                 )}
             </div>
@@ -230,6 +251,14 @@ export function PaperbotView() {
 
     const { data: trendData, loading: trendLoading, refreshing: trendRefreshing } =
         useApi<TrendBotState>(getTrendBotState, [], { intervalMs: 30_000 });
+
+    // Список активных символов — берём из all-state (лёгкий запрос рядом с основным)
+    const { data: trendAllData } =
+        useApi<TrendBotAllState>(getTrendBotAllState, [], { intervalMs: 60_000 });
+
+    const enabledSymbols: string[] = trendAllData?.symbols
+        .filter(s => s.settings.enabled)
+        .map(s => s.symbol) ?? [];
 
     const swingSettings: PaperSettings = swingData ? toSettings(swingData.settings) : {
         depositUsd: 1000, riskPct: 2, leverage: 10, leverageEnabled: true,
@@ -339,7 +368,7 @@ export function PaperbotView() {
 
                     {/* ── Trend column ── */}
                     <div className="xl:order-2">
-                        <TrendStatusCard data={trendData} loading={trendLoading} refreshing={trendRefreshing} />
+                        <TrendStatusCard data={trendData} loading={trendLoading} refreshing={trendRefreshing} enabledSymbols={enabledSymbols} />
                     </div>
                     <div className="xl:order-4">
                         <TrendSignalCard data={trendData} loading={trendLoading} />
