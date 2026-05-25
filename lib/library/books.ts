@@ -2,6 +2,22 @@
 
 export type BookType = "pdf" | "epub";
 
+export type BookCategory = "trading" | "psychology" | "journals" | "finance" | "philosophy";
+
+export interface BookCategoryMeta {
+    id: BookCategory;
+    label: string;
+    emoji: string;
+}
+
+export const BOOK_CATEGORIES: BookCategoryMeta[] = [
+    { id: "trading",     label: "Трейдинг",    emoji: "📈" },
+    { id: "psychology",  label: "Психология",  emoji: "🧠" },
+    { id: "journals",    label: "Журналы",     emoji: "📰" },
+    { id: "finance",     label: "Финансы",     emoji: "💰" },
+    { id: "philosophy",  label: "Философия",   emoji: "🌿" },
+];
+
 export interface Book {
     id: string;
     title: string;
@@ -11,6 +27,7 @@ export interface Book {
     type: BookType;
     filename: string;
     spineColor: string;
+    category: BookCategory;
 }
 
 export const BOOKS: Book[] = [
@@ -23,6 +40,7 @@ export const BOOKS: Book[] = [
         type: "pdf",
         filename: "zarabotok-v-kripte.pdf",
         spineColor: "#7c3aed",
+        category: "trading",
     },
     {
         id: "na-shifre",
@@ -32,6 +50,7 @@ export const BOOKS: Book[] = [
         type: "pdf",
         filename: "na-shifre.pdf",
         spineColor: "#0891b2",
+        category: "trading",
     },
     {
         id: "forex-5-hours",
@@ -42,6 +61,7 @@ export const BOOKS: Book[] = [
         type: "epub",
         filename: "forex-5-hours.epub",
         spineColor: "#b45309",
+        category: "trading",
     },
 ];
 
