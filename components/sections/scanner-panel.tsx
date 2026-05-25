@@ -8,6 +8,21 @@ import { getScanner, type ScannerRow } from "@/lib/api";
 // Display helpers
 // ---------------------------------------------------------------------------
 
+/** Human-readable names for ticker symbols shown in the scanner table. */
+const SYMBOL_LABELS: Record<string, string> = {
+    BTCUSDT:  "Bitcoin",
+    ETHUSDT:  "Ethereum",
+    XAUUSD:   "Gold",
+    SPY:      "S&P 500",
+    QQQ:      "NASDAQ-100",
+    EURUSD:   "EUR/USD",
+    USDJPY:   "USD/JPY",
+};
+
+function symbolLabel(symbol: string): string {
+    return SYMBOL_LABELS[symbol] ?? symbol;
+}
+
 function signalLabel(s: ScannerRow["trend_entry_signal"]): string {
     switch (s) {
         case "ready":   return "READY";
@@ -85,7 +100,7 @@ function ScannerRowItem({
         const isLoading = row.status === "loading" || row.status === "cache_miss";
         return (
             <tr className="border-b border-white/5">
-                <td className="px-3 py-2 font-mono text-[11px] text-white/50">{row.symbol}</td>
+                <td className="px-3 py-2 font-mono text-[11px] text-white/50">{symbolLabel(row.symbol)}</td>
                 <td colSpan={7} className={`px-3 py-2 text-[11px] ${isLoading ? "text-white/30 animate-pulse" : "text-red-400/70"}`}>
                     {isLoading ? "загрузка данных…" : "ошибка данных"}
                 </td>
@@ -109,7 +124,7 @@ function ScannerRowItem({
                         {row.asset_class === "commodity" ? "CMD" : row.asset_class.slice(0, 3).toUpperCase()}
                     </span>
                     <span className="font-mono text-[12px] font-semibold text-white/90">
-                        {row.symbol}
+                        {symbolLabel(row.symbol)}
                     </span>
                 </div>
             </td>
