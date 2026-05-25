@@ -112,10 +112,16 @@ export function TrendBotPanel() {
 
     function updateEdit(symbol: string, patch: Partial<EditState[string]>) {
         setEditState(prev => {
+            // Если символ ещё не трогали — берём реальные данные из API, не нули
+            const symSettings = data?.symbols.find(s => s.symbol === symbol)?.settings;
             const current = prev[symbol] ?? {
-                depositUsd: 0, riskPct: 0.5,
-                allowLong: true, allowShort: true, enabled: true,
-                dirty: false, saving: false,
+                depositUsd: symSettings?.depositUsd ?? 0,
+                riskPct: symSettings?.riskPct ?? 0.5,
+                allowLong: symSettings?.allowLong ?? true,
+                allowShort: symSettings?.allowShort ?? true,
+                enabled: symSettings?.enabled ?? true,
+                dirty: false,
+                saving: false,
             };
             return { ...prev, [symbol]: { ...current, ...patch, dirty: true } };
         });
