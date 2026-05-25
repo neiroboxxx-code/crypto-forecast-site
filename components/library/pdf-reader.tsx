@@ -18,9 +18,9 @@ interface PdfReaderProps {
 
 // Reserve px for header + nav + vertical padding
 const HEADER_H = 48;
-const NAV_H    = 64;
-const PAD_V    = 24;
-const PAD_H    = 48; // total horizontal padding for the two-page container
+const NAV_H    = 56;
+const PAD_V    = 16;
+const PAD_H    = 32; // total horizontal padding for the two-page container
 
 function calcScale(
     vpW: number,
@@ -44,12 +44,15 @@ async function renderPageToCanvas(
     scale: number,
 ) {
     const pdfPage = await pdfDoc.getPage(pageNum);
-    const vp = pdfPage.getViewport({ scale });
+    // Multiply by devicePixelRatio for crisp Retina/HiDPI rendering.
+    // Canvas buffer is DPR× larger; CSS size stays at logical pixels.
+    const dpr = (typeof window !== "undefined" ? window.devicePixelRatio : 1) || 1;
+    const vp = pdfPage.getViewport({ scale: scale * dpr });
     const ctx = canvas.getContext("2d")!;
     canvas.width  = vp.width;
     canvas.height = vp.height;
-    canvas.style.width  = `${vp.width}px`;
-    canvas.style.height = `${vp.height}px`;
+    canvas.style.width  = `${vp.width  / dpr}px`;
+    canvas.style.height = `${vp.height / dpr}px`;
     const task = pdfPage.render({ canvasContext: ctx, viewport: vp });
     await task.promise;
 }
