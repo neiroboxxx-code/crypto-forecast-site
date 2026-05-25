@@ -32,6 +32,20 @@ export interface Book {
 
 // ── Book catalogue ────────────────────────────────────────────────────────────
 
+const psychologyBooks: Book[] = [
+    {
+        id: "steinbarger-psihologiya-treydinga",
+        title: "Психология трейдинга",
+        subtitle: "Библиотека частного инвестора",
+        author: "Стинбарджер Б.",
+        year: 2025,
+        type: "pdf",
+        filename: "steinbarger-psihologiya-treydinga.pdf",
+        spineColor: "#7e22ce",
+        category: "psychology",
+    },
+];
+
 const tradingBooks: Book[] = [
     {
         id: "zarabotok-v-kripte",
@@ -91,6 +105,7 @@ const journalBooks: Book[] = [
 ];
 
 export const BOOKS: Book[] = [
+    ...psychologyBooks,
     ...tradingBooks,
     ...financeBooks,
     ...journalBooks,
