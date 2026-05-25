@@ -144,7 +144,7 @@ function TrendStatusCard({ data, loading, refreshing }: {
     return (
         <Card
             title="Trend Bot"
-            subtitle="HTF · без плеча · до 21 дня"
+            subtitle="HTF · без плеча · до 30 дней"
             padded
             className="border-violet-500/12 bg-gradient-to-br from-violet-500/[0.05] via-[#0E1117]/90 to-transparent"
         >
