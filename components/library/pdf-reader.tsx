@@ -83,14 +83,15 @@ export function PdfReader({ bookId, title, fileUrl, initialPage = 1, onClose }: 
     const [thumbs,         setThumbs]         = useState<Map<number, string>>(new Map());
     const [pageNativeSize, setPageNativeSize] = useState<{ w: number; h: number } | null>(null);
 
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const sidebarRef         = useRef<HTMLDivElement>(null);
-    const pageRefs           = useRef<Map<number, HTMLDivElement>>(new Map());
-    const canvasRefs         = useRef<Map<number, HTMLCanvasElement>>(new Map());
-    const renderedPages      = useRef<Set<number>>(new Set());
-    const scrollRenderGen    = useRef(0);
-    const thumbStopRef       = useRef(false);
-    const saveScrollTimer    = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const scrollContainerRef  = useRef<HTMLDivElement>(null);
+    const sidebarRef          = useRef<HTMLDivElement>(null);
+    const pageRefs            = useRef<Map<number, HTMLDivElement>>(new Map());
+    const canvasRefs          = useRef<Map<number, HTMLCanvasElement>>(new Map());
+    const renderedPages       = useRef<Set<number>>(new Set());
+    const scrollRenderGen     = useRef(0);
+    const thumbStopRef        = useRef(false);
+    const saveScrollTimer     = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const pendingScrollPage   = useRef<number | null>(null);
 
     // ── Load PDF ──────────────────────────────────────────────────────────────
     useEffect(() => {
@@ -164,6 +165,18 @@ export function PdfReader({ bookId, title, fileUrl, initialPage = 1, onClose }: 
         window.addEventListener("resize", onResize);
         return () => { window.removeEventListener("resize", onResize); clearTimeout(timer); };
     }, [status, viewMode]);
+
+    // ── Scroll to pending page after mode switch ──────────────────────────────
+    useEffect(() => {
+        if (viewMode !== "scroll" || pendingScrollPage.current === null) return;
+        const target = pendingScrollPage.current;
+        // Wait for scroll DOM + page placeholders to render
+        const timer = setTimeout(() => {
+            scrollToPage(target);
+            pendingScrollPage.current = null;
+        }, 250);
+        return () => clearTimeout(timer);
+    }, [viewMode, scrollToPage]);
 
     // ── SCROLL: lazy page rendering via IntersectionObserver ──────────────────
     useEffect(() => {
@@ -350,7 +363,10 @@ export function PdfReader({ bookId, title, fileUrl, initialPage = 1, onClose }: 
                 <div className="flex overflow-hidden rounded-md border border-white/10">
                     <button
                         type="button"
-                        onClick={() => setViewMode("spread")}
+                        onClick={() => {
+                            setLeftPage(normalise(currentPage)); // sync scroll→spread
+                            setViewMode("spread");
+                        }}
                         className={`px-3 py-1.5 text-[11px] font-medium transition ${viewMode === "spread" ? "bg-cyan-400/20 text-cyan-400" : "text-white/35 hover:text-white/70"}`}
                     >
                         Разворот
@@ -358,7 +374,12 @@ export function PdfReader({ bookId, title, fileUrl, initialPage = 1, onClose }: 
                     <div className="w-px bg-white/10" />
                     <button
                         type="button"
-                        onClick={() => { setViewMode("scroll"); setZoomLevel(1); }}
+                        onClick={() => {
+                            pendingScrollPage.current = leftPage; // sync spread→scroll
+                            setCurrentPage(leftPage);
+                            setZoomLevel(0.5); // default 50% — fits page comfortably
+                            setViewMode("scroll");
+                        }}
                         className={`px-3 py-1.5 text-[11px] font-medium transition ${viewMode === "scroll" ? "bg-cyan-400/20 text-cyan-400" : "text-white/35 hover:text-white/70"}`}
                     >
                         Страница
