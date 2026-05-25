@@ -33,7 +33,7 @@ const NAV_H     = 52;
 const PAD_V     = 20;
 const PAD_H     = 48;
 const SIDEBAR_W = 192;
-const THUMB_SCALE = 0.14;
+const THUMB_SCALE = 0.3;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
