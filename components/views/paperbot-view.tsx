@@ -51,13 +51,13 @@ function trendSignalColor(s: string | null | undefined): string {
     if (s === "ready")   return "#34d399";
     if (s === "wait")    return "#fbbf24";
     if (s === "caution") return "#fb923c";
-    return "#6b7280";
+    return "#4b5563";
 }
 
 function trendSignalLabel(s: string | null | undefined): string {
     if (s === "ready")   return "READY";
     if (s === "wait")    return "WAIT";
-    if (s === "caution") return "НЕ СЕЙЧАС";
+    if (s === "caution") return "CAUTION";
     return "—";
 }
 
@@ -195,41 +195,54 @@ function TrendStatusCard({ data, loading, refreshing, enabledSymbols }: {
     );
 }
 
-function TrendSignalCard({ data, loading }: { data: TrendBotState | null; loading: boolean }) {
-    const htf    = data?.htfSignal;
-    const signal = htf?.trend_entry_signal;
-    const sigColor = trendSignalColor(signal);
+function TrendSignalCard({ allData, loading }: { allData: TrendBotAllState | null; loading: boolean }) {
+    const symbols = allData?.symbols.filter(s => s.settings.enabled) ?? [];
 
     return (
-        <Card title="HTF Сигнал" subtitle="Trend Entry Signal" padded className="flex flex-col">
-            <div className="flex flex-1 items-center justify-between gap-4">
-                <div>
-                    <div className="text-[10px] uppercase tracking-[0.14em] text-white/35">Trend Entry</div>
-                    <div className="mt-1 text-2xl font-bold tracking-widest" style={{ color: sigColor }}>
-                        {loading ? "—" : trendSignalLabel(signal)}
-                    </div>
+        <Card title="Сигналы" subtitle="HTF Trend Entry · по символам" padded className="flex flex-col">
+            {loading ? (
+                <div className="flex flex-col gap-1.5">
+                    {[...Array(3)].map((_, i) => (
+                        <div key={i} className="h-8 animate-pulse rounded-lg bg-white/[0.04]" />
+                    ))}
                 </div>
-                <div className="flex flex-col items-end gap-1.5">
-                    {htf?.macro_bias && (
-                        <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-white/50">
-                            {htf.macro_bias}
-                        </span>
-                    )}
-                    {htf?.long_context && (
-                        <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] uppercase tracking-wider text-white/50">
-                            {htf.long_context}
-                        </span>
-                    )}
-                    {htf?.updated_at && (
-                        <span className="text-[10px] text-white/25">
-                            {new Date(htf.updated_at).toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
-                        </span>
-                    )}
-                    {!htf && !loading && (
-                        <span className="text-[11px] text-white/30">HTF кеш пуст</span>
-                    )}
+            ) : symbols.length === 0 ? (
+                <div className="py-2 text-[11px] text-white/30">Нет активных символов</div>
+            ) : (
+                <div className="flex flex-col gap-1.5">
+                    {symbols.map(sym => {
+                        const signal  = sym.htfSignal?.trend_entry_signal ?? null;
+                        const color   = trendSignalColor(signal);
+                        const label   = trendSignalLabel(signal);
+                        const hasGlow = signal !== null;
+                        return (
+                            <div
+                                key={sym.symbol}
+                                className="flex items-center justify-between gap-3 rounded-lg border border-white/[0.06] bg-white/[0.025] px-3 py-2"
+                            >
+                                <span className="font-mono text-[11px] font-medium text-white/55">
+                                    {sym.symbol}
+                                </span>
+                                <div className="flex items-center gap-1.5">
+                                    <span
+                                        className="h-1.5 w-1.5 rounded-full"
+                                        style={{
+                                            backgroundColor: color,
+                                            boxShadow: hasGlow ? `0 0 5px ${color}` : "none",
+                                        }}
+                                    />
+                                    <span
+                                        className="text-[10px] font-bold tracking-widest"
+                                        style={{ color }}
+                                    >
+                                        {label}
+                                    </span>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
-            </div>
+            )}
         </Card>
     );
 }
@@ -243,9 +256,8 @@ export function PaperbotView() {
     const { data: trendData, loading: trendLoading, refreshing: trendRefreshing } =
         useApi<TrendBotState>(getTrendBotState, [], { intervalMs: 30_000 });
 
-    // Список активных символов — берём из all-state (лёгкий запрос рядом с основным)
-    const { data: trendAllData } =
-        useApi<TrendBotAllState>(getTrendBotAllState, [], { intervalMs: 60_000 });
+    const { data: trendAllData, loading: trendAllLoading } =
+        useApi<TrendBotAllState>(getTrendBotAllState, [], { intervalMs: 30_000 });
 
     const enabledSymbols: string[] = trendAllData?.symbols
         .filter(s => s.settings.enabled)
@@ -362,7 +374,7 @@ export function PaperbotView() {
                         <TrendStatusCard data={trendData} loading={trendLoading} refreshing={trendRefreshing} enabledSymbols={enabledSymbols} />
                     </div>
                     <div className="xl:order-4">
-                        <TrendSignalCard data={trendData} loading={trendLoading} />
+                        <TrendSignalCard allData={trendAllData} loading={trendAllLoading} />
                     </div>
                     <div className="xl:order-6">
                         <PaperbotSummary summary={trendSummary} />
