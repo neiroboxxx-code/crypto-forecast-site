@@ -22,17 +22,8 @@ type ChatThread = {
     updatedAt: string;
 };
 
-type StoredBundle = {
-    v: 2;
-    sessionId: string;
-    threads: ChatThread[];
-    activeThreadId: string;
-};
-
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-const V1_SESSION     = "assistant:v1:session_id";
-const V2_BUNDLE      = "assistant:v2:bundle";
 const SIDEBAR_KEY    = "assistant:v1:sidebar_open";
 const FETCH_TIMEOUT  = 90_000;
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -50,8 +41,6 @@ const SUGGESTIONS = [
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function nowIso() { return new Date().toISOString(); }
-
-function apiBase() { return process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000"; }
 
 function readLocal(key: string): string | null {
     try { return localStorage.getItem(key); } catch { return null; }
@@ -82,6 +71,27 @@ function fmtTime(iso: string) {
     return new Date(iso).toLocaleTimeString("ru", { hour: "2-digit", minute: "2-digit" });
 }
 
+function buildThreadsFromMessages(messages: Array<{
+    id: string; thread_id: string; role: string; content: string; created_at: string;
+}>): ChatThread[] {
+    const map = new Map<string, ChatThread>();
+    for (const msg of messages) {
+        if (!map.has(msg.thread_id)) {
+            map.set(msg.thread_id, {
+                id: msg.thread_id, title: "Новый чат", messages: [], updatedAt: msg.created_at,
+            });
+        }
+        const t = map.get(msg.thread_id)!;
+        t.messages.push({
+            id: msg.id, role: msg.role as "user" | "assistant",
+            content: msg.content, createdAt: msg.created_at, status: "final",
+        });
+        if (msg.created_at > t.updatedAt) t.updatedAt = msg.created_at;
+    }
+    for (const [, t] of map) t.title = threadTitle(t.messages);
+    return [...map.values()];
+}
+
 // ─── Sub-components ──────────────────────────────────────────────────────────
 
 function TypingDots() {
@@ -101,20 +111,19 @@ function TypingDots() {
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function AssistantChat() {
-    // Persistence state
     const [ready, setReady]               = useState(false);
-    const [sessionId, setSessionId]       = useState<string | null>(null);
     const [threads, setThreads]           = useState<ChatThread[]>([]);
     const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
     const [sidebarOpen, setSidebarOpen]   = useState(true);
 
-    // UI state
+    const [usageToday, setUsageToday]     = useState<number | null>(null);
+    const [dailyLimit, setDailyLimit]     = useState<number | null>(null);
+
     const [input, setInput]               = useState("");
     const [isSending, setIsSending]       = useState(false);
     const [error, setError]               = useState<string | null>(null);
     const [hoveredId, setHoveredId]       = useState<string | null>(null);
 
-    // Image state
     const [imageBase64, setImageBase64]         = useState<string | null>(null);
     const [imageMime, setImageMime]             = useState<string | null>(null);
     const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
@@ -123,42 +132,49 @@ export function AssistantChat() {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const fileRef     = useRef<HTMLInputElement>(null);
 
-    // ── Load from localStorage ─────────────────────────────────────────────
+    // ── Load history from DB on mount ──────────────────────────────────────
     useEffect(() => {
         if (typeof window === "undefined") return;
 
         const stored = readLocal(SIDEBAR_KEY);
         if (stored !== null) setSidebarOpen(stored !== "false");
 
-        try {
-            const raw = readLocal(V2_BUNDLE);
-            if (raw) {
-                const b = JSON.parse(raw) as Partial<StoredBundle>;
-                if (b.v === 2 && b.sessionId && Array.isArray(b.threads) && b.activeThreadId) {
-                    setSessionId(b.sessionId);
-                    setThreads(finalizeStalePending(b.threads));
-                    setActiveThreadId(b.activeThreadId);
-                    setReady(true);
-                    return;
+        (async () => {
+            try {
+                const res = await fetch("/api/assistant/history", { cache: "no-store" });
+                if (res.ok) {
+                    const data = await res.json() as {
+                        messages: Array<{ id: string; thread_id: string; role: string; content: string; created_at: string }>;
+                        usage_today: number | null;
+                        daily_limit: number | null;
+                    };
+                    setUsageToday(data.usage_today);
+                    setDailyLimit(data.daily_limit);
+                    const built = buildThreadsFromMessages(data.messages);
+                    const initialized = finalizeStalePending(built.length > 0 ? built : []);
+                    if (initialized.length > 0) {
+                        const sorted = [...initialized].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+                        setThreads(sorted);
+                        setActiveThreadId(sorted[0].id);
+                    } else {
+                        const tid = crypto.randomUUID();
+                        setThreads([{ id: tid, title: "Новый чат", messages: [], updatedAt: nowIso() }]);
+                        setActiveThreadId(tid);
+                    }
+                } else {
+                    const tid = crypto.randomUUID();
+                    setThreads([{ id: tid, title: "Новый чат", messages: [], updatedAt: nowIso() }]);
+                    setActiveThreadId(tid);
                 }
+            } catch {
+                const tid = crypto.randomUUID();
+                setThreads([{ id: tid, title: "Новый чат", messages: [], updatedAt: nowIso() }]);
+                setActiveThreadId(tid);
+            } finally {
+                setReady(true);
             }
-        } catch { /* ignore */ }
-
-        let sid = readLocal(V1_SESSION);
-        if (!sid) { sid = crypto.randomUUID(); writeLocal(V1_SESSION, sid); }
-        const tid = crypto.randomUUID();
-        setSessionId(sid);
-        setThreads([{ id: tid, title: "Новый чат", messages: [], updatedAt: nowIso() }]);
-        setActiveThreadId(tid);
-        setReady(true);
+        })();
     }, []);
-
-    // ── Persist bundle ─────────────────────────────────────────────────────
-    useEffect(() => {
-        if (!ready || !sessionId || !activeThreadId) return;
-        writeLocal(V2_BUNDLE, JSON.stringify({ v: 2, sessionId, threads, activeThreadId } satisfies StoredBundle));
-        writeLocal(V1_SESSION, sessionId);
-    }, [ready, sessionId, threads, activeThreadId]);
 
     useEffect(() => { writeLocal(SIDEBAR_KEY, String(sidebarOpen)); }, [sidebarOpen]);
 
@@ -177,6 +193,7 @@ export function AssistantChat() {
     };
 
     const activeMessages = threads.find((t) => t.id === activeThreadId)?.messages ?? [];
+    const limitReached = dailyLimit !== null && usageToday !== null && usageToday >= dailyLimit;
 
     // ── Image handling ─────────────────────────────────────────────────────
     const clearImage = useCallback(() => {
@@ -215,6 +232,7 @@ export function AssistantChat() {
     }, [activeThreadId, clearImage]);
 
     const deleteThread = useCallback((tid: string) => {
+        // Optimistic UI
         setThreads((prev) => {
             const next = prev.filter((t) => t.id !== tid);
             if (next.length === 0) {
@@ -228,12 +246,14 @@ export function AssistantChat() {
             }
             return next;
         });
+        // Persist deletion to DB
+        fetch(`/api/assistant/thread/${encodeURIComponent(tid)}`, { method: "DELETE" }).catch(() => {});
     }, [activeThreadId]);
 
     // ── Send ───────────────────────────────────────────────────────────────
     const send = useCallback(async (text: string) => {
         const trimmed = text.trim();
-        if (!trimmed || isSending || !sessionId || !activeThreadId) return;
+        if (!trimmed || isSending || !activeThreadId || limitReached) return;
 
         setError(null);
         setIsSending(true);
@@ -275,15 +295,13 @@ export function AssistantChat() {
             const ctrl  = new AbortController();
             const timer = window.setTimeout(() => ctrl.abort(), FETCH_TIMEOUT);
             try {
-                const res = await fetch(`${apiBase()}/api/assistant/chat`, {
+                const res = await fetch("/api/assistant/chat", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", Accept: "application/json" },
                     cache: "no-store",
                     signal: ctrl.signal,
                     body: JSON.stringify({
-                        session_id:   sessionId,
-                        scenario:     "free_chat",
-                        chat_mode:    "platform",
+                        thread_id:    tid,
                         message:      trimmed,
                         image_base64: img64   ?? undefined,
                         image_mime:   imgMime ?? undefined,
@@ -292,17 +310,22 @@ export function AssistantChat() {
                 });
 
                 if (!res.ok) {
-                    const detail = await res.text().catch(() => "");
-                    throw new Error(`HTTP ${res.status}${detail ? ` · ${detail}` : ""}`);
+                    const detail = await res.json().catch(() => ({ detail: `HTTP ${res.status}` })) as { detail?: string };
+                    if (res.status === 401) {
+                        window.location.href = "/login";
+                        return;
+                    }
+                    throw new Error(detail.detail ?? `HTTP ${res.status}`);
                 }
 
-                const payload = (await res.json()) as Record<string, unknown>;
-                const raw =
-                    (typeof payload?.reply === "string" ? payload.reply : undefined) ??
-                    (typeof (payload?.data as Record<string, unknown>)?.reply === "string"
-                        ? ((payload.data as Record<string, unknown>).reply as string)
-                        : undefined) ??
-                    "Ответ не распознан.";
+                const payload = await res.json() as {
+                    reply: string;
+                    usage_today?: number | null;
+                    daily_limit?: number | null;
+                };
+
+                if (payload.usage_today !== undefined) setUsageToday(payload.usage_today);
+                if (payload.daily_limit !== undefined) setDailyLimit(payload.daily_limit);
 
                 setThreads((prev) => prev.map((t) => {
                     if (t.id !== tid) return t;
@@ -310,7 +333,7 @@ export function AssistantChat() {
                         ...t,
                         updatedAt: nowIso(),
                         messages: t.messages.map((m) =>
-                            m.id === pendingId ? { ...m, content: raw.trim(), status: "final" as const } : m,
+                            m.id === pendingId ? { ...m, content: payload.reply.trim(), status: "final" as const } : m,
                         ),
                     };
                 }));
@@ -339,10 +362,10 @@ export function AssistantChat() {
         } finally {
             setIsSending(false);
         }
-    }, [isSending, sessionId, activeThreadId, threads, imageBase64, imageMime, imagePreviewUrl, clearImage]);
+    }, [isSending, activeThreadId, threads, imageBase64, imageMime, imagePreviewUrl, clearImage, limitReached]);
 
     // ── Render guard ───────────────────────────────────────────────────────
-    if (!ready || !sessionId || !activeThreadId) {
+    if (!ready || !activeThreadId) {
         return <div className="py-12 text-center text-[13px] text-white/35">Загрузка…</div>;
     }
 
@@ -466,6 +489,14 @@ export function AssistantChat() {
                         {error && (
                             <span className="ml-1 text-[11px] text-rose-300/70">· ошибка</span>
                         )}
+                        {/* Usage counter (non-admin only) */}
+                        {dailyLimit !== null && usageToday !== null && (
+                            <span className={`ml-auto text-[11px] tabular-nums ${
+                                limitReached ? "text-rose-400/70" : "text-white/25"
+                            }`}>
+                                Использовано {usageToday}/{dailyLimit} сегодня
+                            </span>
+                        )}
                     </div>
 
                     {/* Messages */}
@@ -583,6 +614,13 @@ export function AssistantChat() {
                         </div>
                     )}
 
+                    {/* Limit reached banner */}
+                    {limitReached && (
+                        <div className="mx-4 mb-2 rounded-lg bg-amber-500/8 px-3 py-2 text-[11.5px] text-amber-300/80">
+                            Дневной лимит исчерпан. Завтра доступно снова.
+                        </div>
+                    )}
+
                     {/* Image preview strip */}
                     {imagePreviewUrl && (
                         <div className="mx-4 mb-2">
@@ -608,13 +646,17 @@ export function AssistantChat() {
                         onSubmit={(e) => { e.preventDefault(); void send(input); }}
                         className="shrink-0 px-4 pb-4"
                     >
-                        <div className="rounded-2xl bg-white/[0.045] px-3 py-2.5 ring-1 ring-white/[0.07] transition-shadow focus-within:ring-fuchsia-400/20">
+                        <div className={`rounded-2xl bg-white/[0.045] px-3 py-2.5 ring-1 transition-shadow ${
+                            limitReached
+                                ? "ring-amber-500/20 opacity-50 cursor-not-allowed"
+                                : "ring-white/[0.07] focus-within:ring-fuchsia-400/20"
+                        }`}>
                             <div className="flex items-end gap-2">
                                 {/* Attach button */}
                                 <button
                                     type="button"
                                     onClick={() => fileRef.current?.click()}
-                                    disabled={isSending}
+                                    disabled={isSending || limitReached}
                                     title="Прикрепить скрин (или вставь Ctrl+V)"
                                     className={`shrink-0 rounded-lg p-1.5 transition ${
                                         imagePreviewUrl
@@ -645,7 +687,6 @@ export function AssistantChat() {
                                         }
                                     }}
                                     onPaste={(e) => {
-                                        // Вставка скрина прямо из буфера (Cmd+Ctrl+Shift+4 → Cmd+V)
                                         const item = Array.from(e.clipboardData.items).find(
                                             (i) => i.type.startsWith("image/"),
                                         );
@@ -656,8 +697,8 @@ export function AssistantChat() {
                                         }
                                     }}
                                     rows={1}
-                                    placeholder="Напиши вопрос или вставь скрин…"
-                                    disabled={!sessionId || isSending}
+                                    placeholder={limitReached ? "Лимит сообщений на сегодня исчерпан" : "Напиши вопрос или вставь скрин…"}
+                                    disabled={isSending || limitReached}
                                     aria-label="Сообщение ассистенту"
                                     className="flex-1 resize-none bg-transparent py-0.5 text-[13.5px] leading-relaxed text-white/85 outline-none placeholder:text-white/28 disabled:opacity-50"
                                     style={{ maxHeight: 180 }}
@@ -666,7 +707,7 @@ export function AssistantChat() {
                                 {/* Send */}
                                 <button
                                     type="submit"
-                                    disabled={isSending || (!input.trim() && !imageBase64)}
+                                    disabled={isSending || limitReached || (!input.trim() && !imageBase64)}
                                     className="shrink-0 rounded-lg p-1.5 text-white/35 transition hover:bg-white/[0.06] hover:text-white/80 disabled:opacity-25"
                                     aria-label="Отправить"
                                 >

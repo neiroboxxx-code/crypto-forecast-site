@@ -10,11 +10,11 @@ import { InfoDialog, InfoIconButton } from "@/components/ui/info-dialog";
 import { fmtTime } from "@/lib/format";
 
 // ─── Конфиг ────────────────────────────────────────────────────────────────
-const STORAGE_KEY = "catalyst-feed:v1:locked-day";
-const STALE_THRESHOLD_H = 28; // плановый цикл 24h + 4h буфер
-const REFRESH_MS = 60 * 60 * 1000; // суточный пайплайн → раз в час хватает с запасом
-const RELEVANCE_MIN = 0.5; // отрезает валютные пары без BTC-релевантности
-const QUOTAS = { crypto: 2, geo: 2, macro: 1 } as const;
+const STORAGE_KEY = "catalyst-feed:v3:locked-day";
+const STALE_THRESHOLD_H = 28;
+const REFRESH_MS = 60 * 60 * 1000;
+const RELEVANCE_MIN = 0.55;
+const QUOTAS = { crypto: 2, geo: 5, macro: 3 } as const;
 
 // ─── Типы и утилиты выборки ────────────────────────────────────────────────
 type Category = "crypto" | "geo" | "macro";
@@ -161,9 +161,42 @@ function StatusDot({ updatedAt }: { updatedAt: string | undefined }) {
 }
 
 // ─── Компонент ──────────────────────────────────────────────────────────────
+// ─── Tag badge config ────────────────────────────────────────────────────────
+const TAG_STYLES: Record<string, string> = {
+    TRUMP:     "border-orange-400/30 bg-orange-400/10 text-orange-300",
+    MUSK:      "border-sky-400/30 bg-sky-400/10 text-sky-300",
+    BIDEN:     "border-blue-400/30 bg-blue-400/10 text-blue-300",
+    WAR:       "border-red-500/30 bg-red-500/10 text-red-300",
+    IRAN:      "border-rose-400/30 bg-rose-400/10 text-rose-300",
+    ISRAEL:    "border-blue-400/30 bg-blue-400/10 text-blue-300",
+    CHINA:     "border-red-400/30 bg-red-400/10 text-red-300",
+    RUSSIA:    "border-purple-400/30 bg-purple-400/10 text-purple-300",
+    UKRAINE:   "border-yellow-400/30 bg-yellow-400/10 text-yellow-300",
+    TAIWAN:    "border-green-400/30 bg-green-400/10 text-green-300",
+    OPEC:      "border-amber-400/30 bg-amber-400/10 text-amber-300",
+    FED:       "border-fuchsia-400/30 bg-fuchsia-400/10 text-fuchsia-300",
+    USA:       "border-blue-300/30 bg-blue-300/10 text-blue-200",
+    EU:        "border-indigo-400/30 bg-indigo-400/10 text-indigo-300",
+    OIL:       "border-amber-500/30 bg-amber-500/10 text-amber-400",
+    GAS:       "border-cyan-400/30 bg-cyan-400/10 text-cyan-300",
+    SHIPPING:  "border-teal-400/30 bg-teal-400/10 text-teal-300",
+    SANCTIONS: "border-rose-500/30 bg-rose-500/10 text-rose-400",
+    TARIFFS:   "border-orange-500/30 bg-orange-500/10 text-orange-400",
+    RATES:     "border-fuchsia-400/30 bg-fuchsia-400/10 text-fuchsia-300",
+    USD:       "border-emerald-400/30 bg-emerald-400/10 text-emerald-300",
+    CPI:       "border-yellow-400/30 bg-yellow-400/10 text-yellow-300",
+    CRYPTO:    "border-violet-400/30 bg-violet-400/10 text-violet-300",
+    NETANYAHU: "border-blue-400/30 bg-blue-400/10 text-blue-300",
+    PUTIN:     "border-purple-400/30 bg-purple-400/10 text-purple-300",
+    XI:        "border-red-400/30 bg-red-400/10 text-red-300",
+};
+
+// Tags that are redundant when the regime badge is already shown
+const REGIME_COVERED_TAGS = new Set(["OIL", "GAS", "SHIPPING", "SANCTIONS", "TARIFFS", "RATES", "USD", "CPI"]);
+
 type CatalystFeedProps = { maxItems?: number };
 
-export function CatalystFeed({ maxItems = 5 }: CatalystFeedProps) {
+export function CatalystFeed({ maxItems = 10 }: CatalystFeedProps) {
     const { data, loading, error } = useApi<NewsData>(getNews, [], { intervalMs: REFRESH_MS });
     const [openKey, setOpenKey] = useState<string | null>(null);
     const [infoOpen, setInfoOpen] = useState(false);
@@ -227,12 +260,20 @@ export function CatalystFeed({ maxItems = 5 }: CatalystFeedProps) {
                 {showError && <ErrorState message={error ?? "Не удалось загрузить новости"} />}
 
                 {itemsToShow.length > 0 && (
-                    <div className="space-y-2">
+                    /* Scrollable container — 5 items visible (~430px), rest on scroll */
+                    <div
+                        className="space-y-2 overflow-y-auto pr-0.5"
+                        style={{ maxHeight: "430px" }}
+                    >
                         {itemsToShow.map((item, idx) => {
                             const key = `${item.event_key ?? item.url ?? item.title}-${idx}`;
                             const isOpen = openKey === key;
                             const sent = sentimentBadge(item.sentiment);
                             const reg = regimeBadge(item.market_regime_effect);
+                            // Show entity/topic tags; suppress trigger tags when regime badge covers them
+                            const tags = (item.tags ?? []).filter(
+                                (t) => !(reg && REGIME_COVERED_TAGS.has(t)),
+                            );
                             return (
                                 <article
                                     key={key}
@@ -243,6 +284,7 @@ export function CatalystFeed({ maxItems = 5 }: CatalystFeedProps) {
                                         onClick={() => setOpenKey(isOpen ? null : key)}
                                         className="w-full text-left"
                                     >
+                                        {/* Row 1: regime + sentiment + time */}
                                         <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-wider">
                                             {reg && (
                                                 <span className={`rounded border px-1.5 py-0.5 ${reg.cls}`}>
@@ -263,6 +305,23 @@ export function CatalystFeed({ maxItems = 5 }: CatalystFeedProps) {
                                                 {fmtTime(item.published_at)}
                                             </span>
                                         </div>
+
+                                        {/* Row 2: entity/topic tags */}
+                                        {tags.length > 0 && (
+                                            <div className="mt-1 flex flex-wrap gap-1">
+                                                {tags.map((tag) => (
+                                                    <span
+                                                        key={tag}
+                                                        className={`rounded border px-1.5 py-0.5 text-[8.5px] uppercase tracking-wider ${
+                                                            TAG_STYLES[tag] ?? "border-white/15 bg-white/5 text-white/40"
+                                                        }`}
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        )}
+
                                         <h3 className="mt-1.5 text-[12px] leading-5 text-white/85">
                                             {item.title}
                                         </h3>

@@ -13,9 +13,11 @@
     "pdf:to-jpg": "node scripts/pdf-to-jpg.mjs"
   },
   "dependencies": {
+    "jose": "^6.2.3",
     "klinecharts": "^10.0.0-beta2",
     "lucide-react": "^1.0.1",
     "next": "16.2.6",
+    "qrcode.react": "^4.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-markdown": "^10.1.0",

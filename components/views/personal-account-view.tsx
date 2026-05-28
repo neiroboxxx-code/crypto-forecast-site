@@ -4,16 +4,17 @@ import { useState } from "react";
 import { CabinetUserCard } from "@/components/sections/personal-account/cabinet-user-card";
 import { AssistantChat } from "@/components/sections/personal-account/assistant-chat";
 import { TradingJournal } from "@/components/sections/personal-account/trading-journal";
+import { PwaInstallGuide } from "@/components/sections/personal-account/pwa-install-guide";
 
 /**
  * Личный кабинет (мультипользовательский задел): контент будет зависеть от сессии / userId после auth + billing.
  * Маршрут пока `/trade-calendar` — URL можно сменить позже с редиректом.
  */
 export function PersonalAccountView() {
-    const [activeTab, setActiveTab] = useState<"assistant" | "journal">("assistant");
+    const [activeTab, setActiveTab] = useState<"assistant" | "journal" | "app">("assistant");
 
     const tabs: Array<{
-        id: "assistant" | "journal";
+        id: "assistant" | "journal" | "app";
         label: string;
         hint: string;
         activeClass: string;
@@ -29,6 +30,12 @@ export function PersonalAccountView() {
             label: "Журнал",
             hint: "Торговые заметки",
             activeClass: "border-cyan-400/35 bg-cyan-400/10 text-cyan-50",
+        },
+        {
+            id: "app",
+            label: "Приложение",
+            hint: "Мобильный доступ",
+            activeClass: "border-fuchsia-400/35 bg-fuchsia-400/10 text-fuchsia-50",
         },
     ];
 
@@ -68,7 +75,9 @@ export function PersonalAccountView() {
                 </div>
             </div>
 
-            {activeTab === "assistant" ? <AssistantChat /> : <TradingJournal />}
+            {activeTab === "assistant" && <AssistantChat />}
+            {activeTab === "journal" && <TradingJournal />}
+            {activeTab === "app" && <PwaInstallGuide />}
         </div>
     );
 }

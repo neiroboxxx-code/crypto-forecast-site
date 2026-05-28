@@ -22,6 +22,7 @@ import { PaperbotSettings } from "@/components/sections/paperbot/paperbot-settin
 import { PaperbotMonitorWidget } from "@/components/sections/paperbot/paperbot-monitor-widget";
 import { AccuracyPanel } from "@/components/sections/accuracy-panel";
 import { TrendBotPanel } from "@/components/sections/trend-bot/trend-bot-panel";
+import { UsersAdminTab } from "@/components/sections/admin/users-admin-tab";
 import { Card } from "@/components/ui/card";
 import type { PaperSettings, PaperSignalState } from "@/components/sections/paperbot/types";
 
@@ -51,68 +52,6 @@ function toSignal(s: PaperBotState["signal"]): PaperSignalState | null {
         label: s.label,
         updatedAt: s.updatedAt,
     };
-}
-
-// ── Login screen ──────────────────────────────────────────────────────────────
-
-function LoginScreen({ onLogin }: { onLogin: () => void }) {
-    const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
-
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault();
-        setLoading(true);
-        setError("");
-        try {
-            const res = await fetch("/api/admin/auth", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ password }),
-            });
-            if (res.ok) {
-                onLogin();
-            } else {
-                setError("Неверный пароль");
-            }
-        } catch {
-            setError("Ошибка соединения");
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    return (
-        <div className="flex min-h-screen items-center justify-center bg-[#080A0F]">
-            <div className="w-full max-w-sm rounded-2xl border border-white/8 bg-[#0E1117]/90 p-8 shadow-[0_24px_80px_rgba(0,0,0,0.4)]">
-                <div className="mb-6 flex items-center gap-3">
-                    <Shield className="h-5 w-5 text-emerald-400/80" />
-                    <div>
-                        <div className="text-[10px] uppercase tracking-[0.2em] text-white/40">Admin Panel</div>
-                        <div className="text-lg font-semibold text-white">PaperBot Control</div>
-                    </div>
-                </div>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                    <input
-                        type="password"
-                        placeholder="Пароль администратора"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        autoFocus
-                        className="rounded-lg border border-white/12 bg-black/40 px-4 py-2.5 text-[13px] text-white/85 outline-none placeholder:text-white/30 focus:border-emerald-400/40"
-                    />
-                    {error && <div className="text-[11px] text-rose-400/80">{error}</div>}
-                    <button
-                        type="submit"
-                        disabled={loading || !password}
-                        className="mt-1 rounded-lg border border-emerald-400/35 bg-emerald-400/10 py-2.5 text-[12px] font-semibold uppercase tracking-wider text-emerald-200 transition-colors hover:bg-emerald-400/20 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        {loading ? "Проверка..." : "Войти"}
-                    </button>
-                </form>
-            </div>
-        </div>
-    );
 }
 
 // ── Swing Bot tab ────────────────────────────────────────────────────────────
@@ -333,7 +272,7 @@ function SwingAdminTab() {
 // ── Admin panel (tabs wrapper) ────────────────────────────────────────────────
 
 function AdminPanel({ onLogout }: { onLogout: () => void }) {
-    const [activeTab, setActiveTab] = useState<"swing" | "trend">("swing");
+    const [activeTab, setActiveTab] = useState<"swing" | "trend" | "users">("swing");
 
     async function handleLogout() {
         await fetch("/api/admin/auth", { method: "DELETE" });
@@ -343,6 +282,7 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
     const tabs = [
         { id: "swing" as const, label: "Swing Bot", sub: "4H · плечо · 48ч" },
         { id: "trend" as const, label: "Trend Bot", sub: "HTF · без плеча · 21д" },
+        { id: "users" as const, label: "Пользователи", sub: "инвайты · доступ" },
     ];
 
     return (
@@ -383,6 +323,7 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
             <div className="mx-auto max-w-7xl">
                 {activeTab === "swing" && <SwingAdminTab />}
                 {activeTab === "trend" && <TrendBotPanel />}
+                {activeTab === "users" && <UsersAdminTab />}
             </div>
         </div>
     );
@@ -409,6 +350,14 @@ export default function AdminPage() {
         );
     }
 
-    if (!authed) return <LoginScreen onLogin={() => setAuthed(true)} />;
+    if (!authed) return (
+        <div className="flex min-h-screen items-center justify-center bg-[#080A0F]">
+            <div className="flex flex-col items-center gap-3 text-center">
+                <Shield className="h-8 w-8 text-red-500/50" />
+                <div className="text-sm font-semibold text-white/50">Доступ запрещён</div>
+                <div className="text-[11px] text-white/25">У вас нет прав для просмотра этой страницы</div>
+            </div>
+        </div>
+    );
     return <AdminPanel onLogout={() => setAuthed(false)} />;
 }

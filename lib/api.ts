@@ -299,6 +299,9 @@ export type NewsItem = {
     btc_relevance_score?: number | null;
     event_key?: string | null;
     market_regime_effect?: string | null;
+    major_entity?: string | null;
+    market_trigger?: string | null;
+    tags?: string[];
 };
 
 export type NewsData = {

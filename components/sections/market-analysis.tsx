@@ -363,12 +363,53 @@ export function MarketThesisContent({ density = "compact" }: MarketThesisContent
 
     if (loading) {
         return (
-            <div className={`space-y-2 ${comfortable ? "space-y-3 py-1" : ""}`}>
-                <Skeleton className={comfortable ? "h-5 w-3/4" : "h-4 w-3/4"} />
-                <Skeleton className={comfortable ? "h-5 w-full" : "h-4 w-full"} />
-                <Skeleton className={comfortable ? "h-5 w-5/6" : "h-4 w-5/6"} />
-                <Skeleton className={comfortable ? "h-5 w-2/3" : "h-4 w-2/3"} />
-                <Skeleton className={comfortable ? "h-5 w-4/5" : "h-4 w-4/5"} />
+            <div className={`flex flex-col items-center justify-center gap-6 ${comfortable ? "py-20" : "py-10"}`}>
+                {/* Animated spinner ring */}
+                <div className="relative flex h-14 w-14 items-center justify-center">
+                    {/* Static outer ring */}
+                    <div className="absolute inset-0 rounded-full border border-white/[0.07]" />
+                    {/* Rotating arc */}
+                    <div
+                        className="absolute inset-0 rounded-full border-2 border-transparent border-t-fuchsia-400/70 border-r-fuchsia-400/20"
+                        style={{ animation: "thesisSpin 1.1s linear infinite" }}
+                    />
+                    {/* Inner pulse dot */}
+                    <div
+                        className="h-2 w-2 rounded-full bg-fuchsia-400/50"
+                        style={{ animation: "thesisPulse 1.1s ease-in-out infinite" }}
+                    />
+                </div>
+
+                {/* Text */}
+                <div className="flex flex-col items-center gap-2 text-center">
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-fuchsia-400/50">
+                        Загрузка
+                    </span>
+                    <p className={`max-w-[280px] leading-relaxed text-white/45 ${comfortable ? "text-[14px]" : "text-[12px]"}`}>
+                        Подождите, загружается описание разворотов рынка за две прошедшие недели
+                    </p>
+                </div>
+
+                {/* Animated dots */}
+                <div className="flex items-center gap-2">
+                    {[0, 220, 440].map((delay) => (
+                        <span
+                            key={delay}
+                            className="h-[5px] w-[5px] rounded-full bg-fuchsia-400/35"
+                            style={{ animation: `thesisPulse 1.3s ease-in-out ${delay}ms infinite` }}
+                        />
+                    ))}
+                </div>
+
+                <style>{`
+                    @keyframes thesisSpin {
+                        to { transform: rotate(360deg); }
+                    }
+                    @keyframes thesisPulse {
+                        0%, 100% { opacity: 0.25; transform: scale(0.85); }
+                        50%       { opacity: 1;    transform: scale(1); }
+                    }
+                `}</style>
             </div>
         );
     }
