@@ -1,39 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getInternalApiToken, getUpstreamApiUrl, requireAdmin } from "../../_utils";
+import { backendFetch } from "@/lib/auth-server";
 
 export const dynamic = "force-dynamic";
 
-type Mapping = { path: string; method: "GET" | "POST" };
-
-function mapAction(action: string, method: "GET" | "POST"): Mapping | null {
-    if (action === "status" && method === "GET") return { path: "/api/admin/ml/status", method: "GET" };
-    if (action === "train" && method === "POST") return { path: "/api/admin/ml/train", method: "POST" };
-    if (action === "mode" && method === "POST") return { path: "/api/admin/ml/mode", method: "POST" };
+// Same admin-auth path as the Users tab: backendFetch forwards the admin's
+// bearer token; the backend enforces require_admin. (No X-Internal-Token here —
+// that pattern needs INTERNAL_API_TOKEN configured, which read-tabs don't use.)
+function mapAction(action: string, method: "GET" | "POST"): string | null {
+    if (action === "status" && method === "GET") return "/api/admin/ml/status";
+    if (action === "train" && method === "POST") return "/api/admin/ml/train";
+    if (action === "mode" && method === "POST") return "/api/admin/ml/mode";
     return null;
 }
 
 async function proxy(req: NextRequest, action: string, method: "GET" | "POST") {
-    const gate = requireAdmin(req);
-    if (gate) return gate;
+    const path = mapAction(action, method);
+    if (!path) return NextResponse.json({ error: "unknown action" }, { status: 404 });
 
-    const mapping = mapAction(action, method);
-    if (!mapping) return NextResponse.json({ error: "unknown action" }, { status: 404 });
-
-    const token = getInternalApiToken();
-    if (!token) return NextResponse.json({ error: "INTERNAL_API_TOKEN is not configured" }, { status: 500 });
-
-    const upstream = getUpstreamApiUrl();
-    const url = `${upstream}${mapping.path}${req.nextUrl.search}`;
-    const res = await fetch(url, {
-        method,
-        headers: {
-            Accept: "application/json",
-            "X-Internal-Token": token,
-        },
-        cache: "no-store",
-    });
-
+    const res = await backendFetch(`${path}${req.nextUrl.search}`, { method });
     const text = await res.text();
     return new NextResponse(text, {
         status: res.status,

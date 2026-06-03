@@ -138,8 +138,24 @@ export function MlAdminTab() {
         return <div className="py-10 text-center text-[12px] text-white/30">Загрузка ML-статуса…</div>;
     }
 
-    const mode = st?.mode ?? "off";
-    const canPromote = st?.gates.can_promote ?? false;
+    if (!st) {
+        return (
+            <div className="flex flex-col items-center gap-3 py-12 text-center">
+                <Brain className="h-6 w-6 text-white/20" />
+                <span className="text-[12px] text-rose-300/70">{msg || "Не удалось загрузить статус ML-движка"}</span>
+                <button
+                    type="button"
+                    onClick={() => { setLoading(true); setMsg(null); load(); }}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[11px] text-white/60 transition-colors hover:border-white/20 hover:text-white/85"
+                >
+                    <RefreshCw className="h-3.5 w-3.5" /> Повторить
+                </button>
+            </div>
+        );
+    }
+
+    const mode = st.mode;
+    const canPromote = st.gates.can_promote;
     const modeBadge =
         mode === "on"
             ? "border-emerald-400/40 bg-emerald-400/15 text-emerald-200"
@@ -164,11 +180,11 @@ export function MlAdminTab() {
                 {/* Lamps */}
                 <Card title="Состояние" subtitle="Индикаторы готовности">
                     <div className="divide-y divide-white/6">
-                        <Lamp on={st!.lamps.accumulating} label="Данные копятся" hint={`${st!.data.predictions_logged} прогнозов · последний ${st!.data.prediction_age_hours ?? "—"} ч назад`} />
-                        <Lamp on={st!.lamps.enough_data} label="Данных достаточно для обучения" hint={`${st!.data.price_bars} / ${st!.data.min_bars_required} баров`} />
-                        <Lamp on={st!.lamps.model_trained} label="Модель обучена" hint={st!.model.trained_at ? `обучена ${new Date(st!.model.trained_at).toLocaleString("ru-RU")}` : "ещё не обучалась"} />
-                        <Lamp on={st!.lamps.beat_heuristic} label="Обыграла эвристику (out-of-sample)" hint={`ML ${pct(st!.model.test_accuracy)} vs эвристика ${pct(st!.model.heuristic_accuracy)}`} />
-                        <Lamp on={st!.lamps.engine_using_ml} label="Движок использует ML в проде" hint={mode === "on" ? "боевой режим" : mode === "shadow" ? "тень (live = эвристика)" : "выключено"} />
+                        <Lamp on={st.lamps.accumulating} label="Данные копятся" hint={`${st.data.predictions_logged} прогнозов · последний ${st.data.prediction_age_hours ?? "—"} ч назад`} />
+                        <Lamp on={st.lamps.enough_data} label="Данных достаточно для обучения" hint={`${st.data.price_bars} / ${st.data.min_bars_required} баров`} />
+                        <Lamp on={st.lamps.model_trained} label="Модель обучена" hint={st.model.trained_at ? `обучена ${new Date(st.model.trained_at).toLocaleString("ru-RU")}` : "ещё не обучалась"} />
+                        <Lamp on={st.lamps.beat_heuristic} label="Обыграла эвристику (out-of-sample)" hint={`ML ${pct(st.model.test_accuracy)} vs эвристика ${pct(st.model.heuristic_accuracy)}`} />
+                        <Lamp on={st.lamps.engine_using_ml} label="Движок использует ML в проде" hint={mode === "on" ? "боевой режим" : mode === "shadow" ? "тень (live = эвристика)" : "выключено"} />
                     </div>
                 </Card>
 
