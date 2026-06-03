@@ -23,6 +23,7 @@ import { PaperbotMonitorWidget } from "@/components/sections/paperbot/paperbot-m
 import { AccuracyPanel } from "@/components/sections/accuracy-panel";
 import { TrendBotPanel } from "@/components/sections/trend-bot/trend-bot-panel";
 import { UsersAdminTab } from "@/components/sections/admin/users-admin-tab";
+import { MlAdminTab } from "@/components/sections/admin/ml-admin-tab";
 import { Card } from "@/components/ui/card";
 import type { PaperSettings, PaperSignalState } from "@/components/sections/paperbot/types";
 
@@ -272,7 +273,7 @@ function SwingAdminTab() {
 // ── Admin panel (tabs wrapper) ────────────────────────────────────────────────
 
 function AdminPanel({ onLogout }: { onLogout: () => void }) {
-    const [activeTab, setActiveTab] = useState<"swing" | "trend" | "users">("swing");
+    const [activeTab, setActiveTab] = useState<"swing" | "trend" | "ml" | "users">("swing");
 
     async function handleLogout() {
         await fetch("/api/admin/auth", { method: "DELETE" });
@@ -282,6 +283,7 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
     const tabs = [
         { id: "swing" as const, label: "Swing Bot", sub: "4H · плечо · 48ч" },
         { id: "trend" as const, label: "Trend Bot", sub: "HTF · без плеча · 21д" },
+        { id: "ml" as const, label: "ML-движок", sub: "обучение · режим" },
         { id: "users" as const, label: "Пользователи", sub: "инвайты · доступ" },
     ];
 
@@ -323,6 +325,7 @@ function AdminPanel({ onLogout }: { onLogout: () => void }) {
             <div className="mx-auto max-w-7xl">
                 {activeTab === "swing" && <SwingAdminTab />}
                 {activeTab === "trend" && <TrendBotPanel />}
+                {activeTab === "ml" && <MlAdminTab />}
                 {activeTab === "users" && <UsersAdminTab />}
             </div>
         </div>
