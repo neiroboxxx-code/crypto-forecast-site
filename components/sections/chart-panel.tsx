@@ -104,7 +104,10 @@ export function ChartPanel() {
                         График открыт в увеличенном режиме. Закройте окно крестиком или нажмите «Свернуть».
                     </div>
                 ) : (
+                    // key={interval}: пересоздаём инстанс при смене ТФ — детерминированно
+                    // убирает гонку getBars / зависание loadOverlays при setPeriod (§18.3).
                     <KlineChart
+                        key={interval}
                         symbol="BTCUSDT"
                         interval={interval}
                         showToolbar
@@ -189,6 +192,7 @@ export function ChartPanel() {
                             </div>
                         </header>
                         <KlineChart
+                            key={interval}
                             symbol="BTCUSDT"
                             interval={interval}
                             showToolbar
