@@ -22,6 +22,19 @@ export function ChartPanel() {
     const [historicalOverlayOpen, setHistoricalOverlayOpen] = useState(false);
     const [historicalInfoOpen, setHistoricalInfoOpen]       = useState(false);
 
+    // Запоминаем выбранный таймфрейм между переходами по страницам.
+    // Восстанавливаем в эффекте (а не в initial state), чтобы не было
+    // hydration-расхождения SSR↔клиент.
+    useEffect(() => {
+        try {
+            const saved = window.localStorage.getItem("dashboard_chart_tf");
+            if (saved && TIMEFRAMES.some(t => t.id === saved)) setInterval(saved as TF);
+        } catch { /* localStorage недоступен — остаёмся на 1H */ }
+    }, []);
+    useEffect(() => {
+        try { window.localStorage.setItem("dashboard_chart_tf", interval); } catch { /* no-op */ }
+    }, [interval]);
+
     const isClient = useSyncExternalStore(
         () => () => {},
         () => true,
