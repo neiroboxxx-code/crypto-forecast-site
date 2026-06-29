@@ -39,6 +39,18 @@ interface MlStatus {
         engine_using_ml: boolean;
     };
     gates: { can_train: boolean; can_promote: boolean };
+    training?: {
+        state?: "idle" | "running" | "done" | "error";
+        started_at?: string;
+        finished_at?: string;
+        result?: {
+            status?: string;
+            test_accuracy?: number;
+            heuristic_accuracy?: number;
+            beat_heuristic?: boolean;
+        };
+        error?: string;
+    };
 }
 
 function Lamp({ on, label, hint }: { on: boolean; label: string; hint?: string }) {
@@ -87,30 +99,50 @@ export function MlAdminTab() {
         load();
     }, [load]);
 
+    // Training runs in a background process on the server. While it's running we
+    // poll /status so the panel always reflects live progress — even if you leave
+    // the tab and come back, or reload the page.
+    const trainState = st?.training?.state;
+    useEffect(() => {
+        if (trainState !== "running") return;
+        const id = setInterval(() => { load(); }, 4000);
+        return () => clearInterval(id);
+    }, [trainState, load]);
+
+    // React to completion of a background training.
+    useEffect(() => {
+        if (trainState === "running") {
+            setTraining(true);
+        } else if (trainState === "done") {
+            setTraining(false);
+            const r = st?.training?.result || {};
+            setMsg(
+                `Обучение завершено: ML ${pct(r.test_accuracy)} vs эвристика ${pct(r.heuristic_accuracy)} — ` +
+                    (r.beat_heuristic ? "обыграла ✓ (ворота открыты)" : "не обыграла (ворота закрыты)"),
+            );
+        } else if (trainState === "error") {
+            setTraining(false);
+            setMsg(`Ошибка обучения: ${st?.training?.error ?? "неизвестно"}`);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [trainState, st?.training?.finished_at]);
+
     async function handleTrain() {
         setTraining(true);
-        setMsg("Обучение запущено — это может занять до минуты…");
+        setMsg("Обучение запущено в фоне — панель не зависнет, можно уйти и вернуться.");
         try {
             const res = await fetch("/api/admin/ml/train", { method: "POST" });
             const j = await res.json();
             if (res.ok) {
-                const r = j.result || {};
-                if (r.status === "ok") {
-                    setMsg(
-                        `Готово: ML ${pct(r.test_accuracy)} vs эвристика ${pct(r.heuristic_accuracy)} — ` +
-                            (r.beat_heuristic ? "обыграла ✓" : "не обыграла"),
-                    );
-                } else {
-                    setMsg(`Недостаточно данных для обучения (${r.samples ?? "?"} примеров)`);
-                }
-                if (j.panel) setSt(j.panel);
+                setSt(j); // response carries the full panel (mode/lamps/gates/training)
+                if (j.status === "already_running") setMsg("Обучение уже идёт…");
             } else {
-                setMsg(j?.detail || j?.error || "Ошибка обучения");
+                setTraining(false);
+                setMsg(j?.detail || j?.error || "Не удалось запустить обучение");
             }
         } catch {
-            setMsg("Ошибка сети при обучении");
-        } finally {
             setTraining(false);
+            setMsg("Ошибка сети при запуске обучения");
         }
     }
 
@@ -121,7 +153,7 @@ export function MlAdminTab() {
             const res = await fetch(`/api/admin/ml/mode?mode=${mode}`, { method: "POST" });
             const j = await res.json();
             if (res.ok) {
-                if (j.panel) setSt(j.panel);
+                setSt(j); // response carries the full panel
                 setMsg(`Режим переключён: ${mode.toUpperCase()}`);
             } else {
                 setMsg(j?.detail || j?.error || "Не удалось переключить режим");
@@ -156,6 +188,8 @@ export function MlAdminTab() {
 
     const mode = st.mode;
     const canPromote = st.gates.can_promote;
+    const isTraining = training || st.training?.state === "running";
+    const trainStarted = st.training?.state === "running" ? st.training?.started_at : null;
     const modeBadge =
         mode === "on"
             ? "border-emerald-400/40 bg-emerald-400/15 text-emerald-200"
@@ -175,6 +209,20 @@ export function MlAdminTab() {
                     Режим: {mode}
                 </span>
             </div>
+
+            {/* Live process banner — visible whenever a background job is running,
+                survives tab switches and page reloads (state lives on the server). */}
+            {isTraining && (
+                <div className="flex items-center gap-3 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-4 py-3">
+                    <RefreshCw className="h-4 w-4 shrink-0 animate-spin text-cyan-300" />
+                    <div className="flex flex-col">
+                        <span className="text-[12px] font-semibold text-cyan-100">Идёт обучение модели…</span>
+                        <span className="text-[10px] text-cyan-200/50">
+                            Выполняется в фоне на сервере{trainStarted ? ` · запущено ${new Date(trainStarted).toLocaleTimeString("ru-RU")}` : ""}. Можно уйти со вкладки — процесс не остановится.
+                        </span>
+                    </div>
+                </div>
+            )}
 
             <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
                 {/* Lamps */}
@@ -196,11 +244,11 @@ export function MlAdminTab() {
                             <button
                                 type="button"
                                 onClick={handleTrain}
-                                disabled={training || !st?.gates.can_train}
+                                disabled={isTraining || !st?.gates.can_train}
                                 className="inline-flex items-center gap-2 rounded-lg border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-[12px] font-semibold text-cyan-200 transition-colors hover:bg-cyan-400/20 disabled:cursor-not-allowed disabled:opacity-40"
                             >
-                                <RefreshCw className={`h-4 w-4 ${training ? "animate-spin" : ""}`} />
-                                {training ? "Обучение…" : "Обучить / переобучить модель"}
+                                <RefreshCw className={`h-4 w-4 ${isTraining ? "animate-spin" : ""}`} />
+                                {isTraining ? "Обучение идёт…" : "Обучить / переобучить модель"}
                             </button>
                             {!st?.gates.can_train && (
                                 <p className="mt-1.5 text-[10px] text-white/30">Недостаточно данных для обучения</p>
