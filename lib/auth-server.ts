@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 const BACKEND = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export const COOKIE_NAME = "auth_token";
-export const COOKIE_MAX_AGE = 24 * 60 * 60; // 24h in seconds
+export const COOKIE_MAX_AGE = 365 * 24 * 60 * 60; // 1 year — совпадает с JWT TTL, без частого релогина
 
 /** Read JWT from the httpOnly cookie (server-side only). */
 export async function getAuthToken(): Promise<string | undefined> {
