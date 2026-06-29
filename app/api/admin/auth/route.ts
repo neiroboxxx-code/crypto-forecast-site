@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
     if (!ok) return NextResponse.json({ ok: false });
 
     const { requireAdmin } = await import("../_utils");
-    const gate = requireAdmin(req);
+    const gate = await requireAdmin(req);
     if (gate) return NextResponse.json({ ok: false }, { status: 200 });
     return NextResponse.json({ ok });
 }

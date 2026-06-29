@@ -20,7 +20,7 @@ function upstreamPath(action: string): { path: string; method: "POST" | "PUT" } 
 }
 
 export async function POST(req: NextRequest, ctx: { params: Promise<{ action: string }> }) {
-    const gate = requireAdmin(req);
+    const gate = await requireAdmin(req);
     if (gate) return gate;
 
     const { action } = await ctx.params;
@@ -47,7 +47,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ action: st
 }
 
 export async function PUT(req: NextRequest, ctx: { params: Promise<{ action: string }> }) {
-    const gate = requireAdmin(req);
+    const gate = await requireAdmin(req);
     if (gate) return gate;
 
     const { action } = await ctx.params;

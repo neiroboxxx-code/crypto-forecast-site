@@ -11,7 +11,7 @@ export async function PUT(
     req: NextRequest,
     ctx: { params: Promise<{ symbol: string }> },
 ) {
-    const gate = requireAdmin(req);
+    const gate = await requireAdmin(req);
     if (gate) return gate;
 
     const { symbol } = await ctx.params;

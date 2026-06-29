@@ -1,17 +1,36 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "node:crypto";
+import { jwtVerify } from "jose";
 
-export function requireAdmin(req: NextRequest): NextResponse | null {
-    const adminToken = process.env.ADMIN_TOKEN ?? "";
-    if (!adminToken) {
-        return NextResponse.json({ error: "ADMIN_TOKEN is not configured" }, { status: 500 });
+/** New JWT auth: true if the auth_token cookie has a valid token with role=admin. */
+async function checkJwtAdmin(req: NextRequest): Promise<boolean> {
+    const token = req.cookies.get("auth_token")?.value;
+    if (!token || !process.env.JWT_SECRET) return false;
+    try {
+        const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
+        return (payload as { role?: string }).role === "admin";
+    } catch {
+        return false;
     }
+}
+
+/**
+ * Admin gate for action routes (paperbot/trend control).
+ * Primary path: the same JWT auth_token the rest of the site uses (role=admin).
+ * Fallback: the legacy password-based admin_session cookie.
+ * Returns null when authorized, or a 401 NextResponse otherwise.
+ */
+export async function requireAdmin(req: NextRequest): Promise<NextResponse | null> {
+    // 1. New JWT auth (role=admin) — what a normal admin login gives you.
+    if (await checkJwtAdmin(req)) return null;
+
+    // 2. Legacy admin_session cookie (old password login).
+    const adminToken = process.env.ADMIN_TOKEN ?? "";
     const sessionSecret = process.env.ADMIN_SESSION_SECRET ?? adminToken;
     const session = req.cookies.get("admin_session")?.value ?? "";
-    if (!session || !verifyAdminSession(session, sessionSecret)) {
-        return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-    }
-    return null;
+    if (adminToken && session && verifyAdminSession(session, sessionSecret)) return null;
+
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
 }
 
 function b64urlEncode(buf: Buffer): string {
